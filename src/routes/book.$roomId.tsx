@@ -67,15 +67,19 @@ function BookPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-1 mx-auto max-w-xl w-full px-4 py-8">
-        <h1 className="text-2xl font-bold mb-1">{t.book.title}</h1>
-        <p className="text-sm text-muted-foreground mb-6">Room: <span className="font-mono">{roomId}</span></p>
+      <main className="flex-1 mx-auto max-w-xl w-full px-4 py-8 space-y-6">
+        <div>
+          <h1 className="font-display text-3xl md:text-4xl text-ink mb-1">{t.book.title}</h1>
+          <p className="text-sm text-muted-foreground">Room: <span className="font-mono">{roomId}</span></p>
+        </div>
+
+        <AmenityIcons />
 
         <form onSubmit={submit} className="space-y-4 bg-card border border-border rounded-2xl p-5">
           <div className="grid grid-cols-2 gap-2">
             {(["Daily", "Weekly"] as const).map(s => (
               <button type="button" key={s} onClick={() => setStayType(s)}
-                className={`touch-min rounded-lg px-4 py-3 font-semibold border ${stayType === s ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border"}`}>
+                className={`btn-pill ${stayType === s ? "btn-ink" : "btn-cream"}`}>
                 {s} {s === "Daily" ? "$80" : "$400"}
               </button>
             ))}
@@ -87,7 +91,7 @@ function BookPage() {
           <Field label="Phone"><input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} className={inputCls} /></Field>
           <Field label="Email"><input required type="email" value={email} onChange={e => setEmail(e.target.value)} className={inputCls} /></Field>
 
-          <button disabled={submitting} className="touch-min w-full rounded-xl bg-primary text-primary-foreground font-bold py-3 hover:opacity-90 disabled:opacity-50">
+          <button disabled={submitting} className="btn-pill btn-coral w-full text-base py-4 disabled:opacity-50">
             {submitting ? "..." : t.book.submit}
           </button>
           {/* TODO: Stripe checkout integration goes here */}
