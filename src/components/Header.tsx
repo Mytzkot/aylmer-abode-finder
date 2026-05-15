@@ -106,7 +106,7 @@ export function Header() {
                   onClick={() => setOpen(false)}
                   className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream font-typewriter uppercase tracking-[0.12em] text-sm text-ink"
                 >
-                  {l.label}
+                  <T>{l.label}</T>
                 </a>
               ) : (
                 <Link
