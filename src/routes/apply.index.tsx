@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/apply/")({
   validateSearch: (s: Record<string, unknown>) => ({
     property: typeof s.property === "string" ? s.property : undefined,
+    room: typeof s.room === "string" ? s.room : undefined,
   }),
   component: ApplyPage,
 });
@@ -26,14 +27,14 @@ const PROPERTY_OPTIONS = [
 ];
 
 const L = {
-  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home" },
-  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil" },
-  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية" },
+  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home", roomsLoading: "Loading rooms…", noRooms: "No specific rooms listed yet — we'll match you with the best fit.", thanksLine2: "We received your application and will contact you within 24 hours." },
+  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil", roomsLoading: "Chargement des chambres…", noRooms: "Aucune chambre listée — nous vous trouverons la meilleure option.", thanksLine2: "Nous avons reçu votre demande et vous contacterons sous 24 heures." },
+  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية", roomsLoading: "جارٍ تحميل الغرف…", noRooms: "لا توجد غرف محددة بعد — سنوفر لك الأنسب.", thanksLine2: "لقد استلمنا طلبك وسنتواصل معك خلال 24 ساعة." },
 };
 
 function ApplyPage() {
-  const { property: prefilledProperty } = useSearch({ from: "/apply/" });
-  const { t, lang } = useLang();
+  const { property: prefilledProperty, room: prefilledRoom } = useSearch({ from: "/apply/" });
+  const { t, lang, dir } = useLang();
   const l = L[lang];
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -41,14 +42,16 @@ function ApplyPage() {
   const [occupants, setOccupants] = useState<Occupant[]>([]);
   const [form, setForm] = useState<Record<string, any>>({});
   const [propertySel, setPropertySel] = useState<string>(prefilledProperty || "");
-  const [roomSel, setRoomSel] = useState<string>("any");
+  const [roomSel, setRoomSel] = useState<string>(prefilledRoom || "any");
   const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
+  const [roomsLoading, setRoomsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    if (!isSupabaseConfigured) { setRoomsLoading(false); return; }
     (async () => {
       const { data } = await supabase.from("rooms").select("id,name,current_status,property_id");
       if (data) setAllRooms(data as RoomRow[]);
+      setRoomsLoading(false);
     })();
   }, []);
 
@@ -96,13 +99,16 @@ function ApplyPage() {
   };
 
   if (done) {
+    const propLabel = PROPERTY_OPTIONS.find((p) => p.value === propertySel)?.label || "";
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col" dir={dir}>
         <Header />
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{t.apply.thanks}</h1>
-          <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
+          <p className="text-sm text-ink/70 mb-2">{l.thanksLine2}</p>
+          {propLabel && <p className="text-xs text-ink/60 mb-6">→ {propLabel}</p>}
+          <Link to="/" className="mt-6 inline-flex rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
         </main>
         <Footer />
         <FloatingContactBar />
@@ -113,9 +119,9 @@ function ApplyPage() {
   const f = t.fields;
 
   return (
-    <div className="min-h-screen flex flex-col bg-cream">
+    <div className="min-h-screen flex flex-col bg-cream" dir={dir}>
       <Header />
-      <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8">
+      <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8 text-start">
         <h1 className="font-display text-3xl md:text-4xl text-ink mb-2">{t.apply.title}</h1>
         <p className="text-sm text-ink/60 mb-6">{l.intro}</p>
 
@@ -151,16 +157,19 @@ function ApplyPage() {
                 required
                 value={roomSel}
                 onChange={(e) => setRoomSel(e.target.value)}
-                disabled={!propertySel}
+                disabled={!propertySel || roomsLoading}
                 className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
               >
-                <option value="any">{l.anyRoom}</option>
+                <option value="any">{roomsLoading ? l.roomsLoading : l.anyRoom}</option>
                 {filteredRooms.map((r) => (
                   <option key={r.id} value={r.id}>
                     {r.name || r.id.slice(0, 8)} {r.current_status ? `· ${r.current_status}` : ""}
                   </option>
                 ))}
               </select>
+              {propertySel && !roomsLoading && filteredRooms.length === 0 && (
+                <span className="block mt-1.5 text-xs text-ink/60">{l.noRooms}</span>
+              )}
             </label>
           </fieldset>
 
