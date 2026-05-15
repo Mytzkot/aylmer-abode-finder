@@ -23,7 +23,7 @@ export function Header() {
         key={l.to}
         href={l.to}
         onClick={onClick}
-        className="uppercase tracking-wider text-[12px] font-bold text-ink/80 hover:text-ink transition"
+        className="font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink/80 hover:text-ink transition"
       >
         {l.label}
       </a>
@@ -32,8 +32,8 @@ export function Header() {
         key={l.to}
         to={l.to}
         onClick={onClick}
-        className="uppercase tracking-wider text-[12px] font-bold text-ink/80 hover:text-ink transition"
-        activeProps={{ className: "uppercase tracking-wider text-[12px] font-bold text-ink underline underline-offset-8 decoration-2" }}
+        className="font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink/80 hover:text-ink transition"
+        activeProps={{ className: "font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink underline underline-offset-8 decoration-2" }}
         activeOptions={{ exact: l.to === "/" }}
       >
         {l.label}
@@ -57,7 +57,7 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="hidden md:inline-flex btn-pill btn-coral text-sm px-5 py-2.5 uppercase tracking-wider"
+              className="hidden md:inline-flex btn-pill btn-coral text-sm px-5 py-2.5 font-typewriter uppercase tracking-[0.12em]"
             >
               Book Now
             </Link>
@@ -105,7 +105,7 @@ export function Header() {
                   key={l.to}
                   href={l.to}
                   onClick={() => setOpen(false)}
-                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream uppercase tracking-wider text-sm font-bold text-ink"
+                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream font-typewriter uppercase tracking-[0.12em] text-sm text-ink"
                 >
                   {l.label}
                 </a>
@@ -114,7 +114,7 @@ export function Header() {
                   key={l.to}
                   to={l.to}
                   onClick={() => setOpen(false)}
-                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream uppercase tracking-wider text-sm font-bold text-ink"
+                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream font-typewriter uppercase tracking-[0.12em] text-sm text-ink"
                   activeProps={{ className: "bg-cream-deep text-ink" }}
                   activeOptions={{ exact: l.to === "/" }}
                 >
@@ -125,7 +125,7 @@ export function Header() {
             <Link
               to="/book"
               onClick={() => setOpen(false)}
-              className="mt-3 btn-pill btn-coral uppercase tracking-wider text-sm px-5 py-3 justify-center"
+              className="mt-3 btn-pill btn-coral font-typewriter uppercase tracking-[0.12em] text-sm px-5 py-3 justify-center"
             >
               Book Now
             </Link>
