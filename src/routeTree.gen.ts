@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as NewcomerRouteImport } from './routes/newcomer'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
@@ -35,6 +36,11 @@ const PropertiesRoute = PropertiesRouteImport.update({
 const NewcomerRoute = NewcomerRouteImport.update({
   id: '/newcomer',
   path: '/newcomer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -86,6 +92,7 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/transit': typeof TransitRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/transit': typeof TransitRoute
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/faq'
     | '/newcomer'
     | '/properties'
     | '/transit'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/faq'
     | '/newcomer'
     | '/transit'
     | '/admin/applications'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/faq'
     | '/newcomer'
     | '/properties'
     | '/transit'
@@ -172,6 +184,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  FaqRoute: typeof FaqRoute
   NewcomerRoute: typeof NewcomerRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
   TransitRoute: typeof TransitRoute
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       path: '/newcomer'
       fullPath: '/newcomer'
       preLoaderRoute: typeof NewcomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -299,6 +319,7 @@ const PropertiesRouteWithChildren = PropertiesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  FaqRoute: FaqRoute,
   NewcomerRoute: NewcomerRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
   TransitRoute: TransitRoute,
