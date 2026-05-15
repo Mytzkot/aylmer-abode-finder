@@ -40,31 +40,48 @@ function HomePage() {
       <Header />
 
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-20">
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-            {t.hero.title}
-          </h1>
-          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl">{t.hero.subtitle}</p>
+      <section className="relative overflow-hidden bg-cream">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h1 className="font-display text-4xl md:text-6xl leading-[1.05] text-ink">
+              {t.hero.title.split(" ").slice(0, -2).join(" ")}{" "}
+              <span className="accent-text">{t.hero.title.split(" ").slice(-2).join(" ")}</span>
+            </h1>
+            <p className="mt-5 text-base md:text-lg text-ink/70 max-w-xl">{t.hero.subtitle}</p>
 
-          <div className="mt-6 flex flex-wrap gap-2">
-            {t.hero.badges.map((b) => (
-              <span key={b} className="inline-flex items-center gap-1.5 rounded-full bg-card border border-border px-3 py-1.5 text-sm font-medium shadow-sm">
-                <CheckCircle2 className="w-4 h-4 text-success" /> {b}
-              </span>
-            ))}
+            <div className="mt-7 flex flex-wrap gap-2">
+              {t.hero.badges.map((b) => (
+                <span key={b} className="inline-flex items-center gap-1.5 rounded-full bg-card border border-border/50 px-3.5 py-1.5 text-sm font-semibold text-ink shadow-sm">
+                  <CheckCircle2 className="w-4 h-4 text-success" /> {b}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#properties" className="btn-pill btn-coral text-base px-6">{t.cta.book}</a>
+              <a href="#properties" className="btn-pill btn-outline-ink text-base px-6">{t.cta.apply}</a>
+            </div>
+
+            <div className="mt-6 inline-flex items-center rounded-full bg-cream-deep text-ink px-5 py-2.5 font-bold text-sm">
+              {t.hero.pricing}
+            </div>
           </div>
 
-          <div className="mt-6 inline-flex items-center rounded-2xl bg-foreground text-background px-5 py-3 font-bold shadow-lg">
-            {t.hero.pricing}
+          <div className="relative">
+            <div className="absolute -inset-4 bg-cyan-pop/20 rounded-[2rem] blur-2xl" />
+            <img
+              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85"
+              alt="Furnished room interior"
+              className="relative rounded-[2rem] aspect-[4/3] w-full object-cover shadow-2xl"
+            />
           </div>
         </div>
       </section>
 
       {/* PROPERTIES */}
-      <section id="properties" className="mx-auto max-w-6xl px-4 py-10 scroll-mt-20">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6">{t.sections.properties}</h2>
+      <section id="properties" className="mx-auto max-w-6xl px-4 py-12 md:py-16 scroll-mt-20">
+        <h2 className="font-display text-3xl md:text-5xl text-ink mb-2">{t.sections.properties}</h2>
+        <p className="text-ink/60 mb-8">Three cozy houses across Aylmer-Gatineau.</p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {PROPERTIES.map((p) => (
             <PropertyCard key={p.id} prop={p} rooms={roomsByProp[p.id] || []} />
