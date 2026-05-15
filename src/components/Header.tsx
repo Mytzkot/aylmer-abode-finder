@@ -126,12 +126,12 @@ export function Header() {
               onClick={() => setOpen(false)}
               className="mt-3 btn-pill btn-coral font-typewriter uppercase tracking-[0.12em] text-sm px-5 py-3 justify-center"
             >
-              Book Now
+              <T>Book Now</T>
             </Link>
           </nav>
 
           <div className="p-5 border-t border-border/60 text-xs text-ink/60">
-            Comfortable Living · Hébergement Confortable
+            <T>Comfortable Living</T>
           </div>
         </aside>
       </div>
