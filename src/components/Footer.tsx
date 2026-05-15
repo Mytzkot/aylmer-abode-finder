@@ -33,7 +33,7 @@ export function Footer() {
           ))}
         </div>
         <p className="mt-8 text-center text-xs text-ink/50">
-          © {new Date().getFullYear()} Zorba Rentals · Aylmer-Gatineau, QC
+          © {new Date().getFullYear()} ZORBA RENTALS · Aylmer-Gatineau, QC
         </p>
       </div>
     </footer>
