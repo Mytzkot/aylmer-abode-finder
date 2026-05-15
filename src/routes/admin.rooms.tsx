@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/lib/supabase";
+import { syncSquareCatalog } from "@/lib/square.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/rooms")({ component: RoomsPage });
