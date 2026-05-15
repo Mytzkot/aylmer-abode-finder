@@ -5,7 +5,14 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
-import { ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle } from "lucide-react";
+import { ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, ExternalLink, Footprints } from "lucide-react";
+import { AmenityIcons } from "@/components/AmenityIcons";
+
+const WALKSCORE_URLS: Record<string, string> = {
+  "102-amour": "https://www.walkscore.com/score/102-chemin-d-amour-gatineau-qc-canada",
+  "58-conrad": "https://www.walkscore.com/score/58-rue-conrad-valera-gatineau-qc-canada",
+  "260-colline": "https://www.walkscore.com/score/260-avenue-de-la-colline-gatineau-qc-canada",
+};
 
 export const Route = createFileRoute("/properties/$id")({ component: PropertyHub });
 
