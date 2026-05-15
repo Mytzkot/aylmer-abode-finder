@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
-import { T } from "@/i18n/LanguageProvider";
+import { T, useTranslated } from "@/i18n/LanguageProvider";
 import logo from "@/assets/zorba-logo.png";
 
 const NAV = [
@@ -17,6 +17,8 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const openMenu = useTranslated("Open menu");
+  const closeMenu = useTranslated("Close menu");
 
   const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] hover:text-brand transition";
   const activeCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] border-b-[3px] border-brand pb-1";
@@ -64,7 +66,7 @@ export function Header() {
             <button
               onClick={() => setOpen(true)}
               className="md:hidden touch-min p-2.5 rounded-xl hover:bg-cream border border-border/60"
-              aria-label="Open menu"
+              aria-label={openMenu}
             >
               <Menu className="w-6 h-6 text-ink" strokeWidth={2.25} />
             </button>
@@ -91,7 +93,7 @@ export function Header() {
             <button
               onClick={() => setOpen(false)}
               className="touch-min p-2 rounded-xl hover:bg-cream"
-              aria-label="Close menu"
+              aria-label={closeMenu}
             >
               <X className="w-6 h-6 text-ink" />
             </button>

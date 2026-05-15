@@ -4,7 +4,7 @@ import type { Lang } from "@/i18n/translations";
 export function LanguageToggle() {
   const { lang, setLang } = useLang();
   const opts: { code: Lang; label: string }[] = [
-    { code: "en", label: "EN" }, { code: "fr", label: "FR" }, { code: "ar", label: "ع" },
+    { code: "en", label: "EN" }, { code: "fr", label: "FR" }, { code: "ar", label: "AR" },
   ];
   return (
     <div className="inline-flex rounded-full bg-cream-deep p-1 text-sm">

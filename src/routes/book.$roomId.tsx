@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { AmenityIcons } from "@/components/AmenityIcons";
-import { useLang } from "@/i18n/LanguageProvider";
+import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
@@ -47,16 +47,20 @@ function BookPage() {
     setDone(true);
   };
 
+  const fullName = useTranslated("Full Name");
+  const phoneL = useTranslated("Phone");
+  const emailL = useTranslated("Email");
+
   if (done) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Request received</h1>
+          <h1 className="text-2xl font-bold mb-2"><T>Request received</T></h1>
           <p className="text-muted-foreground mb-6">{t.book.success}</p>
           {/* TODO: Stripe payment intent placeholder */}
-          <Link to="/" className="inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold">Back to home</Link>
+          <Link to="/" className="inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold"><T>Back to home</T></Link>
         </main>
         <Footer />
         <FloatingContactBar />
@@ -70,7 +74,7 @@ function BookPage() {
       <main className="flex-1 mx-auto max-w-xl w-full px-4 py-8 space-y-6">
         <div>
           <h1 className="font-display text-3xl md:text-4xl text-ink mb-1">{t.book.title}</h1>
-          <p className="text-sm text-muted-foreground">Room: <span className="font-mono">{roomId}</span></p>
+          <p className="text-sm text-muted-foreground"><T>Room</T>: <span className="font-mono">{roomId}</span></p>
         </div>
 
         <AmenityIcons />
@@ -80,16 +84,16 @@ function BookPage() {
             {(["Daily", "Weekly"] as const).map(s => (
               <button type="button" key={s} onClick={() => setStayType(s)}
                 className={`btn-pill ${stayType === s ? "btn-ink" : "btn-cream"}`}>
-                {s} {s === "Daily" ? "$80" : "$400"}
+                <T>{s}</T> {s === "Daily" ? "$80" : "$400"}
               </button>
             ))}
           </div>
 
           <Field label={t.book.checkin}><input required type="date" value={checkin} onChange={e => setCheckin(e.target.value)} className={inputCls} /></Field>
           <Field label={t.book.checkout}><input required type="date" value={checkout} onChange={e => setCheckout(e.target.value)} className={inputCls} /></Field>
-          <Field label="Full Name"><input required value={name} onChange={e => setName(e.target.value)} className={inputCls} /></Field>
-          <Field label="Phone"><input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} className={inputCls} /></Field>
-          <Field label="Email"><input required type="email" value={email} onChange={e => setEmail(e.target.value)} className={inputCls} /></Field>
+          <Field label={fullName}><input required value={name} onChange={e => setName(e.target.value)} className={inputCls} /></Field>
+          <Field label={phoneL}><input required type="tel" value={phone} onChange={e => setPhone(e.target.value)} className={inputCls} /></Field>
+          <Field label={emailL}><input required type="email" value={email} onChange={e => setEmail(e.target.value)} className={inputCls} /></Field>
 
           <button disabled={submitting} className="btn-pill btn-coral w-full text-base py-4 disabled:opacity-50">
             {submitting ? "..." : t.book.submit}

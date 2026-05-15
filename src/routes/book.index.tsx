@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PROPERTIES } from "@/data/properties";
 import { ArrowRight } from "lucide-react";
+import { T } from "@/i18n/LanguageProvider";
 
 export const Route = createFileRoute("/book/")({ component: BookChooser });
 
@@ -12,8 +13,8 @@ function BookChooser() {
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
-        <h1 className="font-display text-4xl md:text-5xl text-ink">Daily / Weekly Booking</h1>
-        <p className="text-ink/60 mt-2 mb-10">Pick the property you'd like to book.</p>
+        <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Daily / Weekly Booking</T></h1>
+        <p className="text-ink/60 mt-2 mb-10"><T>Pick the property you'd like to book.</T></p>
 
         <div className="grid gap-4">
           {PROPERTIES.map((p) => (
