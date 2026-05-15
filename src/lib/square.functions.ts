@@ -131,10 +131,10 @@ export const syncSquareCatalog = createServerFn({ method: "POST" })
         .filter((u): u is string => !!u);
       const presentAt = item.item_data?.present_at_location_ids || [];
 
-      // Pick first matching property location
+      // 1) Try to match by location, 2) fall back to matching by item-name prefix
       const locId = presentAt.find((l) => propByLocation.has(l));
-      if (!locId) continue;
-      const property = propByLocation.get(locId)!;
+      const property = (locId && propByLocation.get(locId)) || matchPropertyByName(itemName);
+      if (!property) continue;
 
       const variations = item.item_data?.variations || [];
       const variationsToUse = variations.length ? variations : [{ type: "ITEM_VARIATION", id: item.id, item_variation_data: { name: "" } } as SquareVariation];
