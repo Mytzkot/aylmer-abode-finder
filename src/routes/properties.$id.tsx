@@ -120,15 +120,15 @@ function PropertyHub() {
                       </div>
                       <div className="p-5 space-y-2">
                         <h3 className="font-display text-xl text-ink leading-tight">
-                          {prop.short_name || prop.address} - Room {r.room_number} / Chambre {r.room_number}
+                          {prop.short_name || prop.address} — <T>Room</T> {r.room_number}
                         </h3>
                         {price != null && (
-                          <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / month</p>
+                          <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / <T>month</T></p>
                         )}
                         <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
                           isAvail ? "bg-success text-white" : "bg-destructive text-white"
                         }`}>
-                          {isAvail ? "Available" : r.booked_until ? `Booked until ${r.booked_until}` : "Booked"}
+                          {isAvail ? <T>Available</T> : r.booked_until ? <><T>Booked until</T> {r.booked_until}</> : <T>Booked</T>}
                         </span>
                       </div>
                     </Link>
@@ -140,12 +140,12 @@ function PropertyHub() {
             {/* Walk Score + Nearby */}
             <section className="mt-12 grid md:grid-cols-2 gap-6">
               <div className="bg-card border border-border/40 rounded-2xl p-5">
-                <h2 className="font-display text-2xl text-ink mb-3">Nearby</h2>
+                <h2 className="font-display text-2xl text-ink mb-3"><T>Nearby</T></h2>
                 <ul className="space-y-1.5 text-sm">
                   {(PROPERTIES.find((p) => p.id === slug)?.walkscore || []).map((w) => (
                     <li key={w.name} className="flex justify-between gap-2">
-                      <span className="font-semibold text-ink">{w.name}</span>
-                      <span className="text-muted-foreground text-xs">{w.detail}</span>
+                      <span className="font-semibold text-ink"><T>{w.name}</T></span>
+                      <span className="text-muted-foreground text-xs"><T>{w.detail}</T></span>
                     </li>
                   ))}
                 </ul>
@@ -153,10 +153,10 @@ function PropertyHub() {
               <div className="bg-card border border-border/40 rounded-2xl p-5 flex flex-col justify-between">
                 <div>
                   <h2 className="font-display text-2xl text-ink mb-2 flex items-center gap-2">
-                    <Footprints className="w-5 h-5" /> Walk Score
+                    <Footprints className="w-5 h-5" /> <T>Walk Score</T>
                   </h2>
                   <p className="text-sm text-ink/70 mb-4">
-                    See walkability, transit and bike scores for this address.
+                    <T>See walkability, transit and bike scores for this address.</T>
                   </p>
                 </div>
                 {WALKSCORE_URLS[slug] && (
@@ -166,7 +166,7 @@ function PropertyHub() {
                     rel="noreferrer"
                     className="btn-pill btn-outline-ink text-sm self-start"
                   >
-                    <ExternalLink className="w-4 h-4" /> View Walk Score
+                    <ExternalLink className="w-4 h-4" /> <T>View Walk Score</T>
                   </a>
                 )}
               </div>
