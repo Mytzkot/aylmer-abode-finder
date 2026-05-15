@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { NEWCOMER_LINKS, EMERGENCY } from "@/data/properties";
+import { T } from "@/i18n/LanguageProvider";
 
 export const Route = createFileRoute("/newcomer")({ component: NewcomerPage });
 
