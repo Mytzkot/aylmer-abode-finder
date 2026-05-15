@@ -9,14 +9,54 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TransitRouteImport } from './routes/transit'
+import { Route as PropertiesRouteImport } from './routes/properties'
+import { Route as NewcomerRouteImport } from './routes/newcomer'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as BookRouteImport } from './routes/book'
+import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PropertiesIndexRouteImport } from './routes/properties.index'
+import { Route as BookIndexRouteImport } from './routes/book.index'
+import { Route as ApplyIndexRouteImport } from './routes/apply.index'
+import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as BookRoomIdRouteImport } from './routes/book.$roomId'
 import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 
+const TransitRoute = TransitRouteImport.update({
+  id: '/transit',
+  path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropertiesRoute = PropertiesRouteImport.update({
+  id: '/properties',
+  path: '/properties',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewcomerRoute = NewcomerRouteImport.update({
+  id: '/newcomer',
+  path: '/newcomer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoute = ApplyRouteImport.update({
+  id: '/apply',
+  path: '/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -27,15 +67,35 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PropertiesIndexRoute = PropertiesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PropertiesRoute,
+} as any)
+const BookIndexRoute = BookIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BookRoute,
+} as any)
+const ApplyIndexRoute = ApplyIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ApplyRoute,
+} as any)
+const PropertiesIdRoute = PropertiesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PropertiesRoute,
+} as any)
 const BookRoomIdRoute = BookRoomIdRouteImport.update({
-  id: '/book/$roomId',
-  path: '/book/$roomId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$roomId',
+  path: '/$roomId',
+  getParentRoute: () => BookRoute,
 } as any)
 const ApplyRoomIdRoute = ApplyRoomIdRouteImport.update({
-  id: '/apply/$roomId',
-  path: '/apply/$roomId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$roomId',
+  path: '/$roomId',
+  getParentRoute: () => ApplyRoute,
 } as any)
 const AdminTenantsRoute = AdminTenantsRouteImport.update({
   id: '/tenants',
@@ -56,70 +116,170 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/apply': typeof ApplyRouteWithChildren
+  '/book': typeof BookRouteWithChildren
+  '/faq': typeof FaqRoute
+  '/newcomer': typeof NewcomerRoute
+  '/properties': typeof PropertiesRouteWithChildren
+  '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
+  '/apply/': typeof ApplyIndexRoute
+  '/book/': typeof BookIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/faq': typeof FaqRoute
+  '/newcomer': typeof NewcomerRoute
+  '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
+  '/apply': typeof ApplyIndexRoute
+  '/book': typeof BookIndexRoute
+  '/properties': typeof PropertiesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/apply': typeof ApplyRouteWithChildren
+  '/book': typeof BookRouteWithChildren
+  '/faq': typeof FaqRoute
+  '/newcomer': typeof NewcomerRoute
+  '/properties': typeof PropertiesRouteWithChildren
+  '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
+  '/apply/': typeof ApplyIndexRoute
+  '/book/': typeof BookIndexRoute
+  '/properties/': typeof PropertiesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/admin'
+    | '/apply'
+    | '/book'
+    | '/faq'
+    | '/newcomer'
+    | '/properties'
+    | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
+    | '/properties/$id'
+    | '/apply/'
+    | '/book/'
+    | '/properties/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
+    | '/faq'
+    | '/newcomer'
+    | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
+    | '/properties/$id'
+    | '/apply'
+    | '/book'
+    | '/properties'
   id:
     | '__root__'
     | '/'
     | '/admin'
+    | '/apply'
+    | '/book'
+    | '/faq'
+    | '/newcomer'
+    | '/properties'
+    | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
+    | '/properties/$id'
+    | '/apply/'
+    | '/book/'
+    | '/properties/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
-  ApplyRoomIdRoute: typeof ApplyRoomIdRoute
-  BookRoomIdRoute: typeof BookRoomIdRoute
+  ApplyRoute: typeof ApplyRouteWithChildren
+  BookRoute: typeof BookRouteWithChildren
+  FaqRoute: typeof FaqRoute
+  NewcomerRoute: typeof NewcomerRoute
+  PropertiesRoute: typeof PropertiesRouteWithChildren
+  TransitRoute: typeof TransitRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/transit': {
+      id: '/transit'
+      path: '/transit'
+      fullPath: '/transit'
+      preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/properties': {
+      id: '/properties'
+      path: '/properties'
+      fullPath: '/properties'
+      preLoaderRoute: typeof PropertiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/newcomer': {
+      id: '/newcomer'
+      path: '/newcomer'
+      fullPath: '/newcomer'
+      preLoaderRoute: typeof NewcomerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply': {
+      id: '/apply'
+      path: '/apply'
+      fullPath: '/apply'
+      preLoaderRoute: typeof ApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -134,19 +294,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/properties/': {
+      id: '/properties/'
+      path: '/'
+      fullPath: '/properties/'
+      preLoaderRoute: typeof PropertiesIndexRouteImport
+      parentRoute: typeof PropertiesRoute
+    }
+    '/book/': {
+      id: '/book/'
+      path: '/'
+      fullPath: '/book/'
+      preLoaderRoute: typeof BookIndexRouteImport
+      parentRoute: typeof BookRoute
+    }
+    '/apply/': {
+      id: '/apply/'
+      path: '/'
+      fullPath: '/apply/'
+      preLoaderRoute: typeof ApplyIndexRouteImport
+      parentRoute: typeof ApplyRoute
+    }
+    '/properties/$id': {
+      id: '/properties/$id'
+      path: '/$id'
+      fullPath: '/properties/$id'
+      preLoaderRoute: typeof PropertiesIdRouteImport
+      parentRoute: typeof PropertiesRoute
+    }
     '/book/$roomId': {
       id: '/book/$roomId'
-      path: '/book/$roomId'
+      path: '/$roomId'
       fullPath: '/book/$roomId'
       preLoaderRoute: typeof BookRoomIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BookRoute
     }
     '/apply/$roomId': {
       id: '/apply/$roomId'
-      path: '/apply/$roomId'
+      path: '/$roomId'
       fullPath: '/apply/$roomId'
       preLoaderRoute: typeof ApplyRoomIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ApplyRoute
     }
     '/admin/tenants': {
       id: '/admin/tenants'
@@ -186,11 +374,53 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface ApplyRouteChildren {
+  ApplyRoomIdRoute: typeof ApplyRoomIdRoute
+  ApplyIndexRoute: typeof ApplyIndexRoute
+}
+
+const ApplyRouteChildren: ApplyRouteChildren = {
+  ApplyRoomIdRoute: ApplyRoomIdRoute,
+  ApplyIndexRoute: ApplyIndexRoute,
+}
+
+const ApplyRouteWithChildren = ApplyRoute._addFileChildren(ApplyRouteChildren)
+
+interface BookRouteChildren {
+  BookRoomIdRoute: typeof BookRoomIdRoute
+  BookIndexRoute: typeof BookIndexRoute
+}
+
+const BookRouteChildren: BookRouteChildren = {
+  BookRoomIdRoute: BookRoomIdRoute,
+  BookIndexRoute: BookIndexRoute,
+}
+
+const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
+
+interface PropertiesRouteChildren {
+  PropertiesIdRoute: typeof PropertiesIdRoute
+  PropertiesIndexRoute: typeof PropertiesIndexRoute
+}
+
+const PropertiesRouteChildren: PropertiesRouteChildren = {
+  PropertiesIdRoute: PropertiesIdRoute,
+  PropertiesIndexRoute: PropertiesIndexRoute,
+}
+
+const PropertiesRouteWithChildren = PropertiesRoute._addFileChildren(
+  PropertiesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
-  ApplyRoomIdRoute: ApplyRoomIdRoute,
-  BookRoomIdRoute: BookRoomIdRoute,
+  ApplyRoute: ApplyRouteWithChildren,
+  BookRoute: BookRouteWithChildren,
+  FaqRoute: FaqRoute,
+  NewcomerRoute: NewcomerRoute,
+  PropertiesRoute: PropertiesRouteWithChildren,
+  TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
