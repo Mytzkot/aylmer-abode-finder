@@ -68,12 +68,14 @@ function PropertyHub() {
     { Icon: ParkingCircle, label: "Parking" },
   ];
 
+  const totalsLine = useTranslated(`${rooms.length} rooms total · ${availableCount} available now`);
+
   return (
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-8 md:py-12">
         <Link to="/properties" className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink/70 hover:text-ink mb-6">
-          <ArrowLeft className="w-4 h-4 flip-rtl" /> All Properties
+          <ArrowLeft className="w-4 h-4 flip-rtl" /> <T>All Properties</T>
         </Link>
 
         {prop && (
@@ -84,19 +86,19 @@ function PropertyHub() {
               <ul className="flex flex-wrap gap-1.5 mt-4">
                 {chips.map(({ Icon, label }) => (
                   <li key={label} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-card border border-border text-ink text-xs font-semibold">
-                    <Icon className="w-3.5 h-3.5" strokeWidth={2.25} /> {label}
+                    <Icon className="w-3.5 h-3.5" strokeWidth={2.25} /> <T>{label}</T>
                   </li>
                 ))}
               </ul>
               <p className="mt-4 text-sm font-semibold text-ink/70">
-                {rooms.length} rooms total · {availableCount} available now
+                {totalsLine}
               </p>
             </header>
 
             {loading ? (
-              <p className="text-ink/60">Loading rooms…</p>
+              <p className="text-ink/60"><T>Loading rooms…</T></p>
             ) : rooms.length === 0 ? (
-              <p className="text-ink/60">No rooms listed yet for this property.</p>
+              <p className="text-ink/60"><T>No rooms listed yet for this property.</T></p>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {rooms.map((r) => {
