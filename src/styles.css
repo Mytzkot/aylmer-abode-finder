@@ -50,32 +50,34 @@
 }
 
 :root {
-  --radius: 1rem;
+  --radius: 0.75rem;
 
-  /* Surfaces */
-  --background: oklch(0.93 0.03 85);          /* #EDE3CC warm cream */
-  --cream: oklch(0.93 0.03 85);
-  --cream-deep: oklch(0.88 0.04 80);          /* slightly darker pill fill */
-  --card: oklch(0.985 0.005 85);              /* near-white card */
+  /* Surfaces — warm cream + white cards */
+  --background: oklch(0.969 0.018 85);        /* #FAF5EB warm cream */
+  --cream: oklch(0.969 0.018 85);             /* same as background */
+  --cream-deep: oklch(0.93 0.025 82);         /* subtle deeper fill */
+  --card: oklch(1 0 0);                       /* pure white */
   --card-foreground: var(--foreground);
 
-  /* Ink */
-  --foreground: oklch(0.27 0.05 50);          /* deep warm brown */
-  --ink: oklch(0.27 0.05 50);
+  /* Text — dark slate */
+  --foreground: oklch(0.21 0.04 265);         /* #0F172A slate-900 */
+  --ink: oklch(0.21 0.04 265);
 
-  /* Brand accents */
-  --cyan-pop: oklch(0.72 0.15 215);           /* #1FB6E5-ish cyan */
-  --coral: oklch(0.66 0.22 18);               /* #FF385C */
+  /* Brand — logo blue */
+  --brand: oklch(0.62 0.19 256);              /* #3B82F6 blue-500 */
+  --brand-deep: oklch(0.43 0.21 264);         /* #1E40AF blue-800 */
+  --cyan-pop: oklch(0.62 0.19 256);           /* alias → brand blue */
+  --coral: oklch(0.62 0.19 256);              /* alias → brand blue (legacy) */
 
-  /* Primary = brown ink for buttons; coral kept for booking CTAs */
-  --primary: oklch(0.27 0.05 50);
-  --primary-foreground: oklch(0.97 0.01 85);
+  /* Primary = brand blue */
+  --primary: oklch(0.62 0.19 256);
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.88 0.04 80);
+  --secondary: oklch(0.93 0.025 82);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.9 0.025 80);
-  --muted-foreground: oklch(0.45 0.04 55);
-  --accent: oklch(0.95 0.04 215);             /* very pale cyan */
+  --muted: oklch(0.95 0.015 82);
+  --muted-foreground: oklch(0.45 0.025 260);
+  --accent: oklch(0.95 0.04 256);             /* very pale blue */
   --accent-foreground: var(--foreground);
   --popover: var(--card);
   --popover-foreground: var(--foreground);
@@ -84,9 +86,9 @@
   --destructive-foreground: oklch(1 0 0);
   --success: oklch(0.6 0.16 152);
 
-  --border: oklch(0.82 0.04 75);
-  --input: oklch(0.85 0.03 75);
-  --ring: oklch(0.72 0.15 215);
+  --border: oklch(0.9 0.015 82);              /* #E7E1D3 warm gray */
+  --input: oklch(0.9 0.015 82);
+  --ring: oklch(0.62 0.19 256);
 }
 
 @layer base {
@@ -114,28 +116,29 @@
 
 @layer components {
   .btn-pill {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition active:scale-[0.98];
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold transition active:scale-[0.98] shadow-sm;
   }
   .btn-cream {
     background-color: var(--cream-deep);
     color: var(--ink);
   }
-  .btn-cream:hover { filter: brightness(0.96); }
+  .btn-cream:hover { filter: brightness(0.97); }
   .btn-ink {
     background-color: var(--ink);
     color: var(--primary-foreground);
   }
-  .btn-ink:hover { filter: brightness(1.1); }
-  .btn-coral {
-    background-color: var(--coral);
+  .btn-ink:hover { filter: brightness(1.15); }
+  .btn-brand, .btn-coral {
+    background-color: var(--brand);
     color: white;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
   }
-  .btn-coral:hover { filter: brightness(0.95); }
+  .btn-brand:hover, .btn-coral:hover { background-color: var(--brand-deep); }
   .btn-outline-ink {
     background-color: transparent;
     color: var(--ink);
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--border);
   }
-  .btn-outline-ink:hover { background-color: var(--ink); color: var(--primary-foreground); }
-  .accent-text { color: var(--cyan-pop); }
+  .btn-outline-ink:hover { background-color: var(--ink); color: var(--primary-foreground); border-color: var(--ink); }
+  .accent-text { color: var(--brand); }
 }
