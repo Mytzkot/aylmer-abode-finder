@@ -147,54 +147,105 @@ export type Database = {
       properties: {
         Row: {
           address: string
+          airbnb_url: string | null
           city: string
           created_at: string
           description: string | null
+          google_maps_url: string | null
           id: string
+          image_urls: string[] | null
+          short_name: string | null
+          slug: string | null
+          youtube_url: string | null
         }
         Insert: {
           address: string
+          airbnb_url?: string | null
           city?: string
           created_at?: string
           description?: string | null
+          google_maps_url?: string | null
           id?: string
+          image_urls?: string[] | null
+          short_name?: string | null
+          slug?: string | null
+          youtube_url?: string | null
         }
         Update: {
           address?: string
+          airbnb_url?: string | null
           city?: string
           created_at?: string
           description?: string | null
+          google_maps_url?: string | null
           id?: string
+          image_urls?: string[] | null
+          short_name?: string | null
+          slug?: string | null
+          youtube_url?: string | null
         }
         Relationships: []
       }
       rooms: {
         Row: {
+          airbnb_listing_url: string | null
           base_rate: number | null
+          booked_until: string | null
           created_at: string
           current_status: string
+          description_en: string | null
+          description_fr: string | null
           id: string
+          image_urls: string[] | null
           name: string | null
           notes: string | null
           property_id: string | null
+          rate_monthly: number | null
+          rate_nightly: number | null
+          rate_weekly: number | null
+          room_number: string | null
+          slug: string | null
+          youtube_video_url: string | null
         }
         Insert: {
+          airbnb_listing_url?: string | null
           base_rate?: number | null
+          booked_until?: string | null
           created_at?: string
           current_status?: string
+          description_en?: string | null
+          description_fr?: string | null
           id?: string
+          image_urls?: string[] | null
           name?: string | null
           notes?: string | null
           property_id?: string | null
+          rate_monthly?: number | null
+          rate_nightly?: number | null
+          rate_weekly?: number | null
+          room_number?: string | null
+          slug?: string | null
+          youtube_video_url?: string | null
         }
         Update: {
+          airbnb_listing_url?: string | null
           base_rate?: number | null
+          booked_until?: string | null
           created_at?: string
           current_status?: string
+          description_en?: string | null
+          description_fr?: string | null
           id?: string
+          image_urls?: string[] | null
           name?: string | null
           notes?: string | null
           property_id?: string | null
+          rate_monthly?: number | null
+          rate_nightly?: number | null
+          rate_weekly?: number | null
+          room_number?: string | null
+          slug?: string | null
+          youtube_video_url?: string | null
         }
         Relationships: [
           {
