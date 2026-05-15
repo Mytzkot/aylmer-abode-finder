@@ -117,7 +117,7 @@ export function Header() {
                   activeProps={{ className: "bg-cream-deep text-ink" }}
                   activeOptions={{ exact: l.to === "/" }}
                 >
-                  {l.label}
+                  <T>{l.label}</T>
                 </Link>
               )
             )}
