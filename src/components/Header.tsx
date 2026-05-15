@@ -1,71 +1,103 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { useLang } from "@/i18n/LanguageProvider";
 import { LanguageToggle } from "./LanguageToggle";
 
+const NAV = [
+  { to: "/", label: "Home" },
+  { to: "/properties", label: "Properties" },
+  { to: "/transit", label: "Transit & Maps" },
+  { to: "/newcomer", label: "Newcomer Guide" },
+  { to: "/faq", label: "FAQ" },
+  { to: "/apply", label: "Apply" },
+  { to: "/#contact", label: "Contact" },
+];
+
 export function Header() {
-  const { t } = useLang();
   const [open, setOpen] = useState(false);
 
-  const links = [
-    { to: "/", label: t.nav.home },
-    { to: "/#properties", label: t.nav.properties },
-    { to: "/#transit", label: t.nav.transit },
-    { to: "/#newcomer", label: t.nav.newcomer },
-    { to: "/admin", label: t.nav.admin },
-  ];
-
   return (
-    <header className="sticky top-0 z-40 bg-card/95 backdrop-blur border-b border-border/60">
-      <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-3">
-        <Link to="/" className="flex items-center gap-2 font-display tracking-tight">
-          <span className="inline-flex w-9 h-9 rounded-xl bg-ink text-primary-foreground items-center justify-center font-display text-lg shrink-0">Z</span>
-          <span className="text-ink font-black text-base sm:text-xl whitespace-nowrap">ZORBA RENTALS</span>
-        </Link>
+    <>
+      <header className="sticky top-0 z-40 bg-card/95 backdrop-blur border-b border-border/60">
+        <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="inline-flex w-9 h-9 rounded-xl bg-ink text-primary-foreground items-center justify-center font-display text-lg shrink-0">
+              Z
+            </span>
+            <span className="text-ink font-black text-base sm:text-xl tracking-tight whitespace-nowrap">
+              ZORBA RENTALS
+            </span>
+          </Link>
 
-        <nav className="hidden md:flex items-center gap-1">
-          {links.slice(0, 4).map(l => (
-            <a key={l.to} href={l.to} className="px-3 py-2 rounded-full text-sm font-semibold text-ink/80 hover:text-ink hover:bg-cream">
-              {l.label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <LanguageToggle />
-          <a href="#properties" className="hidden sm:inline-flex btn-pill btn-outline-ink text-sm">Book Now</a>
-          <button onClick={() => setOpen(true)} className="touch-min p-2 rounded-lg hover:bg-cream md:hidden" aria-label="Menu">
-            <Menu className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
+            <button
+              onClick={() => setOpen(true)}
+              className="touch-min p-2.5 rounded-full hover:bg-cream border border-border/60"
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6 text-ink" strokeWidth={2.25} />
+            </button>
+          </div>
         </div>
+      </header>
+
+      {/* Drawer */}
+      <div
+        className={`fixed inset-0 z-50 transition ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+        aria-hidden={!open}
+      >
+        <div
+          className={`absolute inset-0 bg-ink/40 transition-opacity duration-300 ${open ? "opacity-100" : "opacity-0"}`}
+          onClick={() => setOpen(false)}
+        />
+        <aside
+          className={`absolute top-0 end-0 h-full w-80 max-w-[85vw] bg-card shadow-2xl flex flex-col transform transition-transform duration-300 ease-out ${
+            open ? "translate-x-0" : "translate-x-full rtl:-translate-x-full"
+          }`}
+        >
+          <div className="flex justify-between items-center p-5 border-b border-border/60">
+            <span className="font-display text-2xl text-ink">Menu</span>
+            <button
+              onClick={() => setOpen(false)}
+              className="touch-min p-2 rounded-full hover:bg-cream"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6 text-ink" />
+            </button>
+          </div>
+
+          <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-1">
+            {NAV.map((l) =>
+              l.to.startsWith("/#") ? (
+                <a
+                  key={l.to}
+                  href={l.to}
+                  onClick={() => setOpen(false)}
+                  className="touch-min px-5 py-3.5 rounded-2xl hover:bg-cream text-base font-semibold text-ink"
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  className="touch-min px-5 py-3.5 rounded-2xl hover:bg-cream text-base font-semibold text-ink"
+                  activeProps={{ className: "bg-cream-deep text-ink" }}
+                  activeOptions={{ exact: l.to === "/" }}
+                >
+                  {l.label}
+                </Link>
+              )
+            )}
+          </nav>
+
+          <div className="p-5 border-t border-border/60 text-xs text-ink/60">
+            Aylmer-Gatineau, QC · 15 min to downtown Ottawa
+          </div>
+        </aside>
       </div>
-
-      {open && (
-        <div className="fixed inset-0 z-50 bg-ink/40 md:hidden" onClick={() => setOpen(false)}>
-          <aside
-            className="absolute top-0 end-0 h-full w-80 max-w-[85vw] bg-card shadow-xl p-6 flex flex-col gap-2"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-display text-2xl text-ink">Menu</span>
-              <button onClick={() => setOpen(false)} className="touch-min p-2 rounded-lg hover:bg-cream" aria-label="Close">
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-            {links.map((l) => (
-              <a
-                key={l.to}
-                href={l.to}
-                onClick={() => setOpen(false)}
-                className="touch-min px-4 py-3 rounded-full hover:bg-cream text-base font-semibold text-ink"
-              >
-                {l.label}
-              </a>
-            ))}
-          </aside>
-        </div>
-      )}
-    </header>
+    </>
   );
 }
