@@ -40,31 +40,48 @@ function HomePage() {
       <Header />
 
       {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent" />
-        <div className="relative mx-auto max-w-6xl px-4 py-12 md:py-20">
-          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">
-            {t.hero.title}
-          </h1>
-          <p className="mt-4 text-base md:text-lg text-muted-foreground max-w-2xl">{t.hero.subtitle}</p>
+      <section className="relative overflow-hidden bg-cream">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h1 className="font-display text-4xl md:text-6xl leading-[1.05] text-ink">
+              {t.hero.title.split(" ").slice(0, -2).join(" ")}{" "}
+              <span className="accent-text">{t.hero.title.split(" ").slice(-2).join(" ")}</span>
+            </h1>
+            <p className="mt-5 text-base md:text-lg text-ink/70 max-w-xl">{t.hero.subtitle}</p>
 
-          <div className="mt-6 flex flex-wrap gap-2">
-            {t.hero.badges.map((b) => (
-              <span key={b} className="inline-flex items-center gap-1.5 rounded-full bg-card border border-border px-3 py-1.5 text-sm font-medium shadow-sm">
-                <CheckCircle2 className="w-4 h-4 text-success" /> {b}
-              </span>
-            ))}
+            <div className="mt-7 flex flex-wrap gap-2">
+              {t.hero.badges.map((b) => (
+                <span key={b} className="inline-flex items-center gap-1.5 rounded-full bg-card border border-border/50 px-3.5 py-1.5 text-sm font-semibold text-ink shadow-sm">
+                  <CheckCircle2 className="w-4 h-4 text-success" /> {b}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#properties" className="btn-pill btn-coral text-base px-6">{t.cta.book}</a>
+              <a href="#properties" className="btn-pill btn-outline-ink text-base px-6">{t.cta.apply}</a>
+            </div>
+
+            <div className="mt-6 inline-flex items-center rounded-full bg-cream-deep text-ink px-5 py-2.5 font-bold text-sm">
+              {t.hero.pricing}
+            </div>
           </div>
 
-          <div className="mt-6 inline-flex items-center rounded-2xl bg-foreground text-background px-5 py-3 font-bold shadow-lg">
-            {t.hero.pricing}
+          <div className="relative">
+            <div className="absolute -inset-4 bg-cyan-pop/20 rounded-[2rem] blur-2xl" />
+            <img
+              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85"
+              alt="Furnished room interior"
+              className="relative rounded-[2rem] aspect-[4/3] w-full object-cover shadow-2xl"
+            />
           </div>
         </div>
       </section>
 
       {/* PROPERTIES */}
-      <section id="properties" className="mx-auto max-w-6xl px-4 py-10 scroll-mt-20">
-        <h2 className="text-2xl md:text-3xl font-bold mb-6">{t.sections.properties}</h2>
+      <section id="properties" className="mx-auto max-w-6xl px-4 py-12 md:py-16 scroll-mt-20">
+        <h2 className="font-display text-3xl md:text-5xl text-ink mb-2">{t.sections.properties}</h2>
+        <p className="text-ink/60 mb-8">Three cozy houses across Aylmer-Gatineau.</p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {PROPERTIES.map((p) => (
             <PropertyCard key={p.id} prop={p} rooms={roomsByProp[p.id] || []} />
@@ -78,22 +95,48 @@ function HomePage() {
       </section>
 
       {/* TRANSIT */}
-      <section id="transit" className="bg-card border-y border-border scroll-mt-20">
-        <div className="mx-auto max-w-6xl px-4 py-10">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2 flex items-center gap-2"><Bus className="w-7 h-7 text-primary" /> {t.sections.transit}</h2>
-          <p className="text-muted-foreground mb-6 text-sm">Direct STO lines to downtown Ottawa</p>
+      <section id="transit" className="bg-card border-y border-border/60 scroll-mt-20">
+        <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
+          <h2 className="font-display text-3xl md:text-5xl text-ink mb-2 flex items-center gap-3">
+            <Bus className="w-8 h-8 accent-text" /> {t.sections.transit}
+          </h2>
+          <p className="text-ink/60 mb-8">Direct STO lines to downtown Ottawa</p>
           <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
             {STO_LINES.map((l) => (
-              <div key={l.line} className="rounded-xl border border-border p-4 bg-background">
-                <div className="text-3xl font-black text-primary">#{l.line}</div>
-                <div className="text-sm text-muted-foreground mt-1">{l.desc}</div>
+              <div key={l.line} className="rounded-2xl border border-border/60 p-5 bg-cream">
+                <div className="font-display text-4xl accent-text leading-none">#{l.line}</div>
+                <div className="text-sm text-ink/70 mt-2">{l.desc}</div>
               </div>
             ))}
           </div>
-          <a href="https://www.sto.ca" target="_blank" rel="noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold hover:opacity-90">
+          <a href="https://www.sto.ca" target="_blank" rel="noreferrer" className="mt-6 btn-pill btn-ink">
             <ExternalLink className="w-4 h-4" /> {t.sections.schedule}
           </a>
+        </div>
+      </section>
+
+      {/* NEWCOMER */}
+      <section id="newcomer" className="mx-auto max-w-6xl px-4 py-12 md:py-16 scroll-mt-20">
+        <h2 className="font-display text-3xl md:text-5xl text-ink mb-8">{t.sections.newcomer}</h2>
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {NEWCOMER_LINKS.map(l => (
+            <a key={l.name} href={l.url} target="_blank" rel="noreferrer"
+              className="block rounded-2xl bg-card border border-border/60 p-5 hover:border-cyan-pop hover:shadow-lg transition">
+              <div className="font-display text-xl text-ink flex items-center justify-between gap-2">{l.name} <ExternalLink className="w-4 h-4 text-muted-foreground" /></div>
+              <div className="text-sm text-ink/70 mt-1.5">{l.desc}</div>
+            </a>
+          ))}
+        </div>
+        <div className="mt-8 rounded-2xl bg-destructive/5 border border-destructive/20 p-5">
+          <h3 className="font-display text-xl mb-3 flex items-center gap-2 text-destructive"><Phone className="w-5 h-5" /> Emergency Numbers</h3>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {EMERGENCY.map(e => (
+              <a key={e.number} href={`tel:${e.number.replace(/\D/g, "")}`} className="flex justify-between items-center rounded-full bg-card border border-border/60 px-4 py-2.5 hover:border-destructive">
+                <span className="font-semibold text-sm text-ink">{e.name}</span>
+                <span className="font-bold text-destructive">{e.number}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
