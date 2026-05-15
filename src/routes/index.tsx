@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES } from "@/data/properties";
+import heroImg from "@/assets/hero-room.jpg";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
@@ -40,11 +41,11 @@ function HomePage() {
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 bg-cyan-pop/20 rounded-[2.5rem] blur-2xl" />
+            <div className="absolute -inset-4 bg-brand/15 rounded-[2.5rem] blur-2xl" />
             <img
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85"
-              alt="Welcoming furnished room"
-              className="relative rounded-[2.5rem] aspect-[4/3] w-full object-cover shadow-xl"
+              src={heroImg}
+              alt="Cozy furnished guest room with smart TV, mini-fridge and a cuddly koala on the bed"
+              className="relative rounded-[2.5rem] aspect-square w-full object-cover shadow-xl"
             />
           </div>
         </div>

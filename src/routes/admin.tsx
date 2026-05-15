@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ClipboardList, Users, DoorOpen, LogOut } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
+import logo from "@/assets/zorba-logo.png";
 
 export const Route = createFileRoute("/admin")({ component: AdminLayout });
 
@@ -45,10 +46,13 @@ function AdminLayout() {
     return (
       <div className="min-h-screen grid place-items-center px-4 bg-background">
         <form onSubmit={signIn} className="w-full max-w-sm bg-card rounded-2xl border border-border p-6 space-y-4 shadow">
-          <h1 className="text-2xl font-bold">Admin Login</h1>
-          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" type="email" required className="w-full px-3 py-2.5 rounded-lg border border-input bg-background" />
-          <input value={pass} onChange={e => setPass(e.target.value)} placeholder="Password" type="password" required className="w-full px-3 py-2.5 rounded-lg border border-input bg-background" />
-          <button className="touch-min w-full rounded-lg bg-primary text-primary-foreground font-bold py-2.5">Sign In</button>
+          <div className="flex flex-col items-center gap-2 mb-2">
+            <img src={logo} alt="ZORBA RENTALS" className="h-14 w-auto" />
+            <h1 className="text-xl font-bold text-ink">Admin Login</h1>
+          </div>
+          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" type="email" required className="w-full px-3 py-2.5 rounded-xl border border-input bg-background" />
+          <input value={pass} onChange={e => setPass(e.target.value)} placeholder="Password" type="password" required className="w-full px-3 py-2.5 rounded-xl border border-input bg-background" />
+          <button className="touch-min btn-pill btn-brand w-full">Sign In</button>
         </form>
       </div>
     );
@@ -63,23 +67,29 @@ function AdminLayout() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
       <aside className="hidden md:flex md:w-60 md:flex-col border-r border-border bg-card p-4">
-        <div className="font-bold text-lg mb-6">Zorba Admin</div>
+        <Link to="/" className="flex items-center gap-2 mb-6">
+          <img src={logo} alt="ZORBA RENTALS" className="h-10 w-auto" />
+          <span className="text-xs font-bold tracking-wider text-ink/60 uppercase">Admin</span>
+        </Link>
         <nav className="flex-1 space-y-1">
           {navItems.map(n => (
             <Link key={n.to} to={n.to}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium ${path.startsWith(n.to) ? "bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium ${path.startsWith(n.to) ? "bg-brand text-white" : "hover:bg-cream"}`}>
               <n.icon className="w-4 h-4" /> {n.label}
             </Link>
           ))}
         </nav>
-        <button onClick={signOut} className="touch-min flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-secondary text-muted-foreground">
+        <button onClick={signOut} className="touch-min flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-cream text-ink/60">
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       </aside>
 
-      <header className="md:hidden sticky top-0 z-10 bg-card border-b border-border px-4 h-14 flex items-center justify-between">
-        <div className="font-bold">Zorba Admin</div>
-        <button onClick={signOut} className="touch-min p-2 rounded-lg hover:bg-secondary"><LogOut className="w-5 h-5" /></button>
+      <header className="md:hidden sticky top-0 z-10 bg-card border-b border-border px-4 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="ZORBA RENTALS" className="h-9 w-auto" />
+          <span className="text-xs font-bold tracking-wider text-ink/60 uppercase">Admin</span>
+        </Link>
+        <button onClick={signOut} className="touch-min p-2 rounded-xl hover:bg-cream"><LogOut className="w-5 h-5" /></button>
       </header>
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>

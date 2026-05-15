@@ -42,8 +42,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Zorba Rentals — Furnished Rooms in Aylmer-Gatineau" },
-      { name: "description", content: "Monthly furnished room rentals in Aylmer-Gatineau, QC. No credit check, only first month to move in. 15 min direct bus to downtown Ottawa." },
+      { title: "ZORBA RENTALS — Furnished Guest Houses in Aylmer-Gatineau" },
+      { name: "description", content: "ZORBA RENTALS — monthly furnished room rentals in Aylmer-Gatineau, QC. No credit check, only first month to move in. 15 min direct bus to downtown Ottawa." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
