@@ -1,10 +1,29 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, ExternalLink, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, Snowflake } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, Home, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, Snowflake } from "lucide-react";
 import { useState } from "react";
 import { useLang } from "@/i18n/LanguageProvider";
 import type { PropertyMeta } from "@/data/properties";
 
-interface Room { id: string; name?: string | null; current_status?: string | null; base_rate?: number | null; }
+interface Room { id: string; name?: string | null; current_status?: string | null; base_rate?: number | null; youtube_video_url?: string | null; airbnb_listing_url?: string | null; }
+
+function mapsUrl(address: string, city: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
+}
+
+function IconBtn({ href, label, color, children }: { href: string; label: string; color: string; children: React.ReactNode }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      title={label}
+      aria-label={label}
+      className={`w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand hover:bg-cream transition ${color}`}
+    >
+      {children}
+    </a>
+  );
+}
 
 export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[] }) {
   const { t } = useLang();
@@ -12,18 +31,16 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
   const next = () => setIdx((idx + 1) % prop.images.length);
   const prev = () => setIdx((idx - 1 + prop.images.length) % prop.images.length);
 
-  const available = rooms.some(r => (r.current_status || "").toLowerCase() === "available");
+  const availableCount = rooms.filter(r => (r.current_status || "").toLowerCase() === "available").length;
   const firstRoom = rooms[0];
+  const youtubeUrl = firstRoom?.youtube_video_url || prop.youtube;
+  const airbnbUrl = firstRoom?.airbnb_listing_url || null;
+  const gmapsUrl = mapsUrl(prop.address, prop.city);
 
   return (
     <article className="bg-card rounded-3xl overflow-hidden shadow-sm border border-border/40 hover:shadow-xl hover:-translate-y-0.5 transition">
       <div className="relative aspect-video bg-cream-deep overflow-hidden rounded-3xl m-2">
         <img src={prop.images[idx]} alt={prop.address} className="w-full h-full object-cover" loading="lazy" />
-        <div className="absolute top-3 start-3">
-          <span className={`px-3 py-1 rounded-full text-xs font-bold ${available ? "bg-success text-white" : "bg-ink/80 text-white"}`}>
-            {available ? "Available" : "Limited"}
-          </span>
-        </div>
         {prop.images.length > 1 && (
           <>
             <button onClick={prev} className="touch-min absolute start-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label="Previous image">
@@ -47,8 +64,25 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
           <p className="text-sm text-muted-foreground flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {prop.city}</p>
         </div>
 
+        {/* Circular icon row */}
+        <div className="flex items-center gap-2">
+          <IconBtn href={youtubeUrl} label="Watch tour" color="text-red-500">
+            <Youtube className="w-5 h-5" />
+          </IconBtn>
+          <IconBtn href={gmapsUrl} label="View map" color="text-success">
+            <MapPin className="w-5 h-5" />
+          </IconBtn>
+          {airbnbUrl && (
+            <IconBtn href={airbnbUrl} label="Airbnb listing" color="text-coral">
+              <Home className="w-5 h-5" />
+            </IconBtn>
+          )}
+        </div>
+
         <div className="text-xs text-muted-foreground font-medium">
-          {rooms.length > 0 ? `${rooms.filter(r => (r.current_status || "").toLowerCase() === "available").length} of ${rooms.length} rooms available` : "Contact us for availability"}
+          {rooms.length > 0
+            ? `${availableCount} of ${rooms.length} rooms available`
+            : `${availableCount} rooms available`}
         </div>
 
         <ul className="flex flex-wrap gap-1.5 pt-1" aria-label="Amenities">
@@ -67,15 +101,6 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
         </ul>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
-          <a href={prop.youtube} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm py-2.5">
-            <Youtube className="w-4 h-4 text-red-500" /> {t.cta.tour}
-          </a>
-          <a href={prop.maps} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm py-2.5">
-            <MapPin className="w-4 h-4" /> {t.cta.maps}
-          </a>
-          <a href={prop.airbnb} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm py-2.5 col-span-2">
-            <ExternalLink className="w-4 h-4" /> {t.cta.airbnb}
-          </a>
           <Link to="/book/$roomId" params={{ roomId: firstRoom?.id || prop.id }} className="btn-pill btn-ink text-sm py-2.5">
             <Calendar className="w-4 h-4" /> {t.cta.book}
           </Link>

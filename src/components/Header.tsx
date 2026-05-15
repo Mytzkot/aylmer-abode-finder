@@ -23,7 +23,7 @@ export function Header() {
         key={l.to}
         href={l.to}
         onClick={onClick}
-        className="font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink/80 hover:text-ink transition"
+        className="font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-ink hover:text-brand transition"
       >
         {l.label}
       </a>
@@ -32,8 +32,8 @@ export function Header() {
         key={l.to}
         to={l.to}
         onClick={onClick}
-        className="font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink/80 hover:text-ink transition"
-        activeProps={{ className: "font-typewriter uppercase tracking-[0.12em] text-[12px] text-ink underline underline-offset-8 decoration-2" }}
+        className="font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-ink hover:text-brand transition"
+        activeProps={{ className: "font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-brand underline underline-offset-8 decoration-2 decoration-brand" }}
         activeOptions={{ exact: l.to === "/" }}
       >
         {l.label}

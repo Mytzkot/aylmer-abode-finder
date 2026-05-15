@@ -5,7 +5,14 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
-import { ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle } from "lucide-react";
+import { ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, ExternalLink, Footprints } from "lucide-react";
+import { AmenityIcons } from "@/components/AmenityIcons";
+
+const WALKSCORE_URLS: Record<string, string> = {
+  "102-amour": "https://www.walkscore.com/score/102-chemin-d-amour-gatineau-qc-canada",
+  "58-conrad": "https://www.walkscore.com/score/58-rue-conrad-valera-gatineau-qc-canada",
+  "260-colline": "https://www.walkscore.com/score/260-avenue-de-la-colline-gatineau-qc-canada",
+};
 
 export const Route = createFileRoute("/properties/$id")({ component: PropertyHub });
 
@@ -126,6 +133,46 @@ function PropertyHub() {
                 })}
               </div>
             )}
+
+            {/* Walk Score + Nearby */}
+            <section className="mt-12 grid md:grid-cols-2 gap-6">
+              <div className="bg-card border border-border/40 rounded-2xl p-5">
+                <h2 className="font-display text-2xl text-ink mb-3">Nearby</h2>
+                <ul className="space-y-1.5 text-sm">
+                  {(PROPERTIES.find((p) => p.id === slug)?.walkscore || []).map((w) => (
+                    <li key={w.name} className="flex justify-between gap-2">
+                      <span className="font-semibold text-ink">{w.name}</span>
+                      <span className="text-muted-foreground text-xs">{w.detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-card border border-border/40 rounded-2xl p-5 flex flex-col justify-between">
+                <div>
+                  <h2 className="font-display text-2xl text-ink mb-2 flex items-center gap-2">
+                    <Footprints className="w-5 h-5" /> Walk Score
+                  </h2>
+                  <p className="text-sm text-ink/70 mb-4">
+                    See walkability, transit and bike scores for this address.
+                  </p>
+                </div>
+                {WALKSCORE_URLS[slug] && (
+                  <a
+                    href={WALKSCORE_URLS[slug]}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-pill btn-outline-ink text-sm self-start"
+                  >
+                    <ExternalLink className="w-4 h-4" /> View Walk Score
+                  </a>
+                )}
+              </div>
+            </section>
+
+            {/* Amenities grid */}
+            <div className="mt-8">
+              <AmenityIcons />
+            </div>
           </>
         )}
       </main>

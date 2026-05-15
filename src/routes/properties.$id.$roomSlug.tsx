@@ -5,7 +5,11 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
-import { ArrowLeft, ChevronLeft, ChevronRight, Youtube, MapPin, ExternalLink, Calendar, FileText } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Youtube, MapPin, Calendar, FileText, Home } from "lucide-react";
+
+function mapsUrl(address: string, city: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
+}
 
 export const Route = createFileRoute("/properties/$id/$roomSlug")({ component: RoomDetail });
 
@@ -150,21 +154,22 @@ function RoomDetail() {
               </div>
             </section>
 
-            {/* Tour links */}
-            <div className="grid sm:grid-cols-3 gap-3 mb-8">
+            {/* Tour links — circular icons */}
+            <div className="flex items-center gap-3 mb-8">
               {room.youtube_video_url && (
-                <a href={room.youtube_video_url} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm">
-                  <Youtube className="w-4 h-4 text-red-500" /> Watch YouTube Tour
+                <a href={room.youtube_video_url} target="_blank" rel="noreferrer" title="Watch tour" aria-label="Watch tour"
+                  className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-red-500 transition">
+                  <Youtube className="w-5 h-5" />
                 </a>
               )}
-              {prop.google_maps_url && (
-                <a href={prop.google_maps_url} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm">
-                  <MapPin className="w-4 h-4" /> View on Google Maps
-                </a>
-              )}
+              <a href={prop.google_maps_url || mapsUrl(prop.address, prop.city)} target="_blank" rel="noreferrer" title="View map" aria-label="View map"
+                className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-success transition">
+                <MapPin className="w-5 h-5" />
+              </a>
               {room.airbnb_listing_url && (
-                <a href={room.airbnb_listing_url} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm">
-                  <ExternalLink className="w-4 h-4" /> Airbnb Listing
+                <a href={room.airbnb_listing_url} target="_blank" rel="noreferrer" title="Airbnb listing" aria-label="Airbnb listing"
+                  className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-coral transition">
+                  <Home className="w-5 h-5" />
                 </a>
               )}
             </div>
