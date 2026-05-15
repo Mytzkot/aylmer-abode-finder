@@ -24,7 +24,7 @@ export function Header() {
   const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
     l.to.startsWith("/#") ? (
       <a key={l.to} href={l.to} onClick={onClick} className={baseCls}>
-        {l.label}
+        <T>{l.label}</T>
       </a>
     ) : (
       <Link
@@ -35,7 +35,7 @@ export function Header() {
         activeProps={{ className: activeCls }}
         activeOptions={{ exact: l.to === "/" }}
       >
-        {l.label}
+        <T>{l.label}</T>
       </Link>
     );
 
