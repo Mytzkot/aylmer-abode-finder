@@ -17,6 +17,8 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const openMenu = useTranslated("Open menu");
+  const closeMenu = useTranslated("Close menu");
 
   const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] hover:text-brand transition";
   const activeCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] border-b-[3px] border-brand pb-1";
