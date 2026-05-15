@@ -5,10 +5,17 @@ interface Ctx { lang: Lang; setLang: (l: Lang) => void; t: T; dir: "ltr" | "rtl"
 const LanguageContext = createContext<Ctx | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window === "undefined") return "en";
-    return (localStorage.getItem("zorba-lang") as Lang) || "en";
-  });
+  // Always start with "en" so SSR and the first client render match.
+  // Then sync from localStorage in an effect to avoid hydration mismatches.
+  const [lang, setLangState] = useState<Lang>("en");
+
+  useEffect(() => {
+    const saved = (typeof window !== "undefined" ? localStorage.getItem("zorba-lang") : null) as Lang | null;
+    if (saved && saved !== lang && (saved === "en" || saved === "fr" || saved === "ar")) {
+      setLangState(saved);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const dir = lang === "ar" ? "rtl" : "ltr";
 
