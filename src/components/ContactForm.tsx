@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslated } from "@/i18n/LanguageProvider";
 
 export function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
