@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import url("https://fonts.googleapis.com/css2?family=Cutive+Mono&family=Inter:wght@400;500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,7 +16,8 @@
 
 @theme inline {
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-display: "Fraunces", "Cooper Black", Georgia, serif;
+  --font-display: "Cutive Mono", "Courier Prime", "Courier New", ui-monospace, monospace;
+  --font-typewriter: "Cutive Mono", "Courier Prime", "Courier New", ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -105,9 +107,12 @@
   }
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    font-weight: 900;
-    letter-spacing: -0.01em;
-    font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .font-typewriter {
+    font-family: var(--font-typewriter);
+    letter-spacing: 0.05em;
   }
   [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
   button, a { min-height: 44px; }
