@@ -9,38 +9,124 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BookRoomIdRouteImport } from './routes/book.$roomId'
+import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
+import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
+import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BookRoomIdRoute = BookRoomIdRouteImport.update({
+  id: '/book/$roomId',
+  path: '/book/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplyRoomIdRoute = ApplyRoomIdRouteImport.update({
+  id: '/apply/$roomId',
+  path: '/apply/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTenantsRoute = AdminTenantsRouteImport.update({
+  id: '/tenants',
+  path: '/tenants',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRoomsRoute = AdminRoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/apply/$roomId': typeof ApplyRoomIdRoute
+  '/book/$roomId': typeof BookRoomIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/apply/$roomId': typeof ApplyRoomIdRoute
+  '/book/$roomId': typeof BookRoomIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/rooms': typeof AdminRoomsRoute
+  '/admin/tenants': typeof AdminTenantsRoute
+  '/apply/$roomId': typeof ApplyRoomIdRoute
+  '/book/$roomId': typeof BookRoomIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/admin/applications'
+    | '/admin/rooms'
+    | '/admin/tenants'
+    | '/apply/$roomId'
+    | '/book/$roomId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/admin/applications'
+    | '/admin/rooms'
+    | '/admin/tenants'
+    | '/apply/$roomId'
+    | '/book/$roomId'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/admin/applications'
+    | '/admin/rooms'
+    | '/admin/tenants'
+    | '/apply/$roomId'
+    | '/book/$roomId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  ApplyRoomIdRoute: typeof ApplyRoomIdRoute
+  BookRoomIdRoute: typeof BookRoomIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +134,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/book/$roomId': {
+      id: '/book/$roomId'
+      path: '/book/$roomId'
+      fullPath: '/book/$roomId'
+      preLoaderRoute: typeof BookRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apply/$roomId': {
+      id: '/apply/$roomId'
+      path: '/apply/$roomId'
+      fullPath: '/apply/$roomId'
+      preLoaderRoute: typeof ApplyRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/tenants': {
+      id: '/admin/tenants'
+      path: '/tenants'
+      fullPath: '/admin/tenants'
+      preLoaderRoute: typeof AdminTenantsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/rooms': {
+      id: '/admin/rooms'
+      path: '/rooms'
+      fullPath: '/admin/rooms'
+      preLoaderRoute: typeof AdminRoomsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminRoomsRoute: typeof AdminRoomsRoute
+  AdminTenantsRoute: typeof AdminTenantsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminRoomsRoute: AdminRoomsRoute,
+  AdminTenantsRoute: AdminTenantsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
+  ApplyRoomIdRoute: ApplyRoomIdRoute,
+  BookRoomIdRoute: BookRoomIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
