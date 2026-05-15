@@ -66,7 +66,7 @@ export function Header() {
             <button
               onClick={() => setOpen(true)}
               className="md:hidden touch-min p-2.5 rounded-xl hover:bg-cream border border-border/60"
-              aria-label="Open menu"
+              aria-label={openMenu}
             >
               <Menu className="w-6 h-6 text-ink" strokeWidth={2.25} />
             </button>
@@ -93,7 +93,7 @@ export function Header() {
             <button
               onClick={() => setOpen(false)}
               className="touch-min p-2 rounded-xl hover:bg-cream"
-              aria-label="Close menu"
+              aria-label={closeMenu}
             >
               <X className="w-6 h-6 text-ink" />
             </button>
