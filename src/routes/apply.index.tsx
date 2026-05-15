@@ -117,13 +117,6 @@ function ApplyPage() {
       <Header />
       <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8">
         <h1 className="font-display text-3xl md:text-4xl text-ink mb-2">{t.apply.title}</h1>
-        <p className="text-sm text-ink/60 mb-6">Pick a property below and fill out your details.</p>
-
-        <div className="mb-6"><AmenityIcons /></div>
-
-        <form onSubmit={submit} className="space-y-6">
-          {/* Property + Room selection */}
-          <fieldset className="bg-card border-2 border-brand/40 rounded-2xl p-5 space-y-4">
         <p className="text-sm text-ink/60 mb-6">{l.intro}</p>
 
         <div className="mb-6"><AmenityIcons /></div>
