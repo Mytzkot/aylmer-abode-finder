@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { AmenityIcons } from "@/components/AmenityIcons";
-import { useLang } from "@/i18n/LanguageProvider";
+import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
