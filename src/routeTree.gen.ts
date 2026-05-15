@@ -27,6 +27,7 @@ import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
+import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$id.$roomSlug'
 
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
@@ -118,6 +119,11 @@ const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
   path: '/applications',
   getParentRoute: () => AdminRoute,
 } as any)
+const PropertiesIdRoomSlugRoute = PropertiesIdRoomSlugRouteImport.update({
+  id: '/$roomSlug',
+  path: '/$roomSlug',
+  getParentRoute: () => PropertiesIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -134,10 +140,11 @@ export interface FileRoutesByFullPath {
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
-  '/properties/$id': typeof PropertiesIdRoute
+  '/properties/$id': typeof PropertiesIdRouteWithChildren
   '/apply/': typeof ApplyIndexRoute
   '/book/': typeof BookIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/properties/$id/$roomSlug': typeof PropertiesIdRoomSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -151,10 +158,11 @@ export interface FileRoutesByTo {
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
-  '/properties/$id': typeof PropertiesIdRoute
+  '/properties/$id': typeof PropertiesIdRouteWithChildren
   '/apply': typeof ApplyIndexRoute
   '/book': typeof BookIndexRoute
   '/properties': typeof PropertiesIndexRoute
+  '/properties/$id/$roomSlug': typeof PropertiesIdRoomSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -172,10 +180,11 @@ export interface FileRoutesById {
   '/admin/tenants': typeof AdminTenantsRoute
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
-  '/properties/$id': typeof PropertiesIdRoute
+  '/properties/$id': typeof PropertiesIdRouteWithChildren
   '/apply/': typeof ApplyIndexRoute
   '/book/': typeof BookIndexRoute
   '/properties/': typeof PropertiesIndexRoute
+  '/properties/$id/$roomSlug': typeof PropertiesIdRoomSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/apply/'
     | '/book/'
     | '/properties/'
+    | '/properties/$id/$roomSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/apply'
     | '/book'
     | '/properties'
+    | '/properties/$id/$roomSlug'
   id:
     | '__root__'
     | '/'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/apply/'
     | '/book/'
     | '/properties/'
+    | '/properties/$id/$roomSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -377,6 +389,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/properties/$id/$roomSlug': {
+      id: '/properties/$id/$roomSlug'
+      path: '/$roomSlug'
+      fullPath: '/properties/$id/$roomSlug'
+      preLoaderRoute: typeof PropertiesIdRoomSlugRouteImport
+      parentRoute: typeof PropertiesIdRoute
+    }
   }
 }
 
@@ -418,13 +437,25 @@ const BookRouteChildren: BookRouteChildren = {
 
 const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
 
+interface PropertiesIdRouteChildren {
+  PropertiesIdRoomSlugRoute: typeof PropertiesIdRoomSlugRoute
+}
+
+const PropertiesIdRouteChildren: PropertiesIdRouteChildren = {
+  PropertiesIdRoomSlugRoute: PropertiesIdRoomSlugRoute,
+}
+
+const PropertiesIdRouteWithChildren = PropertiesIdRoute._addFileChildren(
+  PropertiesIdRouteChildren,
+)
+
 interface PropertiesRouteChildren {
-  PropertiesIdRoute: typeof PropertiesIdRoute
+  PropertiesIdRoute: typeof PropertiesIdRouteWithChildren
   PropertiesIndexRoute: typeof PropertiesIndexRoute
 }
 
 const PropertiesRouteChildren: PropertiesRouteChildren = {
-  PropertiesIdRoute: PropertiesIdRoute,
+  PropertiesIdRoute: PropertiesIdRouteWithChildren,
   PropertiesIndexRoute: PropertiesIndexRoute,
 }
 
