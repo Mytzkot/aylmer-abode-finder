@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, ExternalLink, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, Snowflake } from "lucide-react";
 import { useState } from "react";
 import { useLang } from "@/i18n/LanguageProvider";
 import type { PropertyMeta } from "@/data/properties";
@@ -50,6 +50,21 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
         <div className="text-xs text-muted-foreground font-medium">
           {rooms.length > 0 ? `${rooms.filter(r => (r.current_status || "").toLowerCase() === "available").length} of ${rooms.length} rooms available` : "Contact us for availability"}
         </div>
+
+        <ul className="flex flex-wrap gap-1.5 pt-1" aria-label="Amenities">
+          {[
+            { Icon: Wifi, label: "Wi-Fi" },
+            { Icon: BedDouble, label: "Furnished" },
+            { Icon: Utensils, label: "Kitchen" },
+            { Icon: WashingMachine, label: "Laundry" },
+            { Icon: ParkingCircle, label: "Parking" },
+            { Icon: Snowflake, label: "Heat / AC" },
+          ].map(({ Icon, label }) => (
+            <li key={label} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-cream text-ink text-[11px] font-semibold">
+              <Icon className="w-3.5 h-3.5" strokeWidth={2.25} /> {label}
+            </li>
+          ))}
+        </ul>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
           <a href={prop.youtube} target="_blank" rel="noreferrer" className="btn-pill btn-cream text-sm py-2.5">

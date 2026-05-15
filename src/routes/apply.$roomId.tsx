@@ -40,7 +40,7 @@ function ApplyPage() {
       toast.warning("Supabase not connected — application logged locally only.");
       setDone(true); setSubmitting(false); return;
     }
-    const { error } = await supabase.from("applications").insert(payload);
+    const { error } = await supabase.from("applications").insert(payload as never);
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     // TODO: trigger email confirmation here
