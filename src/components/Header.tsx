@@ -55,7 +55,7 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="hidden md:inline-flex btn-pill btn-coral text-sm px-5 py-2.5 font-typewriter uppercase tracking-[0.12em]"
+              className="hidden md:inline-flex btn-pill btn-coral text-[15px] px-5 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold text-[#0F172A]"
             >
               Book Now
             </Link>
