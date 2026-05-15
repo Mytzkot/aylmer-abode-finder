@@ -79,7 +79,7 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
           <Link to="/book/$roomId" params={{ roomId: firstRoom?.id || prop.id }} className="btn-pill btn-ink text-sm py-2.5">
             <Calendar className="w-4 h-4" /> {t.cta.book}
           </Link>
-          <Link to="/apply/$roomId" params={{ roomId: firstRoom?.id || prop.id }} className="btn-pill btn-coral text-sm py-2.5">
+          <Link to="/apply" search={{ property: prop.id }} className="btn-pill btn-coral text-sm py-2.5">
             <FileText className="w-4 h-4" /> {t.cta.apply}
           </Link>
         </div>

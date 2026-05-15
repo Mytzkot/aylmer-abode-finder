@@ -6,34 +6,65 @@ import logo from "@/assets/zorba-logo.png";
 
 const NAV = [
   { to: "/", label: "Home" },
-  { to: "/properties", label: "Properties" },
-  { to: "/transit", label: "Transit & Maps" },
-  { to: "/newcomer", label: "Newcomer Guide" },
+  { to: "/apply", label: "Apply Now" },
+  { to: "/about", label: "About Us" },
+  { to: "/properties", label: "Locations" },
+  { to: "/#contact", label: "Contact Us" },
   { to: "/faq", label: "FAQ" },
-  { to: "/apply", label: "Apply" },
-  { to: "/#contact", label: "Contact" },
+  { to: "/newcomer", label: "Newcomer Guide" },
 ];
 
 export function Header() {
   const [open, setOpen] = useState(false);
 
+  const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
+    l.to.startsWith("/#") ? (
+      <a
+        key={l.to}
+        href={l.to}
+        onClick={onClick}
+        className="uppercase tracking-wider text-[12px] font-bold text-ink/80 hover:text-ink transition"
+      >
+        {l.label}
+      </a>
+    ) : (
+      <Link
+        key={l.to}
+        to={l.to}
+        onClick={onClick}
+        className="uppercase tracking-wider text-[12px] font-bold text-ink/80 hover:text-ink transition"
+        activeProps={{ className: "uppercase tracking-wider text-[12px] font-bold text-ink underline underline-offset-8 decoration-2" }}
+        activeOptions={{ exact: l.to === "/" }}
+      >
+        {l.label}
+      </Link>
+    );
+
   return (
     <>
       <header className="sticky top-0 z-40 bg-card/95 backdrop-blur border-b border-border/60">
-        <div className="mx-auto max-w-6xl px-4 h-20 flex items-center justify-between gap-3">
+        <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-4">
           <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
-            <img
-              src={logo}
-              alt="Zorba Guest Houses"
-              className="h-12 md:h-14 w-auto"
-            />
+            <img src={logo} alt="Zorba Guest Houses" className="h-12 md:h-14 w-auto" />
           </Link>
+
+          {/* DESKTOP nav */}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-7">
+            {NAV.map((l) => navLink(l))}
+          </nav>
 
           <div className="flex items-center gap-2">
             <LanguageToggle />
+            <Link
+              to="/book"
+              className="hidden md:inline-flex btn-pill btn-coral text-sm px-5 py-2.5 uppercase tracking-wider"
+            >
+              Book Now
+            </Link>
+            {/* MOBILE hamburger */}
             <button
               onClick={() => setOpen(true)}
-              className="touch-min p-2.5 rounded-xl hover:bg-cream border border-border/60"
+              className="md:hidden touch-min p-2.5 rounded-xl hover:bg-cream border border-border/60"
               aria-label="Open menu"
             >
               <Menu className="w-6 h-6 text-ink" strokeWidth={2.25} />
@@ -42,9 +73,9 @@ export function Header() {
         </div>
       </header>
 
-      {/* Drawer */}
+      {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-50 transition ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+        className={`fixed inset-0 z-50 md:hidden transition ${open ? "pointer-events-auto" : "pointer-events-none"}`}
         aria-hidden={!open}
       >
         <div
@@ -74,7 +105,7 @@ export function Header() {
                   key={l.to}
                   href={l.to}
                   onClick={() => setOpen(false)}
-                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream text-base font-semibold text-ink"
+                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream uppercase tracking-wider text-sm font-bold text-ink"
                 >
                   {l.label}
                 </a>
@@ -83,7 +114,7 @@ export function Header() {
                   key={l.to}
                   to={l.to}
                   onClick={() => setOpen(false)}
-                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream text-base font-semibold text-ink"
+                  className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream uppercase tracking-wider text-sm font-bold text-ink"
                   activeProps={{ className: "bg-cream-deep text-ink" }}
                   activeOptions={{ exact: l.to === "/" }}
                 >
@@ -91,6 +122,13 @@ export function Header() {
                 </Link>
               )
             )}
+            <Link
+              to="/book"
+              onClick={() => setOpen(false)}
+              className="mt-3 btn-pill btn-coral uppercase tracking-wider text-sm px-5 py-3 justify-center"
+            >
+              Book Now
+            </Link>
           </nav>
 
           <div className="p-5 border-t border-border/60 text-xs text-ink/60">
