@@ -1,8 +1,9 @@
 import {
   Wifi, BedDouble, Utensils, WashingMachine, ShowerHead, Tv, Snowflake,
   Coffee, ParkingCircle, Lock, Bus, Sparkles, KeyRound, Camera, Armchair,
-  CookingPot, Refrigerator, Shirt,
+  Refrigerator, Shirt, CookingPot,
 } from "lucide-react";
+import { T, useTranslated } from "@/i18n/LanguageProvider";
 
 const AMENITIES = [
   { icon: Wifi, label: "Wi-Fi" },
@@ -26,9 +27,10 @@ const AMENITIES = [
 ];
 
 export function AmenityIcons({ title = "What's included" }: { title?: string }) {
+  const translatedTitle = useTranslated(title);
   return (
     <section className="bg-card border border-border rounded-2xl p-5">
-      <h2 className="font-display text-2xl text-ink mb-4">{title}</h2>
+      <h2 className="font-display text-2xl text-ink mb-4">{translatedTitle}</h2>
       <ul className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3">
         {AMENITIES.map(({ icon: Icon, label }) => (
           <li
@@ -39,7 +41,7 @@ export function AmenityIcons({ title = "What's included" }: { title?: string }) 
               <Icon className="w-5 h-5" strokeWidth={2} />
             </span>
             <span className="text-xs font-semibold text-ink leading-tight">
-              {label}
+              <T>{label}</T>
             </span>
           </li>
         ))}
