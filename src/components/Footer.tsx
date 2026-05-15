@@ -1,5 +1,6 @@
 import { MessageCircle, Phone, Facebook, Youtube, Instagram, Send } from "lucide-react";
 import { CONTACT } from "@/data/properties";
+import { T } from "@/i18n/LanguageProvider";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
@@ -15,7 +16,7 @@ export function Footer() {
     <footer className="border-t border-border/60 bg-card pb-32 md:pb-24">
       <div className="mx-auto max-w-6xl px-4 py-12">
         <p className="text-center font-display text-2xl md:text-3xl text-ink mb-6">
-          Stay Connected
+          <T>Stay Connected</T>
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
           {SOCIALS.map(({ href, Icon, label, color }) => (

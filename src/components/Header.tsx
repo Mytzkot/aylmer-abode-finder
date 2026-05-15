@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
+import { T } from "@/i18n/LanguageProvider";
 import logo from "@/assets/zorba-logo.png";
 
 const NAV = [
@@ -23,7 +24,7 @@ export function Header() {
   const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
     l.to.startsWith("/#") ? (
       <a key={l.to} href={l.to} onClick={onClick} className={baseCls}>
-        {l.label}
+        <T>{l.label}</T>
       </a>
     ) : (
       <Link
@@ -34,7 +35,7 @@ export function Header() {
         activeProps={{ className: activeCls }}
         activeOptions={{ exact: l.to === "/" }}
       >
-        {l.label}
+        <T>{l.label}</T>
       </Link>
     );
 
@@ -57,7 +58,7 @@ export function Header() {
               to="/book"
               className="hidden md:inline-flex btn-pill btn-coral text-[15px] px-5 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold text-[#0F172A]"
             >
-              Book Now
+              <T>Book Now</T>
             </Link>
             {/* MOBILE hamburger */}
             <button
@@ -105,7 +106,7 @@ export function Header() {
                   onClick={() => setOpen(false)}
                   className="touch-min px-5 py-3.5 rounded-xl hover:bg-cream font-typewriter uppercase tracking-[0.12em] text-sm text-ink"
                 >
-                  {l.label}
+                  <T>{l.label}</T>
                 </a>
               ) : (
                 <Link
@@ -116,7 +117,7 @@ export function Header() {
                   activeProps={{ className: "bg-cream-deep text-ink" }}
                   activeOptions={{ exact: l.to === "/" }}
                 >
-                  {l.label}
+                  <T>{l.label}</T>
                 </Link>
               )
             )}
@@ -125,12 +126,12 @@ export function Header() {
               onClick={() => setOpen(false)}
               className="mt-3 btn-pill btn-coral font-typewriter uppercase tracking-[0.12em] text-sm px-5 py-3 justify-center"
             >
-              Book Now
+              <T>Book Now</T>
             </Link>
           </nav>
 
           <div className="p-5 border-t border-border/60 text-xs text-ink/60">
-            Comfortable Living · Hébergement Confortable
+            <T>Comfortable Living</T>
           </div>
         </aside>
       </div>

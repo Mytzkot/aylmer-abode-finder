@@ -6,6 +6,7 @@ import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PROPERTIES } from "@/data/properties";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { T } from "@/i18n/LanguageProvider";
 
 export const Route = createFileRoute("/properties/")({ component: PropertiesPage });
 
@@ -35,8 +36,8 @@ function PropertiesPage() {
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-12 md:py-16">
-        <h1 className="font-display text-4xl md:text-5xl text-ink">Available Properties</h1>
-        <p className="text-ink/60 mt-2 mb-10">Three cozy houses across Aylmer-Gatineau.</p>
+        <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Available Properties</T></h1>
+        <p className="text-ink/60 mt-2 mb-10"><T>Three cozy houses across Aylmer-Gatineau.</T></p>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {PROPERTIES.map((p) => (
             <PropertyCard key={p.id} prop={p} rooms={roomsByProp[p.id] || []} />
