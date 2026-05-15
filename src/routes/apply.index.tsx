@@ -22,12 +22,19 @@ interface RoomRow { id: string; name: string | null; current_status: string | nu
 
 const PROPERTY_OPTIONS = [
   ...PROPERTIES.map((p) => ({ value: p.id, label: p.address })),
-  { value: "flexible", label: "I'm flexible / Je suis flexible" },
+  { value: "flexible", label: "I'm flexible / Je suis flexible / أنا مرن" },
 ];
+
+const L = {
+  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home" },
+  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil" },
+  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية" },
+};
 
 function ApplyPage() {
   const { property: prefilledProperty } = useSearch({ from: "/apply/" });
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const l = L[lang];
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isStudent, setIsStudent] = useState(false);
@@ -60,12 +67,12 @@ function ApplyPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!propertySel) { toast.error("Please select a property."); return; }
+    if (!propertySel) { toast.error(l.errPickProp); return; }
     setSubmitting(true);
 
     const propertyLabel = PROPERTY_OPTIONS.find((p) => p.value === propertySel)?.label || "";
     const roomLabel = roomSel === "any"
-      ? "Any available room"
+      ? l.anyRoom
       : filteredRooms.find((r) => r.id === roomSel)?.name || "";
 
     const payload = {
@@ -95,7 +102,7 @@ function ApplyPage() {
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{t.apply.thanks}</h1>
-          <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold">Back to home</Link>
+          <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
         </main>
         <Footer />
         <FloatingContactBar />
@@ -117,12 +124,18 @@ function ApplyPage() {
         <form onSubmit={submit} className="space-y-6">
           {/* Property + Room selection */}
           <fieldset className="bg-card border-2 border-brand/40 rounded-2xl p-5 space-y-4">
-            <legend className="px-2 font-bold text-base">Choose your property / Choisissez votre propriété</legend>
+        <p className="text-sm text-ink/60 mb-6">{l.intro}</p>
+
+        <div className="mb-6"><AmenityIcons /></div>
+
+        <form onSubmit={submit} className="space-y-6">
+          {/* Property + Room selection */}
+          <fieldset className="bg-card border-2 border-brand/40 rounded-2xl p-5 space-y-4">
+            <legend className="px-2 font-bold text-base">{l.chooseProp}</legend>
 
             <label className="block">
               <span className="text-sm font-semibold mb-1 block">
-                Which Property are you applying for? <span className="text-destructive">*</span>
-                <span className="block text-xs text-ink/60 font-normal">Pour quelle propriété postulez-vous ?</span>
+                {l.whichProp} <span className="text-destructive">*</span>
               </span>
               <select
                 required
@@ -130,7 +143,7 @@ function ApplyPage() {
                 onChange={(e) => { setPropertySel(e.target.value); setRoomSel("any"); }}
                 className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option value="">— Select property —</option>
+                <option value="">{l.selectProp}</option>
                 {PROPERTY_OPTIONS.map((p) => (
                   <option key={p.value} value={p.value}>{p.label}</option>
                 ))}
@@ -139,8 +152,7 @@ function ApplyPage() {
 
             <label className="block">
               <span className="text-sm font-semibold mb-1 block">
-                Which Room? <span className="text-destructive">*</span>
-                <span className="block text-xs text-ink/60 font-normal">Quelle chambre ?</span>
+                {l.whichRoom} <span className="text-destructive">*</span>
               </span>
               <select
                 required
@@ -149,7 +161,7 @@ function ApplyPage() {
                 disabled={!propertySel}
                 className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
               >
-                <option value="any">Any available room / Toute chambre disponible</option>
+                <option value="any">{l.anyRoom}</option>
                 {filteredRooms.map((r) => (
                   <option key={r.id} value={r.id}>
                     {r.name || r.id.slice(0, 8)} {r.current_status ? `· ${r.current_status}` : ""}
