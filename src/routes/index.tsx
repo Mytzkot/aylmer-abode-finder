@@ -4,11 +4,14 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES } from "@/data/properties";
+import { useLang } from "@/i18n/LanguageProvider";
 import heroImg from "@/assets/hero-room.jpg";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
 function HomePage() {
+  const { t } = useLang();
+  const h = t.home;
   return (
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
@@ -18,24 +21,24 @@ function HomePage() {
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
             <p className="text-sm md:text-base font-semibold accent-text uppercase tracking-wide">
-              Comfortable Living · Hébergement Confortable
+              {h.tagline}
             </p>
             <h1 className="mt-3 font-display text-4xl md:text-6xl leading-[1.05] text-ink">
-              Furnished Monthly Rooms in Ottawa/Gatineau
+              {h.title}
             </h1>
-            <p className="mt-4 font-display text-2xl md:text-3xl text-ink/70 leading-tight">
-              Chambres Meublées à Gatineau/Ottawa
+            <p className="mt-4 font-display text-xl md:text-2xl text-ink/70 leading-tight">
+              {h.subtitle}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/properties" className="btn-pill btn-coral text-base px-7 py-3.5">
-                Room Rentals
+                {h.ctaRooms}
               </Link>
               <a
                 href="#contact"
                 className="btn-pill btn-outline-ink text-base px-7 py-3.5"
               >
-                Storage Rentals
+                {h.ctaStorage}
               </a>
             </div>
           </div>
@@ -54,8 +57,8 @@ function HomePage() {
       {/* OUR LOCATIONS */}
       <section className="bg-cream">
         <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
-          <h2 className="font-display text-3xl md:text-5xl text-ink text-center">Our Locations</h2>
-          <p className="text-center text-ink/60 mt-2 mb-10">Tap a card to see details</p>
+          <h2 className="font-display text-3xl md:text-5xl text-ink text-center">{h.locations}</h2>
+          <p className="text-center text-ink/60 mt-2 mb-10">{h.locationsHint}</p>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {PROPERTIES.map((p) => (
@@ -88,13 +91,9 @@ function HomePage() {
       {/* CONTACT */}
       <section id="contact" className="bg-cream-deep/30 scroll-mt-20">
         <div className="mx-auto max-w-3xl px-4 py-14 md:py-20">
-          <h2 className="font-display text-3xl md:text-5xl text-ink text-center">Get in Touch</h2>
+          <h2 className="font-display text-3xl md:text-5xl text-ink text-center">{h.contactTitle}</h2>
           <p className="mt-4 text-center text-ink/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
-            Questions about our furnished rooms? Reach out and we'll respond quickly.
-            <br className="hidden sm:inline" />
-            <span className="text-ink/60">
-              Des questions sur nos chambres meublées ? Écrivez-nous, nous répondons rapidement.
-            </span>
+            {h.contactBody}
           </p>
 
           <div className="mt-10">
