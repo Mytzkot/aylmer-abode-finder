@@ -116,6 +116,6 @@ export const translations = {
     },
     faq: { title: "اسألنا أي شيء", placeholder: "اكتب سؤالك...", send: "إرسال" },
   },
-} as const;
+};
 
-export type T = typeof translations.en;
+export type T = (typeof translations)["en"];
