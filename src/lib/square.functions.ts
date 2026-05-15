@@ -77,17 +77,35 @@ export const syncSquareCatalog = createServerFn({ method: "POST" })
     if (!properties?.length) throw new Error("No properties have square_location_id set");
 
     const propByLocation = new Map(properties.map((p) => [p.square_location_id!, p]));
-    const locationIds = properties.map((p) => p.square_location_id!);
 
-    // Search for items at these locations, include images
+    // Build name-prefix map: "amour" -> property, "conrad" -> property, "colline" -> property
+    const propByNameKey = new Map<string, typeof properties[number]>();
+    for (const p of properties) {
+      const keys = [p.short_name, p.slug, p.address]
+        .filter(Boolean)
+        .map((s) => s!.toLowerCase());
+      for (const k of keys) {
+        // index by first word (e.g. "102 Chemin d'Amour" -> also index "amour")
+        propByNameKey.set(k, p);
+        const words = k.split(/[\s\-_]+/);
+        for (const w of words) if (w.length >= 4) propByNameKey.set(w, p);
+      }
+    }
+
+    function matchPropertyByName(itemName: string) {
+      const lower = itemName.toLowerCase();
+      for (const [key, prop] of propByNameKey) {
+        if (lower.includes(key)) return prop;
+      }
+      return null;
+    }
+
+    // Pull all ITEM objects with images (no location filter — items are at "Main")
     const search = await squareFetch(
       "/catalog/search",
       {
         object_types: ["ITEM"],
         include_related_objects: true,
-        query: {
-          enabled_location_query: { location_ids: locationIds },
-        },
       },
       token,
     );
