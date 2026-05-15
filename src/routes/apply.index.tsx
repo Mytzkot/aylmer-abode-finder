@@ -19,51 +19,28 @@ export const Route = createFileRoute("/apply/")({
 });
 
 interface Occupant { name: string; relation: string; age: string }
-interface RoomRow { id: string; name: string | null; current_status: string | null; property_id: string | null }
+interface RoomRow { id: string; name: string | null; current_status: string | null; property_id: string | null; rate_monthly: number | null; base_rate: number | null }
 
-const PROPERTY_OPTIONS = [
-  ...PROPERTIES.map((p) => ({ value: p.id, label: p.address })),
-  { value: "flexible", label: "I'm flexible / Je suis flexible / أنا مرن" },
+const LOCATION_OPTIONS = [
+  { value: "any", label_en: "Any location", label_fr: "N'importe quel emplacement" },
+  ...PROPERTIES.map((p) => ({ value: p.id, label_en: p.address, label_fr: p.address })),
+];
+
+const BUDGET_OPTIONS = [
+  { value: "any", label_en: "Any budget", label_fr: "N'importe quel budget" },
+  { value: "750", label_en: "Around $750", label_fr: "Environ 750 $" },
+  { value: "800", label_en: "Around $800", label_fr: "Environ 800 $" },
+  { value: "850", label_en: "Around $850", label_fr: "Environ 850 $" },
+  { value: "900", label_en: "Around $900", label_fr: "Environ 900 $" },
+  { value: "950", label_en: "Around $950", label_fr: "Environ 950 $" },
+  { value: "1200", label_en: "Around $1200", label_fr: "Environ 1200 $" },
 ];
 
 const L = {
-  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home", roomsLoading: "Loading rooms…", noRooms: "No specific rooms listed yet — we'll match you with the best fit.", thanksLine2: "We received your application and will contact you within 24 hours." },
-  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil", roomsLoading: "Chargement des chambres…", noRooms: "Aucune chambre listée — nous vous trouverons la meilleure option.", thanksLine2: "Nous avons reçu votre demande et vous contacterons sous 24 heures." },
-  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية", roomsLoading: "جارٍ تحميل الغرف…", noRooms: "لا توجد غرف محددة بعد — سنوفر لك الأنسب.", thanksLine2: "لقد استلمنا طلبك وسنتواصل معك خلال 24 ساعة." },
+  en: { intro: "Pick a location and your budget, then fill out your details.", chooseProp: "Choose your location & budget", whichLoc: "Which location are you applying for?", whichBudget: "What's your budget per month?", helper: "We'll match you with the best available room in your budget", noMatch: "No exact match — we'll contact you with the closest options.", matches: (n: number, loc: string, b: string) => `${n} ${n === 1 ? "room" : "rooms"} match your selection in ${loc} around $${b}/month`, matchesAny: (n: number, b: string) => `${n} ${n === 1 ? "room" : "rooms"} match your selection around $${b}/month`, matchesLoc: (n: number, loc: string) => `${n} ${n === 1 ? "room" : "rooms"} available in ${loc}`, back: "Back to home", thanksLine2: "We received your application and will contact you within 24 hours." },
+  fr: { intro: "Choisissez un emplacement et votre budget, puis remplissez vos coordonnées.", chooseProp: "Choisissez votre emplacement et budget", whichLoc: "Quel emplacement vous intéresse ?", whichBudget: "Quel est votre budget mensuel ?", helper: "Nous vous attribuerons la meilleure chambre disponible selon votre budget", noMatch: "Aucune correspondance exacte — nous vous contacterons avec les options les plus proches.", matches: (n: number, loc: string, b: string) => `${n} chambre(s) correspondent à votre sélection à ${loc} autour de ${b} $/mois`, matchesAny: (n: number, b: string) => `${n} chambre(s) correspondent à votre sélection autour de ${b} $/mois`, matchesLoc: (n: number, loc: string) => `${n} chambre(s) disponible(s) à ${loc}`, back: "Retour à l'accueil", thanksLine2: "Nous avons reçu votre demande et vous contacterons sous 24 heures." },
+  ar: { intro: "اختر الموقع والميزانية ثم أكمل بياناتك.", chooseProp: "اختر الموقع والميزانية", whichLoc: "أي موقع تتقدّم له؟", whichBudget: "ما ميزانيتك الشهرية؟", helper: "سنوفر لك أفضل غرفة متاحة ضمن ميزانيتك", noMatch: "لا توجد مطابقة دقيقة — سنتواصل معك بأقرب الخيارات.", matches: (n: number, loc: string, b: string) => `${n} غرفة تطابق اختيارك في ${loc} حوالي ${b} دولار/شهر`, matchesAny: (n: number, b: string) => `${n} غرفة تطابق اختيارك حوالي ${b} دولار/شهر`, matchesLoc: (n: number, loc: string) => `${n} غرفة متاحة في ${loc}`, back: "العودة إلى الرئيسية", thanksLine2: "لقد استلمنا طلبك وسنتواصل معك خلال 24 ساعة." },
 };
-
-function ApplyPage() {
-  const { property: prefilledProperty, room: prefilledRoom } = useSearch({ from: "/apply/" });
-  const { t, lang, dir } = useLang();
-  const l = L[lang];
-  const [done, setDone] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [isStudent, setIsStudent] = useState(false);
-  const [occupants, setOccupants] = useState<Occupant[]>([]);
-  const [form, setForm] = useState<Record<string, any>>({});
-  const [propertySel, setPropertySel] = useState<string>(prefilledProperty || "");
-  const [roomSel, setRoomSel] = useState<string>(prefilledRoom || "any");
-  const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
-  const [roomsLoading, setRoomsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!isSupabaseConfigured) { setRoomsLoading(false); return; }
-    (async () => {
-      const { data } = await supabase.from("rooms").select("id,name,current_status,property_id");
-      if (data) setAllRooms(data as RoomRow[]);
-      setRoomsLoading(false);
-    })();
-  }, []);
-
-  // Filter rooms by selected property (match against name keyword)
-  const propertyKeyword: Record<string, string> = {
-    "102-amour": "102",
-    "58-conrad": "58",
-    "260-colline": "260",
-  };
-  const filteredRooms = propertySel && propertyKeyword[propertySel]
-    ? allRooms.filter((r) => (r.name || "").includes(propertyKeyword[propertySel]))
-    : [];
 
   const upd = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }));
