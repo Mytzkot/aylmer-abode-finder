@@ -99,13 +99,16 @@ function ApplyPage() {
   };
 
   if (done) {
+    const propLabel = PROPERTY_OPTIONS.find((p) => p.value === propertySel)?.label || "";
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col" dir={dir}>
         <Header />
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{t.apply.thanks}</h1>
-          <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
+          <p className="text-sm text-ink/70 mb-2">{l.thanksLine2}</p>
+          {propLabel && <p className="text-xs text-ink/60 mb-6">→ {propLabel}</p>}
+          <Link to="/" className="mt-6 inline-flex rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
         </main>
         <Footer />
         <FloatingContactBar />
@@ -116,9 +119,9 @@ function ApplyPage() {
   const f = t.fields;
 
   return (
-    <div className="min-h-screen flex flex-col bg-cream">
+    <div className="min-h-screen flex flex-col bg-cream" dir={dir}>
       <Header />
-      <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8">
+      <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8 text-start">
         <h1 className="font-display text-3xl md:text-4xl text-ink mb-2">{t.apply.title}</h1>
         <p className="text-sm text-ink/60 mb-6">{l.intro}</p>
 
@@ -154,16 +157,19 @@ function ApplyPage() {
                 required
                 value={roomSel}
                 onChange={(e) => setRoomSel(e.target.value)}
-                disabled={!propertySel}
+                disabled={!propertySel || roomsLoading}
                 className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
               >
-                <option value="any">{l.anyRoom}</option>
+                <option value="any">{roomsLoading ? l.roomsLoading : l.anyRoom}</option>
                 {filteredRooms.map((r) => (
                   <option key={r.id} value={r.id}>
                     {r.name || r.id.slice(0, 8)} {r.current_status ? `· ${r.current_status}` : ""}
                   </option>
                 ))}
               </select>
+              {propertySel && !roomsLoading && filteredRooms.length === 0 && (
+                <span className="block mt-1.5 text-xs text-ink/60">{l.noRooms}</span>
+              )}
             </label>
           </fieldset>
 
