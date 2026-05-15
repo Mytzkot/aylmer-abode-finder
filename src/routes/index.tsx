@@ -17,7 +17,7 @@ function HomePage() {
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
             <p className="text-sm md:text-base font-semibold accent-text uppercase tracking-wide">
-              Comfortable Living
+              Comfortable Living · Hébergement Confortable
             </p>
             <h1 className="mt-3 font-display text-4xl md:text-6xl leading-[1.05] text-ink">
               Furnished Monthly Rooms in Ottawa/Gatineau
