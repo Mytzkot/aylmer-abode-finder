@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 import { Header } from "@/components/Header";
+import { AmenityIcons } from "@/components/AmenityIcons";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { useLang } from "@/i18n/LanguageProvider";
@@ -67,8 +68,10 @@ function ApplyPage() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8">
-        <h1 className="text-2xl md:text-3xl font-bold mb-1">{t.apply.title}</h1>
+        <h1 className="font-display text-3xl md:text-4xl text-ink mb-1">{t.apply.title}</h1>
         <p className="text-sm text-muted-foreground mb-6">Room: <span className="font-mono">{roomId}</span></p>
+
+        <div className="mb-6"><AmenityIcons /></div>
 
         <form onSubmit={submit} className="space-y-6">
           <Section title={t.apply.personal}>

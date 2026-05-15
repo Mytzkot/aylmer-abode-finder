@@ -19,9 +19,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-card/95 backdrop-blur border-b border-border/60">
       <div className="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between gap-3">
-        <Link to="/" className="flex items-center gap-2 font-display text-xl tracking-tight">
-          <span className="inline-flex w-9 h-9 rounded-xl bg-ink text-primary-foreground items-center justify-center font-display text-lg">Z</span>
-          <span className="text-ink">ZORBA</span>
+        <Link to="/" className="flex items-center gap-2 font-display tracking-tight">
+          <span className="inline-flex w-9 h-9 rounded-xl bg-ink text-primary-foreground items-center justify-center font-display text-lg shrink-0">Z</span>
+          <span className="text-ink font-black text-base sm:text-xl whitespace-nowrap">ZORBA RENTALS</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
