@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, Home, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, Snowflake } from "lucide-react";
 import { useState } from "react";
-import { useLang } from "@/i18n/LanguageProvider";
+import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
 import type { PropertyMeta } from "@/data/properties";
 
 interface Room { id: string; name?: string | null; current_status?: string | null; base_rate?: number | null; youtube_video_url?: string | null; airbnb_listing_url?: string | null; }
