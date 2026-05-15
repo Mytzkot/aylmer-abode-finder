@@ -6,6 +6,7 @@ import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PROPERTIES } from "@/data/properties";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { T } from "@/i18n/LanguageProvider";
 
 export const Route = createFileRoute("/properties/")({ component: PropertiesPage });
 
