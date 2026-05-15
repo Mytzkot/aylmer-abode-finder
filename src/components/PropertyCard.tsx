@@ -37,6 +37,18 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
   const airbnbUrl = firstRoom?.airbnb_listing_url || null;
   const gmapsUrl = mapsUrl(prop.address, prop.city);
 
+  const watchTour = useTranslated("Watch tour");
+  const viewMap = useTranslated("View map");
+  const airbnbListing = useTranslated("Airbnb listing");
+  const prevImg = useTranslated("Previous image");
+  const nextImg = useTranslated("Next image");
+  const amenitiesLabel = useTranslated("Amenities");
+  const roomsLine = useTranslated(
+    rooms.length > 0
+      ? `${availableCount} of ${rooms.length} rooms available`
+      : `${availableCount} rooms available`,
+  );
+
   return (
     <article className="bg-card rounded-3xl overflow-hidden shadow-sm border border-border/40 hover:shadow-xl hover:-translate-y-0.5 transition">
       <div className="relative aspect-video bg-cream-deep overflow-hidden rounded-3xl m-2">
