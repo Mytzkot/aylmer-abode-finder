@@ -1,5 +1,6 @@
 import { MessageCircle, Phone, Facebook, Youtube, Instagram, Send } from "lucide-react";
 import { CONTACT } from "@/data/properties";
+import { T } from "@/i18n/LanguageProvider";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
