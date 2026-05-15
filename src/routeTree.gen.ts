@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
+import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as NewcomerRouteImport } from './routes/newcomer'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -32,6 +33,11 @@ import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$i
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsRoute = RoomsRouteImport.update({
+  id: '/rooms',
+  path: '/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PropertiesRoute = PropertiesRouteImport.update({
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/rooms': typeof RoomsRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
+  '/rooms': typeof RoomsRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -174,6 +182,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
+  '/rooms': typeof RoomsRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/newcomer'
     | '/properties'
+    | '/rooms'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -215,6 +225,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/faq'
     | '/newcomer'
+    | '/rooms'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/newcomer'
     | '/properties'
+    | '/rooms'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   NewcomerRoute: typeof NewcomerRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
+  RoomsRoute: typeof RoomsRoute
   TransitRoute: typeof TransitRoute
 }
 
@@ -268,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/transit'
       fullPath: '/transit'
       preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms': {
+      id: '/rooms'
+      path: '/rooms'
+      fullPath: '/rooms'
+      preLoaderRoute: typeof RoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/properties': {
@@ -472,8 +492,19 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   NewcomerRoute: NewcomerRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
+  RoomsRoute: RoomsRoute,
   TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
