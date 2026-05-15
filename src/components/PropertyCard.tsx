@@ -51,14 +51,19 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
 
   return (
     <article className="bg-card rounded-3xl overflow-hidden shadow-sm border border-border/40 hover:shadow-xl hover:-translate-y-0.5 transition">
-      <div className="relative aspect-video bg-cream-deep overflow-hidden rounded-3xl m-2">
-        <img src={prop.images[idx]} alt={prop.address} className="w-full h-full object-cover" loading="lazy" />
+      <Link
+        to="/properties/$id"
+        params={{ id: prop.id }}
+        aria-label={`View rooms at ${prop.address}`}
+        className="block relative aspect-video bg-cream-deep overflow-hidden rounded-3xl m-2 group"
+      >
+        <img src={prop.images[idx]} alt={prop.address} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
         {prop.images.length > 1 && (
           <>
-            <button onClick={prev} className="touch-min absolute start-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label={prevImg}>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); prev(); }} className="touch-min absolute start-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label={prevImg}>
               <ChevronLeft className="w-5 h-5 flip-rtl" />
             </button>
-            <button onClick={next} className="touch-min absolute end-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label={nextImg}>
+            <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); next(); }} className="touch-min absolute end-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label={nextImg}>
               <ChevronRight className="w-5 h-5 flip-rtl" />
             </button>
             <div className="absolute bottom-3 inset-x-0 flex justify-center gap-1.5">
@@ -68,13 +73,14 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
             </div>
           </>
         )}
-      </div>
+      </Link>
 
       <div className="p-5 space-y-3">
-        <div>
+        <Link to="/properties/$id" params={{ id: prop.id }} className="block hover:text-brand transition">
           <h3 className="font-display text-2xl text-ink">{prop.address}</h3>
           <p className="text-sm text-muted-foreground flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {prop.city}</p>
-        </div>
+        </Link>
+
 
         {/* Circular icon row */}
         <div className="flex items-center gap-2">
