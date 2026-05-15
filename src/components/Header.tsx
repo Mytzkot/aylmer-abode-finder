@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
-import { T } from "@/i18n/LanguageProvider";
+import { T, useTranslated } from "@/i18n/LanguageProvider";
 import logo from "@/assets/zorba-logo.png";
 
 const NAV = [
