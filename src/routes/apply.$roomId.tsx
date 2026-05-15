@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 import { Header } from "@/components/Header";
+import { AmenityIcons } from "@/components/AmenityIcons";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { useLang } from "@/i18n/LanguageProvider";
