@@ -13,6 +13,7 @@ import { Route as TransitRouteImport } from './routes/transit'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as NewcomerRouteImport } from './routes/newcomer'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as BookRouteImport } from './routes/book'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
@@ -43,6 +44,11 @@ const NewcomerRoute = NewcomerRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookRoute = BookRouteImport.update({
+  id: '/book',
+  path: '/book',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApplyRoute = ApplyRouteImport.update({
@@ -76,9 +82,9 @@ const PropertiesIdRoute = PropertiesIdRouteImport.update({
   getParentRoute: () => PropertiesRoute,
 } as any)
 const BookRoomIdRoute = BookRoomIdRouteImport.update({
-  id: '/book/$roomId',
-  path: '/book/$roomId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$roomId',
+  path: '/$roomId',
+  getParentRoute: () => BookRoute,
 } as any)
 const ApplyRoomIdRoute = ApplyRoomIdRouteImport.update({
   id: '/$roomId',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/apply': typeof ApplyRouteWithChildren
+  '/book': typeof BookRouteWithChildren
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/book': typeof BookRouteWithChildren
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/transit': typeof TransitRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/apply': typeof ApplyRouteWithChildren
+  '/book': typeof BookRouteWithChildren
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/properties': typeof PropertiesRouteWithChildren
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/apply'
+    | '/book'
     | '/faq'
     | '/newcomer'
     | '/properties'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/book'
     | '/faq'
     | '/newcomer'
     | '/transit'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/apply'
+    | '/book'
     | '/faq'
     | '/newcomer'
     | '/properties'
@@ -207,11 +219,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   ApplyRoute: typeof ApplyRouteWithChildren
+  BookRoute: typeof BookRouteWithChildren
   FaqRoute: typeof FaqRoute
   NewcomerRoute: typeof NewcomerRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
   TransitRoute: typeof TransitRoute
-  BookRoomIdRoute: typeof BookRoomIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -242,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/book': {
+      id: '/book'
+      path: '/book'
+      fullPath: '/book'
+      preLoaderRoute: typeof BookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/apply': {
@@ -288,10 +307,10 @@ declare module '@tanstack/react-router' {
     }
     '/book/$roomId': {
       id: '/book/$roomId'
-      path: '/book/$roomId'
+      path: '/$roomId'
       fullPath: '/book/$roomId'
       preLoaderRoute: typeof BookRoomIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BookRoute
     }
     '/apply/$roomId': {
       id: '/apply/$roomId'
@@ -350,6 +369,16 @@ const ApplyRouteChildren: ApplyRouteChildren = {
 
 const ApplyRouteWithChildren = ApplyRoute._addFileChildren(ApplyRouteChildren)
 
+interface BookRouteChildren {
+  BookRoomIdRoute: typeof BookRoomIdRoute
+}
+
+const BookRouteChildren: BookRouteChildren = {
+  BookRoomIdRoute: BookRoomIdRoute,
+}
+
+const BookRouteWithChildren = BookRoute._addFileChildren(BookRouteChildren)
+
 interface PropertiesRouteChildren {
   PropertiesIdRoute: typeof PropertiesIdRoute
   PropertiesIndexRoute: typeof PropertiesIndexRoute
@@ -368,11 +397,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   ApplyRoute: ApplyRouteWithChildren,
+  BookRoute: BookRouteWithChildren,
   FaqRoute: FaqRoute,
   NewcomerRoute: NewcomerRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
   TransitRoute: TransitRoute,
-  BookRoomIdRoute: BookRoomIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
