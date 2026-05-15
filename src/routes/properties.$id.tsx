@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, ExternalLink, Footprints } from "lucide-react";
 import { AmenityIcons } from "@/components/AmenityIcons";
+import { T, useTranslated } from "@/i18n/LanguageProvider";
 
 const WALKSCORE_URLS: Record<string, string> = {
   "102-amour": "https://www.walkscore.com/score/102-chemin-d-amour-gatineau-qc-canada",
