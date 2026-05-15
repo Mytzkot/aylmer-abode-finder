@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Youtube, Calendar, FileText, ExternalLink, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle, Snowflake } from "lucide-react";
 import { useState } from "react";
 import { useLang } from "@/i18n/LanguageProvider";
 import type { PropertyMeta } from "@/data/properties";
