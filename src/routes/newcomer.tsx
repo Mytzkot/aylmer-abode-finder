@@ -13,8 +13,8 @@ function NewcomerPage() {
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
       <main className="flex-1 mx-auto max-w-5xl w-full px-4 py-12 md:py-16">
-        <h1 className="font-display text-4xl md:text-5xl text-ink">Newcomer Guide</h1>
-        <p className="text-ink/60 mt-2 mb-10">Helpful links for settling into Aylmer-Gatineau.</p>
+        <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Newcomer Guide</T></h1>
+        <p className="text-ink/60 mt-2 mb-10"><T>Helpful links for settling into Aylmer-Gatineau.</T></p>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {NEWCOMER_LINKS.map((l) => (
