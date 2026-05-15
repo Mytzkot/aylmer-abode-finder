@@ -156,6 +156,7 @@ export type Database = {
           image_urls: string[] | null
           short_name: string | null
           slug: string | null
+          square_location_id: string | null
           youtube_url: string | null
         }
         Insert: {
@@ -169,6 +170,7 @@ export type Database = {
           image_urls?: string[] | null
           short_name?: string | null
           slug?: string | null
+          square_location_id?: string | null
           youtube_url?: string | null
         }
         Update: {
@@ -182,6 +184,7 @@ export type Database = {
           image_urls?: string[] | null
           short_name?: string | null
           slug?: string | null
+          square_location_id?: string | null
           youtube_url?: string | null
         }
         Relationships: []
@@ -205,6 +208,8 @@ export type Database = {
           rate_weekly: number | null
           room_number: string | null
           slug: string | null
+          square_item_id: string | null
+          square_variation_id: string | null
           youtube_video_url: string | null
         }
         Insert: {
@@ -225,6 +230,8 @@ export type Database = {
           rate_weekly?: number | null
           room_number?: string | null
           slug?: string | null
+          square_item_id?: string | null
+          square_variation_id?: string | null
           youtube_video_url?: string | null
         }
         Update: {
@@ -245,6 +252,8 @@ export type Database = {
           rate_weekly?: number | null
           room_number?: string | null
           slug?: string | null
+          square_item_id?: string | null
+          square_variation_id?: string | null
           youtube_video_url?: string | null
         }
         Relationships: [

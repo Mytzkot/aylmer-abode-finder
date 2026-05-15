@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/lib/supabase";
+import { syncSquareCatalog } from "@/lib/square.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/rooms")({ component: RoomsPage });
@@ -11,6 +13,8 @@ const STATUSES = ["Available", "Rented", "Maintenance"] as const;
 
 function RoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [syncing, setSyncing] = useState(false);
+  const sync = useServerFn(syncSquareCatalog);
 
   const load = async () => {
     const { data, error } = await supabase.from("rooms").select("*");
@@ -25,9 +29,32 @@ function RoomsPage() {
     setRooms(rooms.map(x => x.id === r.id ? { ...x, current_status: status } : x));
   };
 
+  const runSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await sync();
+      toast.success(`Synced ${res.upserted} rooms from ${res.items} Square items`);
+      if (res.errors?.length) toast.error(res.errors.join("\n"));
+      await load();
+    } catch (e: unknown) {
+      toast.error(e instanceof Error ? e.message : "Sync failed");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Rooms</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Rooms</h1>
+        <button
+          onClick={runSync}
+          disabled={syncing}
+          className="px-4 py-2 rounded-lg bg-foreground text-background text-sm font-semibold disabled:opacity-50"
+        >
+          {syncing ? "Syncing…" : "Sync from Square"}
+        </button>
+      </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {rooms.map(r => {
           const s = (r.current_status || "Available");
