@@ -13,6 +13,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/apply/")({
   validateSearch: (s: Record<string, unknown>) => ({
     property: typeof s.property === "string" ? s.property : undefined,
+    room: typeof s.room === "string" ? s.room : undefined,
   }),
   component: ApplyPage,
 });
@@ -26,14 +27,14 @@ const PROPERTY_OPTIONS = [
 ];
 
 const L = {
-  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home" },
-  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil" },
-  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية" },
+  en: { intro: "Pick a property below and fill out your details.", chooseProp: "Choose your property", whichProp: "Which property are you applying for?", whichRoom: "Which room?", selectProp: "— Select property —", anyRoom: "Any available room", errPickProp: "Please select a property.", back: "Back to home", roomsLoading: "Loading rooms…", noRooms: "No specific rooms listed yet — we'll match you with the best fit.", thanksLine2: "We received your application and will contact you within 24 hours." },
+  fr: { intro: "Choisissez une propriété ci-dessous et remplissez vos coordonnées.", chooseProp: "Choisissez votre propriété", whichProp: "Pour quelle propriété postulez-vous ?", whichRoom: "Quelle chambre ?", selectProp: "— Sélectionnez la propriété —", anyRoom: "Toute chambre disponible", errPickProp: "Veuillez choisir une propriété.", back: "Retour à l'accueil", roomsLoading: "Chargement des chambres…", noRooms: "Aucune chambre listée — nous vous trouverons la meilleure option.", thanksLine2: "Nous avons reçu votre demande et vous contacterons sous 24 heures." },
+  ar: { intro: "اختر عقارًا أدناه وأكمل بياناتك.", chooseProp: "اختر العقار", whichProp: "لأي عقار تتقدّم بطلبك؟", whichRoom: "أي غرفة؟", selectProp: "— اختر العقار —", anyRoom: "أي غرفة متاحة", errPickProp: "يرجى اختيار عقار.", back: "العودة إلى الرئيسية", roomsLoading: "جارٍ تحميل الغرف…", noRooms: "لا توجد غرف محددة بعد — سنوفر لك الأنسب.", thanksLine2: "لقد استلمنا طلبك وسنتواصل معك خلال 24 ساعة." },
 };
 
 function ApplyPage() {
-  const { property: prefilledProperty } = useSearch({ from: "/apply/" });
-  const { t, lang } = useLang();
+  const { property: prefilledProperty, room: prefilledRoom } = useSearch({ from: "/apply/" });
+  const { t, lang, dir } = useLang();
   const l = L[lang];
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -41,14 +42,16 @@ function ApplyPage() {
   const [occupants, setOccupants] = useState<Occupant[]>([]);
   const [form, setForm] = useState<Record<string, any>>({});
   const [propertySel, setPropertySel] = useState<string>(prefilledProperty || "");
-  const [roomSel, setRoomSel] = useState<string>("any");
+  const [roomSel, setRoomSel] = useState<string>(prefilledRoom || "any");
   const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
+  const [roomsLoading, setRoomsLoading] = useState(true);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    if (!isSupabaseConfigured) { setRoomsLoading(false); return; }
     (async () => {
       const { data } = await supabase.from("rooms").select("id,name,current_status,property_id");
       if (data) setAllRooms(data as RoomRow[]);
+      setRoomsLoading(false);
     })();
   }, []);
 
