@@ -1,0 +1,96 @@
+import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ClipboardList, Users, DoorOpen, LogOut } from "lucide-react";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/admin")({ component: AdminLayout });
+
+function AdminLayout() {
+  const [user, setUser] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const path = useRouterState({ select: s => s.location.pathname });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) { setLoading(false); return; }
+    supabase.auth.getSession().then(({ data }) => { setUser(data.session?.user ?? null); setLoading(false); });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setUser(s?.user ?? null));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (user && path === "/admin") navigate({ to: "/admin/applications" });
+  }, [user, path, navigate]);
+
+  const signIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) toast.error(error.message);
+  };
+
+  const signOut = async () => { await supabase.auth.signOut(); };
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+
+  if (!isSupabaseConfigured) {
+    return <div className="min-h-screen flex items-center justify-center px-4 text-center text-sm text-muted-foreground">
+      Supabase not connected. Add credentials in <code className="bg-secondary px-1 rounded">src/lib/supabase.ts</code> to enable admin.
+    </div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen grid place-items-center px-4 bg-background">
+        <form onSubmit={signIn} className="w-full max-w-sm bg-card rounded-2xl border border-border p-6 space-y-4 shadow">
+          <h1 className="text-2xl font-bold">Admin Login</h1>
+          <input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" type="email" required className="w-full px-3 py-2.5 rounded-lg border border-input bg-background" />
+          <input value={pass} onChange={e => setPass(e.target.value)} placeholder="Password" type="password" required className="w-full px-3 py-2.5 rounded-lg border border-input bg-background" />
+          <button className="touch-min w-full rounded-lg bg-primary text-primary-foreground font-bold py-2.5">Sign In</button>
+        </form>
+      </div>
+    );
+  }
+
+  const navItems = [
+    { to: "/admin/applications", label: "Applications", icon: ClipboardList },
+    { to: "/admin/tenants", label: "Tenants", icon: Users },
+    { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
+  ];
+
+  return (
+    <div className="min-h-screen flex flex-col md:flex-row bg-background">
+      <aside className="hidden md:flex md:w-60 md:flex-col border-r border-border bg-card p-4">
+        <div className="font-bold text-lg mb-6">Zorba Admin</div>
+        <nav className="flex-1 space-y-1">
+          {navItems.map(n => (
+            <Link key={n.to} to={n.to}
+              className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium ${path.startsWith(n.to) ? "bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>
+              <n.icon className="w-4 h-4" /> {n.label}
+            </Link>
+          ))}
+        </nav>
+        <button onClick={signOut} className="touch-min flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-secondary text-muted-foreground">
+          <LogOut className="w-4 h-4" /> Sign out
+        </button>
+      </aside>
+
+      <header className="md:hidden sticky top-0 z-10 bg-card border-b border-border px-4 h-14 flex items-center justify-between">
+        <div className="font-bold">Zorba Admin</div>
+        <button onClick={signOut} className="touch-min p-2 rounded-lg hover:bg-secondary"><LogOut className="w-5 h-5" /></button>
+      </header>
+
+      <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
+
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-3">
+        {navItems.map(n => (
+          <Link key={n.to} to={n.to} className={`touch-min flex flex-col items-center justify-center py-2 text-xs font-medium ${path.startsWith(n.to) ? "text-primary" : "text-muted-foreground"}`}>
+            <n.icon className="w-5 h-5 mb-0.5" /> {n.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
+  );
+}
