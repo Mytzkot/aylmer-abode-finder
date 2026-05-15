@@ -4,13 +4,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Inspired by zorbaco.com:
+ * - Warm cream/sand background, deep brown ink text
+ * - Cyan accent for highlight words & links
+ * - Coral kept as a strong CTA secondary
+ * - Chunky soft-serif display (Fraunces 900) + Inter body
+ * - Generous radii, soft pill buttons
+ */
+
 @theme inline {
   --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Fraunces", "Cooper Black", Georgia, serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+  --radius-pill: 9999px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -30,45 +41,101 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-ink: var(--ink);
+  --color-cyan-pop: var(--cyan-pop);
   --color-coral: var(--coral);
   --color-success: var(--success);
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.985 0.002 247);   /* #F9FAFB */
-  --foreground: oklch(0.21 0.04 265);     /* #0F172A */
-  --card: oklch(1 0 0);
+  --radius: 1rem;
+
+  /* Surfaces */
+  --background: oklch(0.93 0.03 85);          /* #EDE3CC warm cream */
+  --cream: oklch(0.93 0.03 85);
+  --cream-deep: oklch(0.88 0.04 80);          /* slightly darker pill fill */
+  --card: oklch(0.985 0.005 85);              /* near-white card */
   --card-foreground: var(--foreground);
-  --popover: oklch(1 0 0);
-  --popover-foreground: var(--foreground);
-  --primary: oklch(0.65 0.23 18);         /* coral #FF385C */
-  --primary-foreground: oklch(1 0 0);
-  --coral: oklch(0.65 0.23 18);
-  --secondary: oklch(0.96 0.005 247);
+
+  /* Ink */
+  --foreground: oklch(0.27 0.05 50);          /* deep warm brown */
+  --ink: oklch(0.27 0.05 50);
+
+  /* Brand accents */
+  --cyan-pop: oklch(0.72 0.15 215);           /* #1FB6E5-ish cyan */
+  --coral: oklch(0.66 0.22 18);               /* #FF385C */
+
+  /* Primary = brown ink for buttons; coral kept for booking CTAs */
+  --primary: oklch(0.27 0.05 50);
+  --primary-foreground: oklch(0.97 0.01 85);
+
+  --secondary: oklch(0.88 0.04 80);
   --secondary-foreground: var(--foreground);
-  --muted: oklch(0.96 0.005 247);
-  --muted-foreground: oklch(0.5 0.02 257);
-  --accent: oklch(0.95 0.02 18);
+  --muted: oklch(0.9 0.025 80);
+  --muted-foreground: oklch(0.45 0.04 55);
+  --accent: oklch(0.95 0.04 215);             /* very pale cyan */
   --accent-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+
   --destructive: oklch(0.6 0.24 27);
   --destructive-foreground: oklch(1 0 0);
-  --success: oklch(0.65 0.17 152);
-  --border: oklch(0.92 0.01 255);
-  --input: oklch(0.92 0.01 255);
-  --ring: oklch(0.65 0.23 18);
+  --success: oklch(0.6 0.16 152);
+
+  --border: oklch(0.82 0.04 75);
+  --input: oklch(0.85 0.03 75);
+  --ring: oklch(0.72 0.15 215);
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; }
+  html {
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    background-color: var(--color-background);
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
   }
   [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
   button, a { min-height: 44px; }
   .touch-min { min-height: 44px; min-width: 44px; }
+}
+
+@layer components {
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold transition active:scale-[0.98];
+  }
+  .btn-cream {
+    background-color: var(--cream-deep);
+    color: var(--ink);
+  }
+  .btn-cream:hover { filter: brightness(0.96); }
+  .btn-ink {
+    background-color: var(--ink);
+    color: var(--primary-foreground);
+  }
+  .btn-ink:hover { filter: brightness(1.1); }
+  .btn-coral {
+    background-color: var(--coral);
+    color: white;
+  }
+  .btn-coral:hover { filter: brightness(0.95); }
+  .btn-outline-ink {
+    background-color: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+  .btn-outline-ink:hover { background-color: var(--ink); color: var(--primary-foreground); }
+  .accent-text { color: var(--cyan-pop); }
 }
