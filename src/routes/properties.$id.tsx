@@ -88,7 +88,7 @@ function PropertyHub() {
                 ))}
               </ul>
               <p className="mt-4 text-sm font-semibold text-ink/70">
-                {availableCount} {availableCount === 1 ? "room" : "rooms"} available
+                {rooms.length} rooms total · {availableCount} available now
               </p>
             </header>
 

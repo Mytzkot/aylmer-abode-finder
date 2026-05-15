@@ -17,14 +17,12 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
 
+  const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] hover:text-brand transition";
+  const activeCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] border-b-[3px] border-brand pb-1";
+
   const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
     l.to.startsWith("/#") ? (
-      <a
-        key={l.to}
-        href={l.to}
-        onClick={onClick}
-        className="font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-ink hover:text-brand transition"
-      >
+      <a key={l.to} href={l.to} onClick={onClick} className={baseCls}>
         {l.label}
       </a>
     ) : (
@@ -32,8 +30,8 @@ export function Header() {
         key={l.to}
         to={l.to}
         onClick={onClick}
-        className="font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-ink hover:text-brand transition"
-        activeProps={{ className: "font-typewriter uppercase tracking-[0.12em] text-[12px] font-bold text-brand underline underline-offset-8 decoration-2 decoration-brand" }}
+        className={baseCls}
+        activeProps={{ className: activeCls }}
         activeOptions={{ exact: l.to === "/" }}
       >
         {l.label}
@@ -57,7 +55,7 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="hidden md:inline-flex btn-pill btn-coral text-sm px-5 py-2.5 font-typewriter uppercase tracking-[0.12em]"
+              className="hidden md:inline-flex btn-pill btn-coral text-[15px] px-5 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold text-[#0F172A]"
             >
               Book Now
             </Link>

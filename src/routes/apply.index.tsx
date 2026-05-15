@@ -234,10 +234,10 @@ function ApplyPage() {
             {isStudent && (
               <>
                 <Two><Input label={f.name_of_school} onChange={upd("name_of_school")} /><Input label={f.program_of_study} onChange={upd("program_of_study")} /></Two>
-                <Two>
-                  <label className="flex items-center gap-2 mt-6"><input type="checkbox" onChange={e => setForm(s => ({ ...s, is_international_student: e.target.checked }))} className="w-5 h-5 accent-primary" /><span>{f.is_international_student}</span></label>
-                  <Input label={f.country_of_origin} onChange={upd("country_of_origin")} />
-                </Two>
+                <label className="flex items-center gap-2 mt-2"><input type="checkbox" checked={!!form.is_international_student} onChange={e => setForm(s => ({ ...s, is_international_student: e.target.checked }))} className="w-5 h-5 accent-primary" /><span>{f.is_international_student}</span></label>
+                {form.is_international_student && (
+                  <Input label={lang === "fr" ? "Pays d'origine" : lang === "ar" ? "بلد الإقامة" : "Home country / Pays d'origine"} onChange={upd("country_of_origin")} />
+                )}
               </>
             )}
           </Section>
