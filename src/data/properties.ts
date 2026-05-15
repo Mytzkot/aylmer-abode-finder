@@ -16,7 +16,7 @@ export const PROPERTIES: PropertyMeta[] = [
     address: "102 Chemin d'Amour",
     city: "Gatineau, QC",
     images: [
-      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=80",
+      "https://145985996.cdn6.editmysite.com/uploads/1/4/5/9/145985996/PXOQFBSYETVWPLATC4SAB26R.jpeg?width=1200&optimize=medium",
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80",
       "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&q=80",
     ],
@@ -36,7 +36,7 @@ export const PROPERTIES: PropertyMeta[] = [
     address: "58 Rue Conrad Valéra",
     city: "Gatineau, QC",
     images: [
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80",
+      "https://145985996.cdn6.editmysite.com/uploads/1/4/5/9/145985996/FPBBSXNVFO2E4LGP3XJFPEOU.jpeg?width=1200&optimize=medium",
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80",
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=1200&q=80",
     ],
@@ -56,7 +56,7 @@ export const PROPERTIES: PropertyMeta[] = [
     address: "260 Av. de la Colline",
     city: "Gatineau, QC",
     images: [
-      "https://images.unsplash.com/photo-1567767292278-a4f21aa2d36e?w=1200&q=80",
+      "https://145985996.cdn6.editmysite.com/uploads/1/4/5/9/145985996/OWMVI47FQZSMDORR3PTM3IYH.jpeg?width=1200&optimize=medium",
       "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=80",
       "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80",
     ],
