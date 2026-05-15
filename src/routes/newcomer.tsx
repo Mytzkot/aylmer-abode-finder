@@ -26,9 +26,9 @@ function NewcomerPage() {
               className="block rounded-2xl bg-card border border-border/60 p-5 hover:border-cyan-pop hover:shadow-md transition"
             >
               <div className="font-display text-xl text-ink flex items-center justify-between gap-2">
-                {l.name} <ExternalLink className="w-4 h-4 text-ink/40" />
+                <T>{l.name}</T> <ExternalLink className="w-4 h-4 text-ink/40" />
               </div>
-              <div className="text-sm text-ink/70 mt-2">{l.desc}</div>
+              <div className="text-sm text-ink/70 mt-2"><T>{l.desc}</T></div>
             </a>
           ))}
         </div>
