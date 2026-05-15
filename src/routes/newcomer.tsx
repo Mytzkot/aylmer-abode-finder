@@ -35,7 +35,7 @@ function NewcomerPage() {
 
         <div className="mt-12 rounded-3xl bg-destructive/5 border border-destructive/20 p-6">
           <h2 className="font-display text-2xl mb-4 flex items-center gap-2 text-destructive">
-            <Phone className="w-6 h-6" /> Emergency Numbers
+            <Phone className="w-6 h-6" /> <T>Emergency Numbers</T>
           </h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {EMERGENCY.map((e) => (
@@ -44,7 +44,7 @@ function NewcomerPage() {
                 href={`tel:${e.number.replace(/\D/g, "")}`}
                 className="flex justify-between items-center rounded-full bg-card border border-border/60 px-5 py-3 hover:border-destructive transition"
               >
-                <span className="font-semibold text-sm text-ink">{e.name}</span>
+                <span className="font-semibold text-sm text-ink"><T>{e.name}</T></span>
                 <span className="font-bold text-destructive">{e.number}</span>
               </a>
             ))}
