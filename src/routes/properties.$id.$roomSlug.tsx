@@ -8,20 +8,68 @@ function mapsUrl(address: string, city: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
 }
 
-function ytEmbedUrl(url: string): string | null {
+// Strict YouTube URL → embed URL. Returns null for anything that isn't a
+// valid youtube.com / youtu.be video link, preventing broken iframes.
+const YT_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+const YT_HOSTS = new Set([
+  "youtube.com",
+  "www.youtube.com",
+  "m.youtube.com",
+  "youtube-nocookie.com",
+  "www.youtube-nocookie.com",
+  "youtu.be",
+]);
+
+function ytEmbedUrl(url: string | null | undefined): string | null {
+  if (!url || typeof url !== "string") return null;
+  const trimmed = url.trim();
+  if (!trimmed) return null;
+  let u: URL;
   try {
-    const u = new URL(url);
-    let id: string | null = null;
-    if (u.hostname.includes("youtu.be")) id = u.pathname.slice(1);
-    else if (u.pathname === "/watch") id = u.searchParams.get("v");
-    else if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2];
-    else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2];
-    if (!id) return null;
-    return `https://www.youtube.com/embed/${id}`;
+    u = new URL(trimmed);
   } catch {
     return null;
   }
+  if (u.protocol !== "https:" && u.protocol !== "http:") return null;
+  const host = u.hostname.toLowerCase();
+  if (!YT_HOSTS.has(host)) return null;
+
+  let id: string | null = null;
+  let start: string | null = null;
+
+  if (host === "youtu.be") {
+    id = u.pathname.slice(1).split("/")[0] || null;
+  } else if (u.pathname === "/watch") {
+    id = u.searchParams.get("v");
+  } else {
+    const parts = u.pathname.split("/").filter(Boolean);
+    // /embed/<id>, /shorts/<id>, /live/<id>, /v/<id>
+    if (parts.length >= 2 && ["embed", "shorts", "live", "v"].includes(parts[0])) {
+      id = parts[1];
+    }
+  }
+
+  if (!id || !YT_ID_RE.test(id)) return null;
+
+  // Preserve a start time if present (?t=90, ?start=90, ?t=1m30s)
+  const t = u.searchParams.get("start") || u.searchParams.get("t");
+  if (t) {
+    const seconds = parseYtTime(t);
+    if (seconds > 0) start = String(seconds);
+  }
+
+  const qs = start ? `?start=${start}` : "";
+  return `https://www.youtube.com/embed/${id}${qs}`;
 }
+
+function parseYtTime(v: string): number {
+  if (/^\d+$/.test(v)) return Number(v);
+  const m = v.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i);
+  if (!m) return 0;
+  const [, h, mi, s] = m;
+  return (Number(h) || 0) * 3600 + (Number(mi) || 0) * 60 + (Number(s) || 0);
+}
+
 
 export const Route = createFileRoute("/properties/$id/$roomSlug")({ component: RoomDetail });
 
