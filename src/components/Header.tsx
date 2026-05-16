@@ -55,17 +55,17 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <LanguageToggle />
             <Link
               to="/book"
-              className="btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
+              className="hidden min-[380px]:inline-flex btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
             >
               <T>Book Now</T>
             </Link>
             <button
               onClick={() => setOpen(true)}
-              className="touch-min p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              className="shrink-0 p-1.5 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
               aria-label={openMenu}
             >
               <Menu className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.25} />
