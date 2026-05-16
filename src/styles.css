@@ -48,6 +48,9 @@
   --color-cyan-pop: var(--cyan-pop);
   --color-coral: var(--coral);
   --color-success: var(--success);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-surface-dark: var(--surface-dark);
 }
 
 :root {
