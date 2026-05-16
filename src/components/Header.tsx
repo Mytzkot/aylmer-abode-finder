@@ -7,7 +7,6 @@ import { PROPERTIES } from "@/data/properties";
 import logo from "@/assets/zorba-logo-transparent.png";
 
 const PRIMARY_NAV = [
-  { to: "/", label: "Home" },
   { to: "/rooms", label: "All Rooms" },
   { to: "/apply", label: "Apply Now" },
   { to: "/about", label: "About Us" },
