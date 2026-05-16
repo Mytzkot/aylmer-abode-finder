@@ -8,6 +8,21 @@ function mapsUrl(address: string, city: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
 }
 
+function ytEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    let id: string | null = null;
+    if (u.hostname.includes("youtu.be")) id = u.pathname.slice(1);
+    else if (u.pathname === "/watch") id = u.searchParams.get("v");
+    else if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2];
+    else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2];
+    if (!id) return null;
+    return `https://www.youtube.com/embed/${id}`;
+  } catch {
+    return null;
+  }
+}
+
 export const Route = createFileRoute("/properties/$id/$roomSlug")({ component: RoomDetail });
 
 interface PropertyRow {
@@ -199,6 +214,22 @@ function RoomDetail() {
                     </div>
                   )}
                 </div>
+
+                {/* Embedded YouTube tour */}
+                {room.youtube_video_url && ytEmbedUrl(room.youtube_video_url) && (
+                  <div className="pt-2">
+                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-ink/15 bg-black">
+                      <iframe
+                        src={ytEmbedUrl(room.youtube_video_url)!}
+                        title="Room video tour"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {/* Tour icons */}
                 <div className="flex items-center gap-3 pt-2">
