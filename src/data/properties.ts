@@ -112,7 +112,7 @@ export const CONTACT = {
   whatsapp: "https://wa.me/13439874565",
   sms: "sms:+13439874565",
   tel: "tel:+13439874565",
-  messenger: "https://m.me/389262180946566",
+  messenger: "https://m.me/Lisa.Mona.Mich",
   facebook: "https://facebook.com/ZorbaRentals/",
   youtube: "https://youtube.com/@shakeshake-m7t",
   email: "mailto:zorbagraphic@gmail.com",
