@@ -5,8 +5,8 @@ export const translations = {
     nav: { home: "Home", properties: "Locations", transit: "Transit", newcomer: "Newcomer Guide", admin: "Admin" },
     home: {
       tagline: "Comfortable Living",
-      title: "Furnished Monthly Rooms in Ottawa / Gatineau",
-      subtitle: "Hull · Aylmer — 15-minute direct bus to downtown Ottawa",
+      title: "Furnished Monthly Rooms in the Nation's Capital",
+      subtitle: "Hull / Aylmer / Gatineau",
       ctaRooms: "Browse Rooms",
       ctaStorage: "Storage Rentals",
       locations: "Our Locations",
