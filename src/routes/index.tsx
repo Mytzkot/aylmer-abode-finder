@@ -30,12 +30,6 @@ function HomePage() {
               <Link to="/rooms" className="btn-pill btn-coral text-base px-7 py-3.5">
                 {h.ctaRooms}
               </Link>
-              <a
-                href="#contact"
-                className="btn-pill btn-outline-ink text-base px-7 py-3.5"
-              >
-                {h.ctaStorage}
-              </a>
             </div>
           </div>
 

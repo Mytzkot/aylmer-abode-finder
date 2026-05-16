@@ -5,8 +5,8 @@ export const translations = {
     nav: { home: "Home", properties: "Locations", transit: "Transit", newcomer: "Newcomer Guide", admin: "Admin" },
     home: {
       tagline: "Comfortable Living",
-      title: "Furnished Monthly Rooms in Ottawa / Gatineau",
-      subtitle: "Hull · Aylmer — 15-minute direct bus to downtown Ottawa",
+      title: "Furnished Monthly Rooms in the Nation's Capital",
+      subtitle: "Hull / Aylmer / Gatineau",
       ctaRooms: "Browse Rooms",
       ctaStorage: "Storage Rentals",
       locations: "Our Locations",
@@ -60,8 +60,8 @@ export const translations = {
     nav: { home: "Accueil", properties: "Emplacements", transit: "Transport", newcomer: "Guide du nouvel arrivant", admin: "Admin" },
     home: {
       tagline: "Un séjour confortable",
-      title: "Chambres meublées au mois à Ottawa / Gatineau",
-      subtitle: "Hull · Aylmer — autobus direct de 15 minutes vers le centre-ville d'Ottawa",
+      title: "Chambres meublées au mois dans la capitale nationale",
+      subtitle: "Hull / Aylmer / Gatineau",
       ctaRooms: "Voir les chambres",
       ctaStorage: "Location d'entreposage",
       locations: "Nos emplacements",
@@ -115,8 +115,8 @@ export const translations = {
     nav: { home: "الرئيسية", properties: "المواقع", transit: "النقل", newcomer: "دليل القادمين الجدد", admin: "الإدارة" },
     home: {
       tagline: "إقامة مريحة",
-      title: "غرف مفروشة للإيجار الشهري في أوتاوا / غاتينو",
-      subtitle: "هَل · أيلمر — حافلة مباشرة إلى وسط أوتاوا في 15 دقيقة",
+      title: "غرف مفروشة للإيجار الشهري في العاصمة الوطنية",
+      subtitle: "هَل / أيلمر / غاتينو",
       ctaRooms: "تصفّح الغرف",
       ctaStorage: "تأجير مساحات التخزين",
       locations: "مواقعنا",
