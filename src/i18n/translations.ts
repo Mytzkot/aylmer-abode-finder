@@ -60,8 +60,8 @@ export const translations = {
     nav: { home: "Accueil", properties: "Emplacements", transit: "Transport", newcomer: "Guide du nouvel arrivant", admin: "Admin" },
     home: {
       tagline: "Un séjour confortable",
-      title: "Chambres meublées au mois à Ottawa / Gatineau",
-      subtitle: "Hull · Aylmer — autobus direct de 15 minutes vers le centre-ville d'Ottawa",
+      title: "Chambres meublées au mois dans la capitale nationale",
+      subtitle: "Hull / Aylmer / Gatineau",
       ctaRooms: "Voir les chambres",
       ctaStorage: "Location d'entreposage",
       locations: "Nos emplacements",
