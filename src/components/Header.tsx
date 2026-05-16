@@ -20,8 +20,8 @@ export function Header() {
   const openMenu = useTranslated("Open menu");
   const closeMenu = useTranslated("Close menu");
 
-  const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] hover:text-brand transition";
-  const activeCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-[#0F172A] border-b-[3px] border-brand pb-1";
+  const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-white/90 hover:text-white transition";
+  const activeCls = "font-typewriter uppercase tracking-[0.14em] text-[15px] lg:text-[16px] font-bold text-white border-b-[3px] border-white pb-1";
 
   const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
     l.to.startsWith("/#") ? (
