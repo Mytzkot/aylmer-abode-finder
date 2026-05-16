@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, Facebook, Youtube, Instagram, Send, Mail, MapPin } from "lucide-react";
+import { MessageCircle, Phone, Facebook, Youtube, Instagram, Mail, MapPin } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { CONTACT, PROPERTIES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
@@ -11,7 +11,6 @@ const SOCIALS = [
   { href: CONTACT.facebook, Icon: Facebook, label: "Facebook", color: "bg-[#1877F2] text-white" },
   { href: CONTACT.youtube, Icon: Youtube, label: "YouTube", color: "bg-[#FF0000] text-white" },
   { href: "https://instagram.com", Icon: Instagram, label: "Instagram", color: "bg-gradient-to-tr from-[#FEDA75] via-[#FA7E1E] to-[#D62976] text-white" },
-  { href: CONTACT.messenger, Icon: Send, label: "Messenger", color: "bg-[#0084FF] text-white" },
 ];
 
 function ColTitle({ children }: { children: React.ReactNode }) {
@@ -65,7 +64,7 @@ export function Footer() {
             <a href={CONTACT.tel} className={itemCls}><Phone className="w-4 h-4 shrink-0" /><span>+1 343 202 5460</span></a>
             <a href={CONTACT.email} className={itemCls}><Mail className="w-4 h-4 shrink-0" /><span>zorbagraphic@gmail.com</span></a>
             <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className={itemCls}><MessageCircle className="w-4 h-4 shrink-0" /><span>WhatsApp</span></a>
-            <a href={CONTACT.messenger} target="_blank" rel="noreferrer" className={itemCls}><Send className="w-4 h-4 shrink-0" /><span>Messenger</span></a>
+            
             <div className={itemCls}><MapPin className="w-4 h-4 shrink-0" /><span>Aylmer-Gatineau, QC</span></div>
           </div>
         </div>
