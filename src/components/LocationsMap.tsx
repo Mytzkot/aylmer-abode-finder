@@ -22,7 +22,8 @@ const PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" 
 export default function LocationsMap() {
   const [mods, setMods] = useState<LeafletModules | null>(null);
   const loadingLabel = useTranslated("Loading map…");
-  const directionsLabel = useTranslated("Get directions →");
+  const directionsLabel = useTranslated("Open in Google Maps →");
+  const streetViewLabel = useTranslated("Street View");
   const mapAria = useTranslated("Map of Zorba Guest Houses property locations");
 
   useEffect(() => {
@@ -93,14 +94,24 @@ export default function LocationsMap() {
             <div className="text-sm">
               <div className="font-bold mb-0.5">{p.address}</div>
               <div className="text-xs text-gray-600 mb-1.5">{p.city}</div>
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline text-xs"
-              >
-                {directionsLabel}
-              </a>
+              <div className="flex flex-col gap-1">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline text-xs"
+                >
+                  {directionsLabel}
+                </a>
+                <a
+                  href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${p.lat},${p.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline text-xs"
+                >
+                  {streetViewLabel}
+                </a>
+              </div>
             </div>
           </Popup>
         </Marker>

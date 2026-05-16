@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
 import heroImg from "@/assets/hero-room.jpg";
+
+const LocationsMap = lazy(() => import("@/components/LocationsMap"));
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
@@ -88,6 +91,18 @@ function HomePage() {
 
           <div className="mt-10">
             <ContactForm />
+          </div>
+        </div>
+      </section>
+
+      {/* MAP */}
+      <section className="bg-cream pb-10 md:pb-14">
+        <div className="mx-auto max-w-7xl px-4">
+          <h2 className="font-display text-2xl md:text-4xl text-ink text-center mb-4">Find Us On The Map</h2>
+          <div className="rounded-3xl overflow-hidden border border-border/60 shadow-lg">
+            <Suspense fallback={<div className="w-full h-[320px] bg-cream-deep/40 animate-pulse" />}>
+              <LocationsMap />
+            </Suspense>
           </div>
         </div>
       </section>
