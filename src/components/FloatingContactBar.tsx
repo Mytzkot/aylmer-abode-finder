@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, MessageSquare, Send } from "lucide-react";
+import { MessageCircle, Phone, Smartphone, Send } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
