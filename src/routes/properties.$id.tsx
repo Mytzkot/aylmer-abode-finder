@@ -1,8 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES, CONTACT } from "@/data/properties";
 import {
@@ -125,7 +122,6 @@ function PropertyHub() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-6 md:py-8">
         <Link to="/properties" className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink/70 hover:text-ink mb-4">
           <ArrowLeft className="w-4 h-4 flip-rtl" /> <T>All Properties</T>
@@ -398,8 +394,6 @@ function PropertyHub() {
           </>
         )}
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

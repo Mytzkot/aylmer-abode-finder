@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Bus, ExternalLink, MapPin } from "lucide-react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PROPERTIES, STO_LINES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 
@@ -11,7 +8,6 @@ export const Route = createFileRoute("/transit")({ component: TransitPage });
 function TransitPage() {
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-5xl w-full px-4 py-12 md:py-16">
         <h1 className="font-display text-4xl md:text-5xl text-ink flex items-center gap-3">
           <Bus className="w-9 h-9 accent-text" /> <T>STO Bus Transit</T>
@@ -58,8 +54,6 @@ function TransitPage() {
           ))}
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

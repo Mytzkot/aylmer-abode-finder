@@ -1,10 +1,7 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
-import { Header } from "@/components/Header";
 import { AmenityIcons } from "@/components/AmenityIcons";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { useLang } from "@/i18n/LanguageProvider";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
@@ -138,7 +135,6 @@ function ApplyPage() {
     const propText = propLabel ? (lang === "fr" ? propLabel.label_fr : propLabel.label_en) : "";
     return (
       <div className="min-h-screen flex flex-col" dir={dir}>
-        <Header />
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">{t.apply.thanks}</h1>
@@ -146,8 +142,6 @@ function ApplyPage() {
           {propText && <p className="text-xs text-ink/60 mb-6">→ {propText}</p>}
           <Link to="/" className="mt-6 inline-flex rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
         </main>
-        <Footer />
-        <FloatingContactBar />
       </div>
     );
   }
@@ -156,7 +150,6 @@ function ApplyPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream" dir={dir}>
-      <Header />
       <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8 text-start">
         <h1 className="font-display text-3xl md:text-4xl text-ink mb-2">{t.apply.title}</h1>
         <p className="text-sm text-ink/60 mb-6">{l.intro}</p>
@@ -274,8 +267,6 @@ function ApplyPage() {
           </button>
         </form>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

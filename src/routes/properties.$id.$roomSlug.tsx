@@ -1,8 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { ArrowLeft, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Youtube, MapPin, Calendar, FileText, Home } from "lucide-react";
@@ -97,7 +94,6 @@ function RoomDetail() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-6 md:py-10">
         {/* Breadcrumb */}
         <nav className="text-sm text-ink/80 mb-4 font-medium">
@@ -269,8 +265,6 @@ function RoomDetail() {
           </>
         )}
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

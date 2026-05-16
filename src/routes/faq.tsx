@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Bot, Send } from "lucide-react";
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { FAQ_KB } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 
@@ -52,7 +49,6 @@ function FaqPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
         <h1 className="font-display text-4xl md:text-5xl text-ink flex items-center gap-3">
           <Bot className="w-9 h-9 accent-text" /> <T>FAQ</T>
@@ -95,8 +91,6 @@ function FaqPage() {
           ))}
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

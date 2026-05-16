@@ -47,7 +47,9 @@ export function Footer() {
                 {p.address}
               </Link>
             ))}
-            <FLink to="/book"><T>Daily / Weekly Booking</T></FLink>
+            <FLink to="/book"><T>Booking Page</T></FLink>
+            <FLink to="/pay"><T>Pay Online (Monthly)</T></FLink>
+            <FLink to="/portal"><T>Tenant Portal</T></FLink>
           </div>
 
           <div>
@@ -79,6 +81,32 @@ export function Footer() {
           <p className="text-xs font-semibold text-white/80">
             © {new Date().getFullYear()} ZORBA RENTALS · Aylmer-Gatineau, QC
           </p>
+        </div>
+
+        {/* Payment methods */}
+        <div className="mt-10 pt-6 border-t border-white/15">
+          <h3 className="font-bold text-white/95 text-sm uppercase tracking-[0.14em] mb-3"><T>Payment Methods</T></h3>
+          <div className="flex flex-wrap items-center gap-2">
+            {["Visa", "Mastercard", "Amex", "Stripe", "PayPal", "e-Transfer", "Apple Pay", "Google Pay"].map((m) => (
+              <span key={m} className="px-3 py-1.5 rounded-md bg-white text-surface-dark text-xs font-bold tracking-wide">{m}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Google Map */}
+        <div className="mt-10">
+          <h3 className="font-bold text-white/95 text-sm uppercase tracking-[0.14em] mb-3"><T>Find Us</T></h3>
+          <div className="rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
+            <iframe
+              title="Zorba Rentals — Aylmer-Gatineau map"
+              src="https://www.google.com/maps?q=Aylmer+Gatineau+QC&output=embed"
+              width="100%"
+              height="320"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              style={{ border: 0, display: "block" }}
+            />
+          </div>
         </div>
       </div>
 

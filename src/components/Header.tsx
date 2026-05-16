@@ -17,6 +17,9 @@ const FULL_NAV = [
   { to: "/", label: "Home" },
   { to: "/rooms", label: "All Rooms" },
   { to: "/properties", label: "Locations" },
+  { to: "/book", label: "Booking Page" },
+  { to: "/pay", label: "Pay Online" },
+  { to: "/portal", label: "Tenant Portal" },
   { to: "/apply", label: "Apply Now" },
   { to: "/about", label: "About Us" },
   { to: "/faq", label: "FAQ" },
@@ -108,12 +111,31 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            <Link
-              to="/book"
-              className="hidden sm:inline-flex btn-pill bg-white text-surface-dark hover:bg-white/90 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold"
-            >
-              <T>Book Now</T>
-            </Link>
+            {/* Book Now dropdown */}
+            <div className="hidden sm:block relative group">
+              <button
+                className="btn-pill bg-white text-surface-dark hover:bg-white/90 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold inline-flex items-center gap-1"
+                aria-haspopup="menu"
+              >
+                <T>Book Now</T>
+                <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
+              </button>
+              <div className="absolute end-0 top-full pt-2 min-w-[220px] hidden group-hover:block group-focus-within:block">
+                <div className="rounded-xl bg-white text-ink shadow-2xl border border-border/40 overflow-hidden">
+                  <Link to="/book" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
+                    <T>Booking Page</T>
+                  </Link>
+                  <div className="h-px bg-border/60" />
+                  <Link to="/pay" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
+                    <T>Pay Online (Monthly)</T>
+                  </Link>
+                  <div className="h-px bg-border/60" />
+                  <Link to="/portal" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
+                    <T>Tenant Portal</T>
+                  </Link>
+                </div>
+              </div>
+            </div>
             {/* Hamburger ALWAYS visible */}
             <button
               onClick={() => setOpen(true)}

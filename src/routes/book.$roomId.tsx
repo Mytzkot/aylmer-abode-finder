@@ -1,8 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { AmenityIcons } from "@/components/AmenityIcons";
 import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -54,7 +51,6 @@ function BookPage() {
   if (done) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Header />
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2"><T>Request received</T></h1>
@@ -62,15 +58,12 @@ function BookPage() {
           {/* TODO: Stripe payment intent placeholder */}
           <Link to="/" className="inline-flex rounded-lg bg-primary text-primary-foreground px-5 py-3 font-semibold"><T>Back to home</T></Link>
         </main>
-        <Footer />
-        <FloatingContactBar />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1 mx-auto max-w-xl w-full px-4 py-8 space-y-6">
         <div>
           <h1 className="font-display text-3xl md:text-4xl text-ink mb-1">{t.book.title}</h1>
@@ -101,8 +94,6 @@ function BookPage() {
           {/* TODO: Stripe checkout integration goes here */}
         </form>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }
