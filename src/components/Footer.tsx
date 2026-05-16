@@ -110,13 +110,11 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Giant logo wordmark */}
+      {/* Giant logo on a soft white badge so brand colors stay readable on navy */}
       <div className="mt-10 md:mt-14 px-4 select-none flex justify-center" aria-hidden="true">
-        <img
-          src={logo}
-          alt=""
-          className="w-full max-w-[1200px] h-auto opacity-95"
-        />
+        <div className="w-full max-w-[1100px] bg-white rounded-[2.5rem] shadow-2xl px-8 py-6 md:px-12 md:py-10">
+          <img src={logo} alt="" className="w-full h-auto" />
+        </div>
       </div>
     </footer>
   );
