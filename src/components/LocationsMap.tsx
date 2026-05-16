@@ -21,6 +21,9 @@ const PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" 
 
 export default function LocationsMap() {
   const [mods, setMods] = useState<LeafletModules | null>(null);
+  const loadingLabel = useTranslated("Loading map…");
+  const directionsLabel = useTranslated("Get directions →");
+  const mapAria = useTranslated("Map of Zorba Guest Houses property locations");
 
   useEffect(() => {
     let cancelled = false;
