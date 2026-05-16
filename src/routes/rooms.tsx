@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
+import housekeepingIcon from "@/assets/housekeeping-icon.jpg";
 
 export const Route = createFileRoute("/rooms")({
   component: RoomsShop,
@@ -80,6 +81,8 @@ function RoomsShop() {
     let out = rooms.slice();
     // Hide rooms belonging to hidden properties
     out = out.filter(r => !r.property_id || !HIDDEN_PROPERTY_SLUGS.has(propById[r.property_id]?.slug || ""));
+    // Hide the 5x5 storage extra
+    out = out.filter(r => !/storage|5x5/i.test(r.name || ""));
 
     if (category === "extras") {
       out = out.filter(r => !r.property_id);
@@ -206,7 +209,8 @@ function RoomsShop() {
                 {filtered.map(r => {
                   const p = r.property_id ? propById[r.property_id] : null;
                   const fallback = PROPERTIES.find(x => p && x.id === p.slug)?.images[0];
-                  const img = (r.image_urls && r.image_urls[0]) || fallback;
+                  const isHousekeeping = /housekeep|cleaning/i.test(r.name || "");
+                  const img = (r.image_urls && r.image_urls[0]) || (isHousekeeping ? housekeepingIcon : fallback);
                   const price = r.rate_monthly ?? r.base_rate;
                   const to = p ? "/properties/$id/$roomSlug" : "/rooms";
                   return (
