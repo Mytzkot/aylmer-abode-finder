@@ -47,7 +47,9 @@ export function Footer() {
                 {p.address}
               </Link>
             ))}
-            <FLink to="/book"><T>Daily / Weekly Booking</T></FLink>
+            <FLink to="/book"><T>Booking Page</T></FLink>
+            <FLink to="/pay"><T>Pay Online (Monthly)</T></FLink>
+            <FLink to="/portal"><T>Tenant Portal</T></FLink>
           </div>
 
           <div>
