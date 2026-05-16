@@ -1,4 +1,4 @@
-import { MessageCircle, MessageCircleMore, Phone, Send } from "lucide-react";
+import { MessageCircle, Phone, Send } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
@@ -8,7 +8,7 @@ export function FloatingContactBar() {
     { href: CONTACT.messenger, label: "FB Messenger", icon: Send, color: "bg-[#0084FF] text-white" },
     { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
-    { href: CONTACT.sms, label: t.contact.sms, icon: MessageCircleMore, color: "bg-cream text-surface-dark", strong: true },
+    { href: CONTACT.sms, label: t.contact.sms, icon: MessageCircle, color: "bg-cream text-surface-dark", strong: true },
   ];
   return (
     <div className="fixed bottom-3 left-1/2 z-30 -translate-x-1/2 md:bottom-4 pointer-events-none">
@@ -21,7 +21,7 @@ export function FloatingContactBar() {
             rel="noreferrer"
             aria-label={it.label}
             title={it.label}
-            className={`w-11 h-11 md:w-12 md:h-12 inline-flex items-center justify-center rounded-full ${it.color} active:scale-95 transition shadow shrink-0`}
+            className={`w-11 h-11 md:w-12 md:h-12 inline-flex items-center justify-center rounded-full ${it.color} active:scale-95 transition shrink-0`}
           >
             <it.icon className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={it.strong ? 2.85 : 2.25} />
           </a>
