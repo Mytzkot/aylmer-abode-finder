@@ -4,6 +4,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
+import housekeepingIcon from "@/assets/housekeeping-icon.jpg";
 
 export const Route = createFileRoute("/rooms")({
   component: RoomsShop,
