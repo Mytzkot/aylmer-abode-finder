@@ -48,13 +48,13 @@ export function FaqChatbot() {
     <>
       {!open && (
         <button onClick={() => setOpen(true)}
-          className="fixed bottom-24 end-4 z-40 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-2xl flex items-center justify-center active:scale-95 transition"
+          className="fixed bottom-24 end-4 z-20 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-2xl flex items-center justify-center active:scale-95 transition"
           aria-label={openLabel}>
           <Bot className="w-7 h-7" />
         </button>
       )}
       {open && (
-        <div className="fixed bottom-24 end-4 z-40 w-[92vw] max-w-sm h-[28rem] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden">
+        <div className="fixed bottom-24 end-4 z-20 w-[92vw] max-w-sm h-[28rem] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden">
           <div className="flex items-center justify-between p-3 border-b border-border bg-primary text-primary-foreground">
             <div className="flex items-center gap-2 font-semibold"><Bot className="w-5 h-5" /> {t.faq.title}</div>
             <button onClick={() => setOpen(false)} className="p-1 rounded hover:bg-white/20" aria-label={closeLabel}>
