@@ -42,8 +42,8 @@ export function useLang() {
 // ==========================================================================
 
 const CACHE_KEYS: Record<"fr" | "ar", string> = {
-  fr: "translations:fr:v1",
-  ar: "translations:ar:v1",
+  fr: "translations:fr:v2",
+  ar: "translations:ar:v2",
 };
 
 const memCache: Record<"fr" | "ar", Map<string, string>> = {

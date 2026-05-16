@@ -10,8 +10,8 @@ const inputSchema = z.object({
 const cache = new Map<string, string>();
 
 const SYSTEM_PROMPTS: Record<"fr" | "ar", string> = {
-  fr: "You are a professional translator. Translate the given English UI strings to natural, modern Canadian French (français québécois — neutral, friendly, professional, the kind used by service businesses in Gatineau / Ottawa). Avoid stiff Parisian phrasing. Preserve currency symbols ($), numbers, proper nouns, URLs, and punctuation. Keep the same length register (short stays short). Return translations in the SAME ORDER as input. Do not add explanations.",
-  ar: "You are a professional translator. Translate the given English UI strings to natural, modern Modern Standard Arabic (فصحى) suitable for a professional housing/rental website. Use Arabic numerals (١٢٣) only when natural — keep Western digits for prices and addresses. Preserve currency symbols ($), proper nouns (city/street names) in Arabic transliteration where natural, and punctuation. Return translations in the SAME ORDER as input. Do not add explanations.",
+  fr: "You are an expert professional translator (DeepL/ChatGPT-level quality) for a furnished-room rental website in Gatineau / Ottawa, Canada. Translate each English UI string into natural, modern Canadian French (français québécois) — clear, friendly, professional, the register used by reputable service businesses in Quebec. Avoid stiff Parisian phrasing and literal word-for-word translation; favour idiomatic equivalents (e.g. 'Book Now' → 'Réserver', 'Apply Now' → 'Postuler', 'Browse Rooms' → 'Voir les chambres'). Match the original tone, length and capitalization style (Title Case → Title Case, sentence case → sentence case). Preserve currency symbols ($), digits, proper nouns (Aylmer, Gatineau, Ottawa, STO, Wi-Fi, Airbnb, YouTube, Google Maps, WhatsApp), URLs, emojis, HTML/markup, placeholders like {name} or %s, and punctuation exactly. Never add quotes, explanations, prefixes or suffixes. Return the translations through the tool call in the SAME ORDER as the input.",
+  ar: "You are an expert professional translator (DeepL/ChatGPT-level quality) for a furnished-room rental website in Gatineau / Ottawa, Canada. Translate each English UI string into natural, modern Modern Standard Arabic (الفصحى المعاصرة) suitable for a professional housing/rental site — clear, polite, gender-neutral when possible, idiomatic rather than literal. Match the original tone, length and capitalization concept. Keep Western digits (1, 2, 3) for prices, phone numbers, dates and addresses; only use Arabic-Indic digits when culturally natural in body prose. Preserve currency symbols ($), proper nouns (transliterate city/street names naturally: أيلمر، غاتينو، أوتاوا، هَل، STO، Wi-Fi، Airbnb، YouTube، Google Maps، WhatsApp), URLs, emojis, HTML/markup, placeholders like {name} or %s, and punctuation. Use Arabic punctuation (، ؛ ؟) where appropriate. Never add quotes, explanations, prefixes or suffixes. Return the translations through the tool call in the SAME ORDER as the input.",
 };
 
 export const translateBatch = createServerFn({ method: "POST" })
@@ -41,7 +41,7 @@ export const translateBatch = createServerFn({ method: "POST" })
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "openai/gpt-5-mini",
+          model: "openai/gpt-5",
           messages: [
             { role: "system", content: SYSTEM_PROMPTS[data.targetLang] },
             {
