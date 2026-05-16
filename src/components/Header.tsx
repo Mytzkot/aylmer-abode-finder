@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
-import logo from "@/assets/zorba-logo-transparent.png";
+import logo from "@/assets/zorba-logo-light.png";
 
 const PRIMARY_NAV = [
   { to: "/", label: "Home" },
@@ -64,7 +64,7 @@ export function Header() {
           </Link>
 
           {/* DESKTOP nav: trimmed + Locations dropdown */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6">
             {PRIMARY_NAV.map((l) => navLink(l))}
 
             <div
@@ -112,7 +112,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <LanguageToggle />
             {/* Book Now dropdown */}
-            <div className="hidden sm:block relative group">
+            <div className="hidden md:block relative group">
               <button
                 className="btn-pill bg-white text-surface-dark hover:bg-white/90 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold inline-flex items-center gap-1"
                 aria-haspopup="menu"
