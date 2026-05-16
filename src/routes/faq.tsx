@@ -8,7 +8,7 @@ export const Route = createFileRoute("/faq")({ component: FaqPage });
 
 interface Msg { role: "user" | "bot"; text: string }
 
-const FALLBACK = "I can answer questions about Wi-Fi, furnishings, utilities, credit checks, pets, and bus access. For anything else, please WhatsApp +1 343-987-4565.";
+const FALLBACK = "I can answer questions about Wi-Fi, furnishings, utilities, credit checks, pets, and bus access. For anything else, please WhatsApp +1 343-202-5460.";
 
 function answer(q: string): string {
   const lower = q.toLowerCase();

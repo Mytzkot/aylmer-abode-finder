@@ -62,7 +62,7 @@ export function Footer() {
 
           <div>
             <ColTitle><T>Support &amp; Contact</T></ColTitle>
-            <a href={CONTACT.tel} className={itemCls}><Phone className="w-4 h-4 shrink-0" /><span>+1 343 987 4565</span></a>
+            <a href={CONTACT.tel} className={itemCls}><Phone className="w-4 h-4 shrink-0" /><span>+1 343 202 5460</span></a>
             <a href={CONTACT.email} className={itemCls}><Mail className="w-4 h-4 shrink-0" /><span>zorbagraphic@gmail.com</span></a>
             <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className={itemCls}><MessageCircle className="w-4 h-4 shrink-0" /><span>WhatsApp</span></a>
             <a href={CONTACT.messenger} target="_blank" rel="noreferrer" className={itemCls}><Send className="w-4 h-4 shrink-0" /><span>Messenger</span></a>

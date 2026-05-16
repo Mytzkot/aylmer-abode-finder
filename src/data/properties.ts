@@ -108,10 +108,10 @@ export const EMERGENCY = [
 ];
 
 export const CONTACT = {
-  phone: "+13439874565",
-  whatsapp: "https://wa.me/13439874565",
-  sms: "sms:+13439874565",
-  tel: "tel:+13439874565",
+  phone: "+13432025460",
+  whatsapp: "https://wa.me/13432025460",
+  sms: "sms:+13432025460",
+  tel: "tel:+13432025460",
   messenger: "https://m.me/Lisa.Mona.Mich",
   facebook: "https://facebook.com/ZorbaRentals/",
   youtube: "https://youtube.com/@shakeshake-m7t",
