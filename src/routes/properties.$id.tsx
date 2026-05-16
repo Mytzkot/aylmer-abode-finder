@@ -15,7 +15,29 @@ const WALKSCORE_URLS: Record<string, string> = {
   "260-colline": "https://www.walkscore.com/score/260-avenue-de-la-colline-gatineau-qc-canada",
 };
 
-export const Route = createFileRoute("/properties/$id")({ component: PropertyHub });
+export const Route = createFileRoute("/properties/$id")({
+  component: PropertyHub,
+  head: ({ params }) => {
+    const prop = PROPERTIES.find((p) => p.id === params.id);
+    const title = prop ? `${prop.address} — Furnished Rooms in ${prop.city}` : "Property — Zorba Rentals";
+    const desc = prop
+      ? `Furnished monthly rooms at ${prop.address}, ${prop.city}. Wi-Fi, utilities and all furnishings included.`
+      : "Furnished monthly rooms across Aylmer-Gatineau.";
+    const image = prop?.images?.[0];
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "place" },
+        { property: "og:url", content: `/properties/${params.id}` },
+        ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
+      ],
+      links: [{ rel: "canonical", href: `/properties/${params.id}` }],
+    };
+  },
+});
 
 interface PropertyRow {
   id: string; slug: string; address: string; city: string;

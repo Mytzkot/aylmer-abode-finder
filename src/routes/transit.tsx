@@ -3,7 +3,19 @@ import { Bus, ExternalLink, MapPin } from "lucide-react";
 import { PROPERTIES, STO_LINES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/transit")({ component: TransitPage });
+export const Route = createFileRoute("/transit")({
+  component: TransitPage,
+  head: () => ({
+    meta: [
+      { title: "Transit & Bus Access — Zorba Rentals" },
+      { name: "description", content: "STO bus lines from Aylmer-Gatineau: direct 15-minute service to downtown Ottawa, UQO, Algonquin and University of Ottawa." },
+      { property: "og:title", content: "Transit — 15 min direct bus to downtown Ottawa" },
+      { property: "og:description", content: "STO lines 40, 50, 59 and 800 — fast, frequent service across the region." },
+      { property: "og:url", content: "/transit" },
+    ],
+    links: [{ rel: "canonical", href: "/transit" }],
+  }),
+});
 
 function TransitPage() {
   return (

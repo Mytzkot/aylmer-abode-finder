@@ -4,7 +4,19 @@ import { useState } from "react";
 import { FAQ_KB } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/faq")({ component: FaqPage });
+export const Route = createFileRoute("/faq")({
+  component: FaqPage,
+  head: () => ({
+    meta: [
+      { title: "FAQ — Zorba Rentals" },
+      { name: "description", content: "Answers about Wi-Fi, furnishings, utilities, credit checks, pets and bus access at Zorba Rentals furnished rooms in Aylmer-Gatineau." },
+      { property: "og:title", content: "FAQ — Zorba Rentals" },
+      { property: "og:description", content: "Wi-Fi, furniture, utilities, credit, pets, transit — answered." },
+      { property: "og:url", content: "/faq" },
+    ],
+    links: [{ rel: "canonical", href: "/faq" }],
+  }),
+});
 
 interface Msg { role: "user" | "bot"; text: string }
 

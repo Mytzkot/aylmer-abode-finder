@@ -7,7 +7,20 @@ import heroImg from "@/assets/hero-room.jpg";
 
 const LocationsMap = lazy(() => import("@/components/LocationsMap"));
 
-export const Route = createFileRoute("/")({ component: HomePage });
+export const Route = createFileRoute("/")({
+  component: HomePage,
+  head: () => ({
+    meta: [
+      { title: "Zorba Rentals — Furnished Monthly Rooms in Aylmer-Gatineau" },
+      { name: "description", content: "Furnished monthly room rentals in Aylmer-Gatineau, 15 minutes by direct bus to downtown Ottawa. No credit check, first month only to move in. Wi-Fi and utilities included." },
+      { property: "og:title", content: "Zorba Rentals — Furnished Monthly Rooms in Aylmer-Gatineau" },
+      { property: "og:description", content: "Furnished monthly rooms, 15-min direct bus to downtown Ottawa. No credit check." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
+});
 
 function HomePage() {
   const { t } = useLang();

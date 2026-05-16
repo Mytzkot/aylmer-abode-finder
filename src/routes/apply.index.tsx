@@ -13,6 +13,16 @@ export const Route = createFileRoute("/apply/")({
     room: typeof s.room === "string" ? s.room : undefined,
   }),
   component: ApplyPage,
+  head: () => ({
+    meta: [
+      { title: "Apply for a Furnished Room — Zorba Rentals" },
+      { name: "description", content: "Apply online for a furnished monthly room in Aylmer-Gatineau. No credit check, first month only to move in." },
+      { property: "og:title", content: "Apply for a Furnished Room — Zorba Rentals" },
+      { property: "og:description", content: "No credit check. First month only to move in." },
+      { property: "og:url", content: "/apply" },
+    ],
+    links: [{ rel: "canonical", href: "/apply" }],
+  }),
 });
 
 interface Occupant { name: string; relation: string; age: string }

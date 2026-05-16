@@ -6,7 +6,19 @@ import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
 
-export const Route = createFileRoute("/book/$roomId")({ component: BookPage });
+export const Route = createFileRoute("/book/$roomId")({
+  component: BookPage,
+  head: ({ params }) => ({
+    meta: [
+      { title: "Book Your Stay — Zorba Rentals" },
+      { name: "description", content: "Request a daily or weekly stay in a furnished room." },
+      { property: "og:title", content: "Book Your Stay — Zorba Rentals" },
+      { property: "og:url", content: `/book/${params.roomId}` },
+      { name: "robots", content: "noindex" },
+    ],
+    links: [{ rel: "canonical", href: `/book/${params.roomId}` }],
+  }),
+});
 
 function BookPage() {
   const { roomId } = Route.useParams();

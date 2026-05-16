@@ -3,7 +3,19 @@ import { PROPERTIES } from "@/data/properties";
 import { ArrowRight, CreditCard } from "lucide-react";
 import { T } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/book/")({ component: BookChooser });
+export const Route = createFileRoute("/book/")({
+  component: BookChooser,
+  head: () => ({
+    meta: [
+      { title: "Book a Room — Zorba Rentals" },
+      { name: "description", content: "Book a daily or weekly stay at one of our furnished guest houses in Aylmer-Gatineau." },
+      { property: "og:title", content: "Book a Room — Zorba Rentals" },
+      { property: "og:description", content: "Daily and weekly stays in furnished rooms across Aylmer-Gatineau." },
+      { property: "og:url", content: "/book" },
+    ],
+    links: [{ rel: "canonical", href: "/book" }],
+  }),
+});
 
 function BookChooser() {
   return (

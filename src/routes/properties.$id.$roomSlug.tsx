@@ -71,7 +71,20 @@ function parseYtTime(v: string): number {
 }
 
 
-export const Route = createFileRoute("/properties/$id/$roomSlug")({ component: RoomDetail });
+export const Route = createFileRoute("/properties/$id/$roomSlug")({
+  component: RoomDetail,
+  head: ({ params }) => ({
+    meta: [
+      { title: `Furnished Room — ${params.id} — Zorba Rentals` },
+      { name: "description", content: "Furnished monthly room with Wi-Fi, smart TV, mini-fridge, coffee maker and keypad lock — all utilities included." },
+      { property: "og:title", content: `Furnished Room — Zorba Rentals` },
+      { property: "og:description", content: "Furnished monthly room — Wi-Fi and utilities included." },
+      { property: "og:type", content: "product" },
+      { property: "og:url", content: `/properties/${params.id}/${params.roomSlug}` },
+    ],
+    links: [{ rel: "canonical", href: `/properties/${params.id}/${params.roomSlug}` }],
+  }),
+});
 
 interface PropertyRow {
   id: string; slug: string; address: string; city: string;
