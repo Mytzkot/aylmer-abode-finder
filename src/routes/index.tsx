@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense } from "react";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
 import heroImg from "@/assets/hero-room.jpg";
+
+const LocationsMap = lazy(() => import("@/components/LocationsMap"));
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
