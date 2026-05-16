@@ -209,7 +209,8 @@ function RoomsShop() {
                 {filtered.map(r => {
                   const p = r.property_id ? propById[r.property_id] : null;
                   const fallback = PROPERTIES.find(x => p && x.id === p.slug)?.images[0];
-                  const img = (r.image_urls && r.image_urls[0]) || fallback;
+                  const isHousekeeping = /housekeep|cleaning/i.test(r.name || "");
+                  const img = (r.image_urls && r.image_urls[0]) || (isHousekeeping ? housekeepingIcon : fallback);
                   const price = r.rate_monthly ?? r.base_rate;
                   const to = p ? "/properties/$id/$roomSlug" : "/rooms";
                   return (
