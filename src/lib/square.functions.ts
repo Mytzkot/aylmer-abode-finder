@@ -144,12 +144,12 @@ export const syncSquareCatalog = createServerFn({ method: "POST" })
         const fullName = vName && vName.toLowerCase() !== "regular" ? `${itemName} — ${vName}` : itemName;
         const priceCents = v.item_variation_data?.price_money?.amount;
         const rate = priceCents != null ? priceCents / 100 : null;
-        const slug = slugify(`${property.slug}-${fullName}`);
+        const slug = slugify(`${property?.slug ?? "extras"}-${fullName}`);
 
         const row = {
           square_variation_id: v.id,
           square_item_id: item.id,
-          property_id: property.id,
+          property_id: property?.id ?? null,
           name: fullName,
           slug,
           description_en: description,
