@@ -19,10 +19,7 @@ function HomePage() {
       <section className="bg-cream">
         <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
-            <p className="text-sm md:text-base font-semibold accent-text uppercase tracking-wide">
-              {h.tagline}
-            </p>
-            <h1 className="mt-3 font-display text-4xl md:text-6xl leading-[1.05] text-ink">
+            <h1 className="font-display text-4xl md:text-6xl leading-[1.05] text-ink">
               {h.title}
             </h1>
             <p className="mt-4 font-display text-xl md:text-2xl text-ink/70 leading-tight">
