@@ -21,6 +21,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "102-amour",
     address: "102 Chemin d'Amour",
     city: "Gatineau, QC",
+    lat: 45.39456,
+    lng: -75.83815,
     images: [
       imgAmour,
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80",
