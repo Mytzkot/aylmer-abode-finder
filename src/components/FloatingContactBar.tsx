@@ -8,7 +8,7 @@ export function FloatingContactBar() {
     { href: CONTACT.messenger, label: "FB Messenger", icon: Send, color: "bg-[#0084FF] text-white" },
     { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
-    { href: CONTACT.sms, label: t.contact.sms, icon: MessageSquare, color: "bg-cream text-ink" },
+    { href: CONTACT.sms, label: t.contact.sms, icon: Smartphone, color: "bg-cream text-ink" },
   ];
   return (
     <div className="fixed bottom-3 inset-x-3 z-30 md:bottom-4 md:inset-x-0 md:flex md:justify-center pointer-events-none">
