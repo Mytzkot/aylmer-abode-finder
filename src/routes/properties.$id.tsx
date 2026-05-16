@@ -149,6 +149,18 @@ function PropertyHub() {
           <ArrowLeft className="w-4 h-4 flip-rtl" /> <T>All Properties</T>
         </Link>
 
+        {loading && !prop && (
+          <div className="animate-pulse space-y-4" aria-label="Loading property">
+            <div className="h-8 w-2/3 bg-cream-deep rounded" />
+            <div className="h-4 w-1/3 bg-cream-deep rounded" />
+            <div className="h-[280px] md:h-[440px] bg-cream-deep rounded-2xl" />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="h-32 bg-cream-deep rounded-2xl" />
+              <div className="h-32 bg-cream-deep rounded-2xl" />
+            </div>
+          </div>
+        )}
+
         {prop && (
           <>
             {/* Title row */}
