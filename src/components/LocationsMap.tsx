@@ -80,7 +80,7 @@ export default function LocationsMap() {
       zoom={12}
       scrollWheelZoom={false}
       style={{ height: 320, width: "100%" }}
-      aria-label="Map of Zorba Guest Houses property locations"
+      aria-label={mapAria}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
