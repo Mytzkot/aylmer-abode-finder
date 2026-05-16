@@ -31,7 +31,7 @@ function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link to="/properties" className="btn-pill btn-coral text-base px-7 py-3.5">
+              <Link to="/rooms" className="btn-pill btn-coral text-base px-7 py-3.5">
                 {h.ctaRooms}
               </Link>
               <a
