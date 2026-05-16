@@ -52,6 +52,7 @@
   --color-brand: var(--brand);
   --color-brand-deep: var(--brand-deep);
   --color-surface-dark: var(--surface-dark);
+  --color-brand-aqua: var(--brand-aqua);
 }
 
 :root {
@@ -68,12 +69,13 @@
   --foreground: oklch(0.21 0.04 265);         /* #0F172A slate-900 */
   --ink: oklch(0.21 0.04 265);
 
-  /* Brand — logo blue */
-  --brand: oklch(0.62 0.19 256);              /* #3B82F6 blue-500 */
-  --brand-deep: oklch(0.30 0.10 260);         /* deep navy blue — header/footer surface */
-  --surface-dark: oklch(0.30 0.10 260);       /* alias for header + footer */
-  --cyan-pop: oklch(0.62 0.19 256);
-  --coral: oklch(0.62 0.19 256);
+  /* Brand — synced to Zorba logo */
+  --brand: oklch(0.62 0.20 268);              /* logo body blue ~#5B7FFF */
+  --brand-deep: oklch(0.26 0.10 268);         /* deep navy — header/footer surface */
+  --surface-dark: oklch(0.26 0.10 268);       /* alias for header + footer */
+  --brand-aqua: oklch(0.82 0.12 210);         /* logo wing aqua ~#6FD8E8 — CTAs */
+  --cyan-pop: oklch(0.82 0.12 210);
+  --coral: oklch(0.82 0.12 210);
 
   /* Primary = brand blue */
   --primary: oklch(0.62 0.19 256);
@@ -139,11 +141,11 @@
   }
   .btn-ink:hover { filter: brightness(1.15); }
   .btn-brand, .btn-coral {
-    background-color: var(--brand);
-    color: white;
+    background-color: var(--brand-aqua);
+    color: var(--brand-deep);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.08);
   }
-  .btn-brand:hover, .btn-coral:hover { background-color: var(--brand-deep); }
+  .btn-brand:hover, .btn-coral:hover { filter: brightness(0.95); }
   .btn-outline-ink {
     background-color: transparent;
     color: var(--ink);
