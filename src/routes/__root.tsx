@@ -54,6 +54,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:locale:alternate", content: "fr_CA" },
       { property: "og:locale:alternate", content: "ar" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Zorba Rentals — Furnished Guest Houses in Aylmer-Gatineau" },
+      { name: "twitter:title", content: "Zorba Rentals — Furnished Guest Houses in Aylmer-Gatineau" },
+      { property: "og:description", content: "Zorba Rentals — monthly furnished room rentals in Aylmer-Gatineau, QC. No credit check, only first month to move in. 15 min direct bus to downtown Ottawa." },
+      { name: "twitter:description", content: "Zorba Rentals — monthly furnished room rentals in Aylmer-Gatineau, QC. No credit check, only first month to move in. 15 min direct bus to downtown Ottawa." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d0f92496-3d8a-4ecd-836d-02560b87495d/id-preview-124b264d--95b9ca3c-81e7-444d-9ec3-c033ecb84878.lovable.app-1778975429916.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/d0f92496-3d8a-4ecd-836d-02560b87495d/id-preview-124b264d--95b9ca3c-81e7-444d-9ec3-c033ecb84878.lovable.app-1778975429916.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
