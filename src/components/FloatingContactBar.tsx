@@ -10,8 +10,8 @@ export function FloatingContactBar() {
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
   ];
   return (
-    <div className="fixed bottom-3 left-1/2 z-30 -translate-x-1/2 md:bottom-4 pointer-events-none">
-      <div className="w-fit max-w-[calc(100vw-1.5rem)] bg-card rounded-full shadow-2xl border border-border/60 p-1.5 grid grid-cols-3 gap-1.5 pointer-events-auto md:gap-2 justify-center overflow-hidden isolate [&>*:nth-child(n+4)]:hidden">
+    <div className="fixed inset-x-0 bottom-3 z-[70] flex justify-center px-3 md:bottom-4 pointer-events-none overflow-visible isolate">
+      <div className="relative z-10 w-fit max-w-full bg-card rounded-full shadow-2xl border border-border/60 p-1.5 grid grid-cols-3 gap-1.5 pointer-events-auto md:gap-2 justify-center overflow-hidden isolate contain-layout [&>*:not(a)]:hidden [&>*:nth-child(n+4)]:hidden">
         {items.map((it) => (
           <a
             key={it.label}
@@ -20,7 +20,7 @@ export function FloatingContactBar() {
             rel="noreferrer"
             aria-label={it.label}
             title={it.label}
-            className={`w-11 h-11 md:w-12 md:h-12 inline-flex items-center justify-center rounded-full ${it.color} active:scale-95 transition shrink-0`}
+            className={`relative z-10 w-11 h-11 md:w-12 md:h-12 inline-flex items-center justify-center rounded-full ${it.color} active:scale-95 transition shrink-0 overflow-hidden`}
           >
             <it.icon className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={2.25} />
           </a>
