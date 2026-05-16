@@ -48,6 +48,9 @@
   --color-cyan-pop: var(--cyan-pop);
   --color-coral: var(--coral);
   --color-success: var(--success);
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-surface-dark: var(--surface-dark);
 }
 
 :root {
@@ -66,9 +69,10 @@
 
   /* Brand — logo blue */
   --brand: oklch(0.62 0.19 256);              /* #3B82F6 blue-500 */
-  --brand-deep: oklch(0.43 0.21 264);         /* #1E40AF blue-800 */
-  --cyan-pop: oklch(0.62 0.19 256);           /* alias → brand blue */
-  --coral: oklch(0.62 0.19 256);              /* alias → brand blue (legacy) */
+  --brand-deep: oklch(0.30 0.10 260);         /* deep navy blue — header/footer surface */
+  --surface-dark: oklch(0.30 0.10 260);       /* alias for header + footer */
+  --cyan-pop: oklch(0.62 0.19 256);
+  --coral: oklch(0.62 0.19 256);
 
   /* Primary = brand blue */
   --primary: oklch(0.62 0.19 256);
