@@ -38,6 +38,23 @@ export function Header() {
             />
           </Link>
 
+          <nav className="hidden lg:flex items-center gap-1 mr-1">
+            {[
+              { to: "/faq", label: "FAQ" },
+              { to: "/transit", label: "Transit" },
+              { to: "/newcomer", label: "Newcomer Guide" },
+            ].map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="px-3 py-2 rounded-lg text-[13px] font-typewriter uppercase tracking-[0.12em] font-bold text-surface-dark hover:bg-surface-dark/10"
+                activeProps={{ className: "bg-surface-dark/10" }}
+              >
+                <T>{l.label}</T>
+              </Link>
+            ))}
+          </nav>
+
           <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguageToggle />
             <Link
