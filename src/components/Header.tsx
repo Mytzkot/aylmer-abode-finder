@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
-import logo from "@/assets/zorba-logo-light.png";
+import logo from "@/assets/zorba-logo-blue.png";
 
 const PRIMARY_NAV = [
   { to: "/", label: "Home" },

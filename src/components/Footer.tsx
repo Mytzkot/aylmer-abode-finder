@@ -2,7 +2,7 @@ import { MessageCircle, Phone, Facebook, Youtube, Instagram, Send, Mail, MapPin 
 import { Link } from "@tanstack/react-router";
 import { CONTACT, PROPERTIES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
-import logo from "@/assets/zorba-logo-light.png";
+import logo from "@/assets/zorba-logo-blue.png";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
