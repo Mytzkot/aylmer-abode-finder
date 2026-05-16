@@ -28,13 +28,13 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-surface-dark text-white border-b border-white/10 w-full">
+      <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur text-surface-dark border-b border-ink/10 w-full">
         <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-3">
           <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
             <img
               src={logo}
               alt="Zorba Guest Houses"
-              className="h-14 md:h-16 w-auto [filter:drop-shadow(0_0_6px_rgba(255,255,255,0.65))_drop-shadow(0_1px_2px_rgba(0,0,0,0.25))]"
+              className="h-14 md:h-16 w-auto"
             />
           </Link>
 
@@ -42,16 +42,16 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="btn-pill bg-brand-aqua text-surface-dark hover:brightness-95 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold"
+              className="btn-pill bg-surface-dark text-white hover:brightness-110 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold"
             >
               <T>Book Now</T>
             </Link>
             <button
               onClick={() => setOpen(true)}
-              className="touch-min p-2.5 rounded-xl hover:bg-white/10 border border-white/20"
+              className="touch-min p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
               aria-label={openMenu}
             >
-              <Menu className="w-6 h-6 text-white" strokeWidth={2.25} />
+              <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
           </div>
         </div>
