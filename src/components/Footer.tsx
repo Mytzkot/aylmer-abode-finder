@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { CONTACT, PROPERTIES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 import logo from "@/assets/zorba-logo-blue.png";
+import LocationsMap from "@/components/LocationsMap";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
