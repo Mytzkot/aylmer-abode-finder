@@ -109,7 +109,7 @@ export function Header() {
             </div>
           </nav>
 
-          <div className="flex items-center gap-2 ml-2 pl-3 border-l border-white/20">
+          <div className="flex items-center gap-2">
             <LanguageToggle />
             {/* Book Now dropdown */}
             <div className="hidden md:block relative group">
