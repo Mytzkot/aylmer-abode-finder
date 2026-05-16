@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PROPERTIES } from "@/data/properties";
+import { T, useTranslated } from "@/i18n/LanguageProvider";
 
 // Fully client-only: import leaflet & react-leaflet inside an effect so
 // SSR never touches `window`.
