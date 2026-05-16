@@ -264,6 +264,14 @@ function PropertyHub() {
                     const img = (r.image_urls && r.image_urls[0]) || fallbackImg;
                     const isAvail = (r.current_status || "").toLowerCase() === "available";
                     const price = r.rate_monthly ?? r.base_rate;
+                    // Derive room number: prefer DB column, else parse first digit run from name
+                    const parsedNum = (r.name || "").match(/\d+/)?.[0];
+                    const roomNum = r.room_number || parsedNum;
+                    // Clean display name: strip the "Property - " prefix and French duplicate after slash
+                    const cleanName = (r.name || "")
+                      .replace(/^[^-]+-\s*/, "")
+                      .split("/")[0]
+                      .trim();
                     return (
                       <Link
                         key={r.id}
@@ -273,13 +281,14 @@ function PropertyHub() {
                       >
                         <div className="aspect-[4/3] bg-cream-deep overflow-hidden">
                           {img && (
-                            <img src={img} alt={r.name || `Room ${r.room_number}`} loading="lazy"
+                            <img src={img} alt={cleanName || `Room ${roomNum || ""}`} loading="lazy"
                               className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                           )}
                         </div>
                         <div className="p-5 space-y-2">
                           <h3 className="font-display text-xl text-ink leading-tight">
-                            {prop.short_name || prop.address} — <T>Room</T> {r.room_number}
+                            {prop.short_name || prop.address}
+                            {roomNum ? <> — <T>Room</T> {roomNum}</> : cleanName ? <> — {cleanName}</> : null}
                           </h3>
                           {price != null && (
                             <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / <T>month</T></p>
