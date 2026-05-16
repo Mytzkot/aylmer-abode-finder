@@ -7,6 +7,8 @@ export interface PropertyMeta {
   id: string;
   address: string;
   city: string;
+  lat: number;
+  lng: number;
   images: string[];
   youtube: string;
   maps: string;
@@ -19,6 +21,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "102-amour",
     address: "102 Chemin d'Amour",
     city: "Gatineau, QC",
+    lat: 45.39456,
+    lng: -75.83815,
     images: [
       imgAmour,
       "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80",
@@ -39,6 +43,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "58-conrad",
     address: "58 Rue Conrad Valéra",
     city: "Gatineau, QC",
+    lat: 45.39810,
+    lng: -75.84520,
     images: [
       imgConrad,
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80",
@@ -59,6 +65,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "260-colline",
     address: "260 Av. de la Colline",
     city: "Gatineau, QC",
+    lat: 45.41260,
+    lng: -75.78180,
     images: [
       imgColline,
       "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=80",

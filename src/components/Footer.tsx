@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { CONTACT, PROPERTIES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 import logo from "@/assets/zorba-logo-blue.png";
+import LocationsMap from "@/components/LocationsMap";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
@@ -97,15 +98,7 @@ export function Footer() {
         <div className="mt-10">
           <h3 className="font-bold text-white/95 text-sm uppercase tracking-[0.14em] mb-3"><T>Find Us</T></h3>
           <div className="rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
-            <iframe
-              title="Zorba Rentals — Aylmer-Gatineau map"
-              src="https://www.google.com/maps?q=Aylmer+Gatineau+QC&output=embed"
-              width="100%"
-              height="320"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              style={{ border: 0, display: "block" }}
-            />
+            <LocationsMap />
           </div>
         </div>
       </div>
