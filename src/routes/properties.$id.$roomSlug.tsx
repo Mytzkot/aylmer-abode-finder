@@ -200,6 +200,22 @@ function RoomDetail() {
                   )}
                 </div>
 
+                {/* Embedded YouTube tour */}
+                {room.youtube_video_url && ytEmbedUrl(room.youtube_video_url) && (
+                  <div className="pt-2">
+                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden border border-ink/15 bg-black">
+                      <iframe
+                        src={ytEmbedUrl(room.youtube_video_url)!}
+                        title="Room video tour"
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Tour icons */}
                 <div className="flex items-center gap-3 pt-2">
                   {room.youtube_video_url && (
