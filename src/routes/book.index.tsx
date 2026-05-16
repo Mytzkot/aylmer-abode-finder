@@ -1,7 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PROPERTIES } from "@/data/properties";
 import { ArrowRight } from "lucide-react";
 import { T } from "@/i18n/LanguageProvider";
@@ -11,7 +8,6 @@ export const Route = createFileRoute("/book/")({ component: BookChooser });
 function BookChooser() {
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
         <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Daily / Weekly Booking</T></h1>
         <p className="text-ink/60 mt-2 mb-10"><T>Pick the property you'd like to book.</T></p>
@@ -34,8 +30,6 @@ function BookChooser() {
           ))}
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

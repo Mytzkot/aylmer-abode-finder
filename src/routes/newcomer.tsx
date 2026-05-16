@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ExternalLink, Phone } from "lucide-react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { NEWCOMER_LINKS, EMERGENCY } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 
@@ -11,7 +8,6 @@ export const Route = createFileRoute("/newcomer")({ component: NewcomerPage });
 function NewcomerPage() {
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-5xl w-full px-4 py-12 md:py-16">
         <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Newcomer Guide</T></h1>
         <p className="text-ink/60 mt-2 mb-10"><T>Helpful links for settling into Aylmer-Gatineau.</T></p>
@@ -51,8 +47,6 @@ function NewcomerPage() {
           </div>
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

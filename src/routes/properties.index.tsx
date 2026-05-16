@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { PropertyCard } from "@/components/PropertyCard";
 import { PROPERTIES } from "@/data/properties";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
@@ -34,7 +31,6 @@ function PropertiesPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-12 md:py-16">
         <h1 className="font-display text-4xl md:text-5xl text-ink"><T>Available Properties</T></h1>
         <p className="text-ink/60 mt-2 mb-10"><T>Three cozy houses across Aylmer-Gatineau.</T></p>
@@ -44,8 +40,6 @@ function PropertiesPage() {
           ))}
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

@@ -1,9 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
@@ -118,7 +115,6 @@ function RoomsShop() {
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-[220px_1fr] gap-8">
           {/* SIDEBAR */}
@@ -234,8 +230,6 @@ function RoomsShop() {
           </section>
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

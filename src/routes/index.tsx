@@ -1,7 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
@@ -14,7 +11,6 @@ function HomePage() {
   const h = t.home;
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
 
       {/* HERO */}
       <section className="bg-cream">
@@ -102,8 +98,6 @@ function HomePage() {
         </div>
       </section>
 
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }

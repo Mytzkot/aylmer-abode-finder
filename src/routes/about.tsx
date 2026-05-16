@@ -1,7 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { T } from "@/i18n/LanguageProvider";
 
 export const Route = createFileRoute("/about")({
@@ -17,7 +14,6 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <Header />
       <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-20">
         <p className="text-sm font-semibold accent-text uppercase tracking-wider"><T>About Us</T></p>
         <h1 className="font-display text-4xl md:text-6xl text-ink mt-3"><T>Comfortable living, made simple.</T></h1>
@@ -43,8 +39,6 @@ function AboutPage() {
           </Link>
         </div>
       </main>
-      <Footer />
-      <FloatingContactBar />
     </div>
   );
 }
