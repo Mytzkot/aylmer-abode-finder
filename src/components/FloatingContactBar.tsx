@@ -12,17 +12,18 @@ export function FloatingContactBar() {
   ];
   return (
     <div className="fixed bottom-3 inset-x-3 z-30 md:bottom-4 md:inset-x-0 md:flex md:justify-center pointer-events-none">
-      <div className="bg-card/95 backdrop-blur rounded-full shadow-2xl border border-border/60 p-1.5 flex gap-1.5 pointer-events-auto md:gap-2 overflow-x-auto">
+      <div className="bg-card/95 backdrop-blur rounded-full shadow-2xl border border-border/60 p-1.5 flex gap-1.5 pointer-events-auto md:gap-2 justify-center">
         {items.map((it) => (
           <a
             key={it.label}
             href={it.href}
             target={it.href.startsWith("http") ? "_blank" : undefined}
             rel="noreferrer"
-            className={`flex-1 md:flex-none md:px-5 inline-flex items-center justify-center gap-2 rounded-full px-3 py-2 text-sm font-semibold whitespace-nowrap ${it.color} active:scale-95 transition`}
+            aria-label={it.label}
+            title={it.label}
+            className={`w-11 h-11 md:w-12 md:h-12 inline-flex items-center justify-center rounded-full ${it.color} active:scale-95 transition shadow`}
           >
-            <it.icon className="w-4 h-4 shrink-0" />
-            <span>{it.label}</span>
+            <it.icon className="w-5 h-5 md:w-[22px] md:h-[22px]" strokeWidth={2.25} />
           </a>
         ))}
       </div>
