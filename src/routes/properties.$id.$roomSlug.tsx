@@ -8,6 +8,21 @@ function mapsUrl(address: string, city: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
 }
 
+function ytEmbedUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    let id: string | null = null;
+    if (u.hostname.includes("youtu.be")) id = u.pathname.slice(1);
+    else if (u.pathname === "/watch") id = u.searchParams.get("v");
+    else if (u.pathname.startsWith("/embed/")) id = u.pathname.split("/")[2];
+    else if (u.pathname.startsWith("/shorts/")) id = u.pathname.split("/")[2];
+    if (!id) return null;
+    return `https://www.youtube.com/embed/${id}`;
+  } catch {
+    return null;
+  }
+}
+
 export const Route = createFileRoute("/properties/$id/$roomSlug")({ component: RoomDetail });
 
 interface PropertyRow {
