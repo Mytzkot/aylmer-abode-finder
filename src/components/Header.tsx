@@ -46,7 +46,7 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-surface-dark text-white border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-4">
           <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
-            <img src={logo} alt="Zorba Guest Houses" className="h-12 md:h-14 w-auto brightness-0 invert" />
+            <img src={logo} alt="Zorba Guest Houses" className="h-14 md:h-16 w-auto" />
           </Link>
 
           {/* DESKTOP nav */}
