@@ -14,13 +14,13 @@ const SOCIALS = [
 ];
 
 function ColTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="font-display text-base text-white mb-4 tracking-wide">{children}</h3>;
+  return <h3 className="font-display text-lg font-bold text-white mb-4 tracking-wide">{children}</h3>;
 }
 
-const itemCls = "flex items-center gap-2 py-1 text-sm text-white/70 hover:text-white transition";
+const itemCls = "flex items-center gap-2 py-1.5 text-sm font-semibold text-white/95 hover:text-white transition";
 
 function FLink({ to, href, children }: { to?: string; href?: string; children: React.ReactNode }) {
-  const cls = "block py-1 text-sm text-white/70 hover:text-white transition";
+  const cls = "block py-1.5 text-sm font-semibold text-white/95 hover:text-white transition";
   if (href) return <a href={href} className={cls} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">{children}</a>;
   return <Link to={to!} className={cls}>{children}</Link>;
 }
@@ -43,7 +43,7 @@ export function Footer() {
             <ColTitle><T>Stay</T></ColTitle>
             <FLink to="/rooms"><T>All Rooms</T></FLink>
             {PROPERTIES.map((p) => (
-              <Link key={p.id} to="/properties/$id" params={{ id: p.id }} className="block py-1 text-sm text-white/70 hover:text-white transition">
+              <Link key={p.id} to="/properties/$id" params={{ id: p.id }} className="block py-1.5 text-sm font-semibold text-white/95 hover:text-white transition">
                 {p.address}
               </Link>
             ))}
@@ -59,11 +59,11 @@ export function Footer() {
 
           <div>
             <ColTitle><T>Support &amp; Contact</T></ColTitle>
-            <a href={CONTACT.tel} className={itemCls}><Phone className="w-4 h-4" /><span>+1 343 987 4565</span></a>
-            <a href={CONTACT.email} className={itemCls}><Mail className="w-4 h-4" /><span>zorbagraphic@gmail.com</span></a>
-            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className={itemCls}><MessageCircle className="w-4 h-4" /><span>WhatsApp</span></a>
-            <a href={CONTACT.messenger} target="_blank" rel="noreferrer" className={itemCls}><Send className="w-4 h-4" /><span>Messenger</span></a>
-            <div className={itemCls}><MapPin className="w-4 h-4" /><span>Aylmer-Gatineau, QC</span></div>
+            <a href={CONTACT.tel} className={itemCls}><Phone className="w-4 h-4 shrink-0" /><span>+1 343 987 4565</span></a>
+            <a href={CONTACT.email} className={itemCls}><Mail className="w-4 h-4 shrink-0" /><span>zorbagraphic@gmail.com</span></a>
+            <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className={itemCls}><MessageCircle className="w-4 h-4 shrink-0" /><span>WhatsApp</span></a>
+            <a href={CONTACT.messenger} target="_blank" rel="noreferrer" className={itemCls}><Send className="w-4 h-4 shrink-0" /><span>Messenger</span></a>
+            <div className={itemCls}><MapPin className="w-4 h-4 shrink-0" /><span>Aylmer-Gatineau, QC</span></div>
           </div>
         </div>
 
@@ -76,7 +76,7 @@ export function Footer() {
               </a>
             ))}
           </div>
-          <p className="text-xs text-white/50">
+          <p className="text-xs font-semibold text-white/80">
             © {new Date().getFullYear()} ZORBA RENTALS · Aylmer-Gatineau, QC
           </p>
         </div>
