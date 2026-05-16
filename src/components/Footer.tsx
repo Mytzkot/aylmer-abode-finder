@@ -97,15 +97,7 @@ export function Footer() {
         <div className="mt-10">
           <h3 className="font-bold text-white/95 text-sm uppercase tracking-[0.14em] mb-3"><T>Find Us</T></h3>
           <div className="rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
-            <iframe
-              title="Zorba Rentals — Aylmer-Gatineau map"
-              src="https://www.google.com/maps?q=Aylmer+Gatineau+QC&output=embed"
-              width="100%"
-              height="320"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              style={{ border: 0, display: "block" }}
-            />
+            <LocationsMap />
           </div>
         </div>
       </div>
