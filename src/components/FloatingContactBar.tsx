@@ -11,7 +11,7 @@ export function FloatingContactBar() {
   ];
   return (
     <div className="fixed inset-x-0 bottom-3 z-[70] flex justify-center px-3 md:bottom-4 pointer-events-none overflow-visible isolate">
-      <div className="relative z-10 w-fit max-w-full bg-card rounded-full shadow-2xl border border-border/60 p-1.5 grid grid-cols-3 gap-1.5 pointer-events-auto md:gap-2 justify-center overflow-hidden isolate contain-layout [&>*:not(a)]:hidden [&>*:nth-child(n+4)]:hidden">
+      <div className="relative z-10 w-fit max-w-full bg-card rounded-full shadow-2xl border border-border/60 px-3 py-2 flex items-center gap-3 md:gap-4 pointer-events-auto">
         {items.map((it) => (
           <a
             key={it.label}
