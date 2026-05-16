@@ -1,16 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
 import logo from "@/assets/zorba-logo-transparent.png";
-
-const PRIMARY_NAV = [
-  { to: "/rooms", label: "All Rooms" },
-  { to: "/apply", label: "Apply Now" },
-  { to: "/about", label: "About Us" },
-];
 
 const FULL_NAV = [
   { to: "/", label: "Home" },
@@ -29,30 +23,8 @@ const FULL_NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [locOpen, setLocOpen] = useState(false);
   const openMenu = useTranslated("Open menu");
   const closeMenu = useTranslated("Close menu");
-
-  const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[14px] lg:text-[15px] font-bold text-white/90 hover:text-white transition";
-  const activeCls = baseCls + " border-b-[3px] border-white pb-1";
-
-  const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
-    l.to.startsWith("/#") ? (
-      <a key={l.to} href={l.to} onClick={onClick} className={baseCls}>
-        <T>{l.label}</T>
-      </a>
-    ) : (
-      <Link
-        key={l.to}
-        to={l.to}
-        onClick={onClick}
-        className={baseCls}
-        activeProps={{ className: activeCls }}
-        activeOptions={{ exact: l.to === "/" }}
-      >
-        <T>{l.label}</T>
-      </Link>
-    );
 
   return (
     <>
