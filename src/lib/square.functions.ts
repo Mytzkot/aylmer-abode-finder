@@ -132,9 +132,9 @@ export const syncSquareCatalog = createServerFn({ method: "POST" })
       const presentAt = item.item_data?.present_at_location_ids || [];
 
       // 1) Try to match by location, 2) fall back to matching by item-name prefix
+      // 3) If no match, still store as an "extras" item (water, extra guest, etc.) with no property
       const locId = presentAt.find((l) => propByLocation.has(l));
       const property = (locId && propByLocation.get(locId)) || matchPropertyByName(itemName);
-      if (!property) continue;
 
       const variations = item.item_data?.variations || [];
       const variationsToUse = variations.length ? variations : [{ type: "ITEM_VARIATION", id: item.id, item_variation_data: { name: "" } } as SquareVariation];
@@ -144,12 +144,12 @@ export const syncSquareCatalog = createServerFn({ method: "POST" })
         const fullName = vName && vName.toLowerCase() !== "regular" ? `${itemName} — ${vName}` : itemName;
         const priceCents = v.item_variation_data?.price_money?.amount;
         const rate = priceCents != null ? priceCents / 100 : null;
-        const slug = slugify(`${property.slug}-${fullName}`);
+        const slug = slugify(`${property?.slug ?? "extras"}-${fullName}`);
 
         const row = {
           square_variation_id: v.id,
           square_item_id: item.id,
-          property_id: property.id,
+          property_id: property?.id ?? null,
           name: fullName,
           slug,
           description_en: description,

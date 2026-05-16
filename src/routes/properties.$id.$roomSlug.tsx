@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
-import { ArrowLeft, ChevronLeft, ChevronRight, Youtube, MapPin, Calendar, FileText, Home } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Youtube, MapPin, Calendar, FileText, Home } from "lucide-react";
 
 function mapsUrl(address: string, city: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
@@ -25,13 +25,20 @@ interface RoomRow {
   youtube_video_url: string | null; airbnb_listing_url: string | null;
   description_en: string | null; description_fr: string | null;
 }
+interface SimilarRow {
+  id: string; slug: string | null; name: string | null;
+  rate_monthly: number | null; base_rate: number | null;
+  image_urls: string[] | null;
+}
 
 function RoomDetail() {
   const { id: slug, roomSlug } = Route.useParams();
   const [prop, setProp] = useState<PropertyRow | null>(null);
   const [room, setRoom] = useState<RoomRow | null>(null);
+  const [similar, setSimilar] = useState<SimilarRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [idx, setIdx] = useState(0);
+  const [descOpen, setDescOpen] = useState(true);
 
   const fallbackImg = PROPERTIES.find((p) => p.id === slug)?.images[0];
 
@@ -52,7 +59,17 @@ function RoomDetail() {
         .eq("slug", roomSlug)
         .maybeSingle();
       setRoom((r as RoomRow) || null);
+      if (r) {
+        const { data: sim } = await supabase
+          .from("rooms")
+          .select("id, slug, name, rate_monthly, base_rate, image_urls")
+          .eq("property_id", p.id)
+          .neq("id", (r as RoomRow).id)
+          .limit(8);
+        setSimilar((sim as SimilarRow[]) || []);
+      }
       setLoading(false);
+      setIdx(0);
     })();
   }, [slug, roomSlug]);
 
@@ -65,6 +82,7 @@ function RoomDetail() {
   const prev = () => setIdx((idx - 1 + Math.max(images.length, 1)) % Math.max(images.length, 1));
 
   const isAvail = (room?.current_status || "").toLowerCase() === "available";
+  const price = room?.rate_monthly ?? room?.base_rate;
 
   const features = {
     en: ["Twin/Queen bed", "Duvet, linens, towels", "Keypad lock", "Coffee maker", "Mini-fridge",
@@ -80,109 +98,174 @@ function RoomDetail() {
   return (
     <div className="min-h-screen flex flex-col bg-cream">
       <Header />
-      <main className="flex-1 mx-auto max-w-4xl w-full px-4 py-8 md:py-12">
-        <Link to="/properties/$id" params={{ id: slug }} className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink/70 hover:text-ink mb-6">
-          <ArrowLeft className="w-4 h-4 flip-rtl" /> {prop?.address || "Back"}
-        </Link>
+      <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-6 md:py-10">
+        {/* Breadcrumb */}
+        <nav className="text-sm text-ink/80 mb-4 font-medium">
+          <Link to="/rooms" className="hover:underline">Rentals</Link>
+          <span className="mx-2">&gt;</span>
+          <span className="text-ink">{room?.name || "Room"}</span>
+        </nav>
 
         {loading || !room || !prop ? (
-          <p className="text-ink/60">Loading…</p>
+          <p className="text-ink">Loading…</p>
         ) : (
           <>
-            {/* Carousel */}
-            <div className="relative aspect-video bg-cream-deep rounded-3xl overflow-hidden mb-6">
-              {images.length > 0 && (
-                <img src={images[idx]} alt={room.name || ""} className="w-full h-full object-cover" />
-              )}
-              {images.length > 1 && (
-                <>
-                  <button onClick={prev} className="touch-min absolute start-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label="Previous">
-                    <ChevronLeft className="w-5 h-5 flip-rtl" />
+            <div className="grid md:grid-cols-[80px_1fr_360px] gap-5">
+              {/* Thumbnail column */}
+              <div className="hidden md:flex flex-col items-center gap-2">
+                {images.length > 1 && (
+                  <button onClick={prev} aria-label="Previous" className="w-8 h-8 inline-flex items-center justify-center text-ink hover:text-coral">
+                    <ChevronUp className="w-5 h-5" />
                   </button>
-                  <button onClick={next} className="touch-min absolute end-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label="Next">
-                    <ChevronRight className="w-5 h-5 flip-rtl" />
+                )}
+                <div className="flex flex-col gap-2 max-h-[480px] overflow-y-auto">
+                  {images.map((src, i) => (
+                    <button key={i} onClick={() => setIdx(i)}
+                      className={`w-16 h-16 rounded-md overflow-hidden border-2 ${i === idx ? "border-ink" : "border-transparent"}`}>
+                      <img src={src} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+                {images.length > 1 && (
+                  <button onClick={next} aria-label="Next" className="w-8 h-8 inline-flex items-center justify-center text-ink hover:text-coral">
+                    <ChevronDown className="w-5 h-5" />
                   </button>
-                </>
-              )}
+                )}
+              </div>
+
+              {/* Main image */}
+              <div className="relative aspect-square bg-cream-deep rounded-2xl overflow-hidden">
+                {images.length > 0 && (
+                  <img src={images[idx]} alt={room.name || ""} className="w-full h-full object-contain" />
+                )}
+                {images.length > 1 && (
+                  <>
+                    <button onClick={prev} className="touch-min absolute start-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label="Previous">
+                      <ChevronLeft className="w-5 h-5 flip-rtl" />
+                    </button>
+                    <button onClick={next} className="touch-min absolute end-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label="Next">
+                      <ChevronRight className="w-5 h-5 flip-rtl" />
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Right: title, price, description */}
+              <aside className="space-y-4">
+                <div>
+                  <h1 className="font-display text-2xl md:text-3xl text-ink leading-tight">{room.name}</h1>
+                  {price != null && <p className="mt-1 text-xl font-bold text-ink">CAD${Number(price).toFixed(2)}</p>}
+                </div>
+
+                <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                  isAvail ? "bg-success text-white" : "bg-destructive text-white"
+                }`}>
+                  {isAvail ? "Available" : room.booked_until ? `Booked until ${room.booked_until}` : "Booked"}
+                </span>
+
+                {/* Description accordion */}
+                <div className="border-t border-ink/20 pt-3">
+                  <button onClick={() => setDescOpen(!descOpen)} className="w-full flex items-center justify-between font-bold text-ink">
+                    <span>Description</span>
+                    <ChevronDown className={`w-4 h-4 transition ${descOpen ? "" : "-rotate-90"}`} />
+                  </button>
+                  {descOpen && (
+                    <div className="mt-3 space-y-4 text-sm text-ink">
+                      <div>
+                        <p className="font-bold underline mb-2">ROOM FEATURES:</p>
+                        <ul className="space-y-0.5">
+                          {features.en.map(f => <li key={f}>• {f}</li>)}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold underline mb-2">CARACTÉRISTIQUES DE LA CHAMBRE :</p>
+                        <ul className="space-y-0.5">
+                          {features.fr.map(f => <li key={f}>- {f}</li>)}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold underline mb-2">SHARED & AMENITIES</p>
+                        <ul className="space-y-0.5">
+                          {shared.en.map(f => <li key={f}>• {f}</li>)}
+                        </ul>
+                      </div>
+                      <div>
+                        <p className="font-bold underline mb-2">SERVICES ET ÉQUIPEMENTS PARTAGÉS</p>
+                        <ul className="space-y-0.5">
+                          {shared.fr.map(f => <li key={f}>- {f}</li>)}
+                        </ul>
+                      </div>
+                      {(room.description_en || room.description_fr) && (
+                        <div className="pt-2 border-t border-ink/10 whitespace-pre-line">
+                          {room.description_en || room.description_fr}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Tour icons */}
+                <div className="flex items-center gap-3 pt-2">
+                  {room.youtube_video_url && (
+                    <a href={room.youtube_video_url} target="_blank" rel="noreferrer" aria-label="Watch tour"
+                      className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-ink/20 text-red-500 hover:border-ink transition">
+                      <Youtube className="w-5 h-5" />
+                    </a>
+                  )}
+                  <a href={prop.google_maps_url || mapsUrl(prop.address, prop.city)} target="_blank" rel="noreferrer" aria-label="View map"
+                    className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-ink/20 text-success hover:border-ink transition">
+                    <MapPin className="w-5 h-5" />
+                  </a>
+                  {room.airbnb_listing_url && (
+                    <a href={room.airbnb_listing_url} target="_blank" rel="noreferrer" aria-label="Airbnb listing"
+                      className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-ink/20 text-coral hover:border-ink transition">
+                      <Home className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
+
+                {/* CTAs */}
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <Link to="/book/$roomId" params={{ roomId: room.id }} className="btn-pill btn-ink text-sm py-2.5 justify-center">
+                    <Calendar className="w-4 h-4" /> Book
+                  </Link>
+                  <Link to="/apply" search={{ property: slug, room: room.id }} className="btn-pill btn-coral text-sm py-2.5 justify-center">
+                    <FileText className="w-4 h-4" /> Apply
+                  </Link>
+                </div>
+              </aside>
             </div>
 
-            <header className="mb-6">
-              <h1 className="font-display text-3xl md:text-4xl text-ink">
-                {prop.short_name || prop.address} - Room {room.room_number} / Chambre {room.room_number}
-              </h1>
-              <div className="mt-3 flex flex-wrap gap-3 items-center">
-                {room.rate_monthly != null && <span className="font-semibold text-ink">${Number(room.rate_monthly).toFixed(0)}/month</span>}
-                {room.rate_weekly != null && <span className="text-ink/70">· ${Number(room.rate_weekly).toFixed(0)}/week</span>}
-                {room.rate_nightly != null && <span className="text-ink/70">· ${Number(room.rate_nightly).toFixed(0)}/night</span>}
-              </div>
-              <span className={`inline-block mt-3 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                isAvail ? "bg-success text-white" : "bg-destructive text-white"
-              }`}>
-                {isAvail ? "Available" : room.booked_until ? `Booked until ${room.booked_until}` : "Booked"}
-              </span>
-            </header>
-
-            {/* Features bilingual */}
-            <section className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-card border border-border/40 rounded-2xl p-5">
-                <h2 className="font-display text-lg text-ink mb-3">ROOM FEATURES</h2>
-                <ul className="space-y-1.5 text-sm text-ink/80 list-disc ps-5">
-                  {features.en.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-              </div>
-              <div className="bg-card border border-border/40 rounded-2xl p-5">
-                <h2 className="font-display text-lg text-ink mb-3">CARACTÉRISTIQUES DE LA CHAMBRE</h2>
-                <ul className="space-y-1.5 text-sm text-ink/80 list-disc ps-5">
-                  {features.fr.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-              </div>
-            </section>
-
-            {/* Shared & amenities */}
-            <section className="grid md:grid-cols-2 gap-6 mb-8">
-              <div className="bg-card border border-border/40 rounded-2xl p-5">
-                <h2 className="font-display text-lg text-ink mb-3">SHARED & AMENITIES</h2>
-                <ul className="space-y-1.5 text-sm text-ink/80 list-disc ps-5">
-                  {shared.en.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-              </div>
-              <div className="bg-card border border-border/40 rounded-2xl p-5">
-                <h2 className="font-display text-lg text-ink mb-3">SERVICES ET ÉQUIPEMENTS PARTAGÉS</h2>
-                <ul className="space-y-1.5 text-sm text-ink/80 list-disc ps-5">
-                  {shared.fr.map((f) => <li key={f}>{f}</li>)}
-                </ul>
-              </div>
-            </section>
-
-            {/* Tour links — circular icons */}
-            <div className="flex items-center gap-3 mb-8">
-              {room.youtube_video_url && (
-                <a href={room.youtube_video_url} target="_blank" rel="noreferrer" title="Watch tour" aria-label="Watch tour"
-                  className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-red-500 transition">
-                  <Youtube className="w-5 h-5" />
-                </a>
-              )}
-              <a href={prop.google_maps_url || mapsUrl(prop.address, prop.city)} target="_blank" rel="noreferrer" title="View map" aria-label="View map"
-                className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-success transition">
-                <MapPin className="w-5 h-5" />
-              </a>
-              {room.airbnb_listing_url && (
-                <a href={room.airbnb_listing_url} target="_blank" rel="noreferrer" title="Airbnb listing" aria-label="Airbnb listing"
-                  className="w-10 h-10 rounded-full inline-flex items-center justify-center bg-card border border-border hover:border-brand text-coral transition">
-                  <Home className="w-5 h-5" />
-                </a>
-              )}
-            </div>
-
-            {/* Big CTAs */}
-            <div className="grid sm:grid-cols-2 gap-3">
-              <Link to="/book/$roomId" params={{ roomId: room.id }} className="btn-pill btn-ink text-base py-3.5 justify-center">
-                <Calendar className="w-5 h-5" /> Book Daily/Weekly
+            {/* Back link */}
+            <div className="mt-10">
+              <Link to="/properties/$id" params={{ id: slug }} className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:underline">
+                <ArrowLeft className="w-4 h-4 flip-rtl" /> {prop.address}
               </Link>
-              <Link to="/apply" search={{ property: slug, room: room.id }} className="btn-pill btn-coral text-base py-3.5 justify-center">
-                <FileText className="w-5 h-5" /> Apply for Monthly
-              </Link>
             </div>
+
+            {/* Similar items */}
+            {similar.length > 0 && (
+              <section className="mt-10">
+                <h2 className="font-display text-2xl md:text-3xl text-ink mb-4">Similar Items</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                  {similar.slice(0, 4).map(s => {
+                    const sImg = (s.image_urls && s.image_urls[0]) || fallbackImg;
+                    const sPrice = s.rate_monthly ?? s.base_rate;
+                    return (
+                      <Link key={s.id} to="/properties/$id/$roomSlug" params={{ id: slug, roomSlug: s.slug || s.id }} className="group block">
+                        <div className="aspect-square bg-cream-deep rounded-md overflow-hidden">
+                          {sImg && <img src={sImg} alt={s.name || ""} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />}
+                        </div>
+                        <div className="pt-2">
+                          <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{s.name}</h3>
+                          {sPrice != null && <p className="text-sm text-ink font-medium">CAD${Number(sPrice).toFixed(2)}</p>}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </>
         )}
       </main>
