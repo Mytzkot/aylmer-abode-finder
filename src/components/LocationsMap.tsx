@@ -48,9 +48,9 @@ export default function LocationsMap() {
       <div
         className="w-full h-[320px] bg-cream/40 animate-pulse flex items-center justify-center text-ink/40 text-sm"
         role="status"
-        aria-label="Loading map"
+        aria-label={loadingLabel}
       >
-        Loading map…
+        {loadingLabel}
       </div>
     );
   }
