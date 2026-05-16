@@ -23,26 +23,56 @@ function BookPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
+    const { bookSchema, firstError } = await import("@/lib/validation");
+    const parsed = bookSchema.safeParse({ name, phone, email, checkin, checkout });
+    if (!parsed.success) {
+      setSubmitting(false);
+      toast.error(firstError(parsed.error));
+      return;
+    }
+
     if (!isSupabaseConfigured) {
-      toast.warning("Supabase not connected — request logged locally only.");
+      toast.warning("Backend not connected — request logged locally only.");
       setDone(true);
       setSubmitting(false);
       return;
     }
-    const [first_name, ...rest] = name.split(" ");
+
+    // Guard against double-bookings: reject if the room is rented or booked past check-in.
+    const { data: room } = await supabase
+      .from("rooms")
+      .select("current_status, booked_until")
+      .eq("id", roomId)
+      .maybeSingle();
+    if (room) {
+      const status = (room.current_status || "").toLowerCase();
+      if (status === "rented" || status === "unavailable") {
+        setSubmitting(false);
+        toast.error("This room is no longer available.");
+        return;
+      }
+      if (room.booked_until && room.booked_until >= parsed.data.checkin) {
+        setSubmitting(false);
+        toast.error(`Room is booked until ${room.booked_until}. Pick a later date.`);
+        return;
+      }
+    }
+
+    const [first_name, ...rest] = parsed.data.name.split(" ");
     const { error } = await supabase.from("applications").insert({
-      first_name: first_name || name,
+      first_name: first_name || parsed.data.name,
       surname: rest.join(" ") || "—",
-      telephone: phone,
-      email,
+      telephone: parsed.data.phone,
+      email: parsed.data.email,
       stay_type: stayType,
-      additional_information: `Booking request — Room: ${roomId} · Check-in: ${checkin} · Check-out: ${checkout}`,
-      // TODO: also store room_id once schema is confirmed
+      additional_information: `Booking request — Room: ${roomId} · Check-in: ${parsed.data.checkin} · Check-out: ${parsed.data.checkout}`,
     });
     setSubmitting(false);
     if (error) { toast.error(error.message); return; }
     setDone(true);
   };
+
 
   const fullName = useTranslated("Full Name");
   const phoneL = useTranslated("Phone");
