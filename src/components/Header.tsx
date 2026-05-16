@@ -88,14 +88,14 @@ export function Header() {
             open ? "translate-x-0" : "translate-x-full rtl:-translate-x-full"
           }`}
         >
-          <div className="flex justify-between items-center p-5 border-b border-white/15">
+          <div className="flex justify-between items-center p-5 border-b border-white/15 bg-cream">
             <img src={logo} alt="Zorba Guest Houses" className="h-10 w-auto" />
             <button
               onClick={() => setOpen(false)}
-              className="touch-min p-2 rounded-xl hover:bg-white/10"
+              className="touch-min p-2 rounded-xl hover:bg-surface-dark/10 text-surface-dark"
               aria-label={closeMenu}
             >
-              <X className="w-6 h-6 text-white" />
+              <X className="w-6 h-6" />
             </button>
           </div>
 
