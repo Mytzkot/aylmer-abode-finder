@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
-import logo from "@/assets/zorba-logo-light.png";
+import logo from "@/assets/zorba-logo-blue.png";
 
 const PRIMARY_NAV = [
   { to: "/", label: "Home" },
@@ -60,7 +60,9 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-surface-dark text-white border-b border-white/10">
         <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-4">
           <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
-            <img src={logo} alt="Zorba Guest Houses" className="h-14 md:h-16 w-auto" />
+            <span className="inline-flex items-center justify-center bg-white rounded-2xl shadow-md px-3 py-1.5 md:px-4 md:py-2">
+              <img src={logo} alt="Zorba Guest Houses" className="h-10 md:h-12 w-auto" />
+            </span>
           </Link>
 
           {/* DESKTOP nav: trimmed + Locations dropdown */}

@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, MessageSquare, Send, Mail } from "lucide-react";
+import { MessageCircle, Phone, MessageSquare, Send } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
@@ -9,7 +9,6 @@ export function FloatingContactBar() {
     { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
     { href: CONTACT.sms, label: t.contact.sms, icon: MessageSquare, color: "bg-cream text-ink" },
-    { href: CONTACT.email, label: "Email", icon: Mail, color: "bg-white text-surface-dark" },
   ];
   return (
     <div className="fixed bottom-3 inset-x-3 z-30 md:bottom-4 md:inset-x-0 md:flex md:justify-center pointer-events-none">
