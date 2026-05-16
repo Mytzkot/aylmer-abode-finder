@@ -59,7 +59,7 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="hidden xs:inline-flex btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
+              className="hidden min-[380px]:inline-flex btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
             >
               <T>Book Now</T>
             </Link>
