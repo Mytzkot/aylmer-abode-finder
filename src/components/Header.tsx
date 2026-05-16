@@ -145,7 +145,6 @@ export function Header() {
               <Menu className="w-6 h-6 text-white" strokeWidth={2.25} />
             </button>
           </div>
-          </div>
         </div>
       </header>
 
