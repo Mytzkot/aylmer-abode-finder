@@ -7,6 +7,8 @@ export interface PropertyMeta {
   id: string;
   address: string;
   city: string;
+  lat: number;
+  lng: number;
   images: string[];
   youtube: string;
   maps: string;
