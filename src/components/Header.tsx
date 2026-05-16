@@ -59,7 +59,11 @@ export function Header() {
       <header className="sticky top-0 z-40 bg-surface-dark text-white border-b border-white/10 w-full">
         <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-3">
           <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
-            <img src={logo} alt="Zorba Guest Houses" className="h-14 md:h-16 w-auto" />
+            <img
+              src={logo}
+              alt="Zorba Guest Houses"
+              className="h-14 md:h-16 w-auto [filter:drop-shadow(0_0_6px_rgba(255,255,255,0.65))_drop-shadow(0_1px_2px_rgba(0,0,0,0.25))]"
+            />
           </Link>
 
           {/* DESKTOP nav: trimmed + Locations dropdown */}
@@ -113,7 +117,7 @@ export function Header() {
             {/* Book Now dropdown */}
             <div className="hidden md:block relative group">
               <button
-                className="btn-pill bg-white text-surface-dark hover:bg-white/90 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold inline-flex items-center gap-1"
+                className="btn-pill bg-brand-aqua text-surface-dark hover:brightness-95 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold inline-flex items-center gap-1"
                 aria-haspopup="menu"
               >
                 <T>Book Now</T>
