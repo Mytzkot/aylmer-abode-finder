@@ -99,7 +99,7 @@ export default function LocationsMap() {
                 rel="noopener noreferrer"
                 className="text-blue-600 underline text-xs"
               >
-                Get directions →
+                {directionsLabel}
               </a>
             </div>
           </Popup>
