@@ -43,6 +43,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "58-conrad",
     address: "58 Rue Conrad Valéra",
     city: "Gatineau, QC",
+    lat: 45.39810,
+    lng: -75.84520,
     images: [
       imgConrad,
       "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80",
