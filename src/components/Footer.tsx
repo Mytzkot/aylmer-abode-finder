@@ -2,7 +2,7 @@ import { MessageCircle, Phone, Facebook, Youtube, Instagram, Send, Mail, MapPin 
 import { Link } from "@tanstack/react-router";
 import { CONTACT, PROPERTIES } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
-import logo from "@/assets/zorba-logo.png";
+import logo from "@/assets/zorba-logo-transparent.png";
 
 const SOCIALS = [
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
@@ -87,7 +87,7 @@ export function Footer() {
         <img
           src={logo}
           alt=""
-          className="w-full max-w-[1200px] h-auto opacity-95 brightness-0 invert"
+          className="w-full max-w-[1200px] h-auto opacity-95"
         />
       </div>
     </footer>
