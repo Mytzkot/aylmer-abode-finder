@@ -1,16 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
 import logo from "@/assets/zorba-logo-transparent.png";
-
-const PRIMARY_NAV = [
-  { to: "/rooms", label: "All Rooms" },
-  { to: "/apply", label: "Apply Now" },
-  { to: "/about", label: "About Us" },
-];
 
 const FULL_NAV = [
   { to: "/", label: "Home" },
@@ -29,30 +23,8 @@ const FULL_NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const [locOpen, setLocOpen] = useState(false);
   const openMenu = useTranslated("Open menu");
   const closeMenu = useTranslated("Close menu");
-
-  const baseCls = "font-typewriter uppercase tracking-[0.14em] text-[14px] lg:text-[15px] font-bold text-white/90 hover:text-white transition";
-  const activeCls = baseCls + " border-b-[3px] border-white pb-1";
-
-  const navLink = (l: { to: string; label: string }, onClick?: () => void) =>
-    l.to.startsWith("/#") ? (
-      <a key={l.to} href={l.to} onClick={onClick} className={baseCls}>
-        <T>{l.label}</T>
-      </a>
-    ) : (
-      <Link
-        key={l.to}
-        to={l.to}
-        onClick={onClick}
-        className={baseCls}
-        activeProps={{ className: activeCls }}
-        activeOptions={{ exact: l.to === "/" }}
-      >
-        <T>{l.label}</T>
-      </Link>
-    );
 
   return (
     <>
@@ -66,80 +38,14 @@ export function Header() {
             />
           </Link>
 
-          {/* DESKTOP nav: trimmed + Locations dropdown */}
-          <nav className="hidden md:flex items-center gap-6">
-            {PRIMARY_NAV.map((l) => navLink(l))}
-
-            <div
-              className="relative"
-              onMouseEnter={() => setLocOpen(true)}
-              onMouseLeave={() => setLocOpen(false)}
-            >
-              <button
-                onClick={() => setLocOpen((v) => !v)}
-                className={baseCls + " flex items-center gap-1"}
-                aria-haspopup="menu"
-                aria-expanded={locOpen}
-              >
-                <T>Locations</T>
-                <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
-              </button>
-              {locOpen && (
-                <div className="absolute end-0 top-full pt-3 min-w-[260px]">
-                  <div className="rounded-xl bg-white text-ink shadow-2xl border border-border/40 overflow-hidden">
-                    <Link
-                      to="/properties"
-                      onClick={() => setLocOpen(false)}
-                      className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream"
-                    >
-                      <T>All Locations</T>
-                    </Link>
-                    <div className="h-px bg-border/60" />
-                    {PROPERTIES.map((p) => (
-                      <Link
-                        key={p.id}
-                        to="/properties/$id"
-                        params={{ id: p.id }}
-                        onClick={() => setLocOpen(false)}
-                        className="block px-4 py-3 text-sm font-semibold hover:bg-cream"
-                      >
-                        {p.address}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </nav>
-
           <div className="flex items-center gap-2">
             <LanguageToggle />
-            {/* Book Now dropdown */}
-            <div className="hidden md:block relative group">
-              <button
-                className="btn-pill bg-brand-aqua text-surface-dark hover:brightness-95 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold inline-flex items-center gap-1"
-                aria-haspopup="menu"
-              >
-                <T>Book Now</T>
-                <ChevronDown className="w-4 h-4" strokeWidth={2.5} />
-              </button>
-              <div className="absolute end-0 top-full pt-2 min-w-[220px] hidden group-hover:block group-focus-within:block">
-                <div className="rounded-xl bg-white text-ink shadow-2xl border border-border/40 overflow-hidden">
-                  <Link to="/book" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
-                    <T>Booking Page</T>
-                  </Link>
-                  <div className="h-px bg-border/60" />
-                  <Link to="/pay" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
-                    <T>Pay Online (Monthly)</T>
-                  </Link>
-                  <div className="h-px bg-border/60" />
-                  <Link to="/portal" className="block px-4 py-3 text-sm font-bold uppercase tracking-wide hover:bg-cream">
-                    <T>Tenant Portal</T>
-                  </Link>
-                </div>
-              </div>
-            </div>
-            {/* Hamburger ALWAYS visible */}
+            <Link
+              to="/book"
+              className="btn-pill bg-brand-aqua text-surface-dark hover:brightness-95 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold"
+            >
+              <T>Book Now</T>
+            </Link>
             <button
               onClick={() => setOpen(true)}
               className="touch-min p-2.5 rounded-xl hover:bg-white/10 border border-white/20"
