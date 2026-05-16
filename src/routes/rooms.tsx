@@ -81,6 +81,8 @@ function RoomsShop() {
     let out = rooms.slice();
     // Hide rooms belonging to hidden properties
     out = out.filter(r => !r.property_id || !HIDDEN_PROPERTY_SLUGS.has(propById[r.property_id]?.slug || ""));
+    // Hide the 5x5 storage extra
+    out = out.filter(r => !/storage|5x5/i.test(r.name || ""));
 
     if (category === "extras") {
       out = out.filter(r => !r.property_id);
