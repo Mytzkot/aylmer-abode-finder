@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TransitRouteImport } from './routes/transit'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoomsRouteImport } from './routes/rooms'
 import { Route as PropertiesRouteImport } from './routes/properties'
 import { Route as PortalRouteImport } from './routes/portal'
@@ -35,6 +36,11 @@ import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$i
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoomsRoute = RoomsRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/portal': typeof PortalRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/rooms': typeof RoomsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/pay': typeof PayRoute
   '/portal': typeof PortalRoute
   '/rooms': typeof RoomsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/portal': typeof PortalRoute
   '/properties': typeof PropertiesRouteWithChildren
   '/rooms': typeof RoomsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/rooms': typeof AdminRoomsRoute
@@ -227,6 +236,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/properties'
     | '/rooms'
+    | '/sitemap.xml'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/portal'
     | '/rooms'
+    | '/sitemap.xml'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/properties'
     | '/rooms'
+    | '/sitemap.xml'
     | '/transit'
     | '/admin/applications'
     | '/admin/rooms'
@@ -297,6 +309,7 @@ export interface RootRouteChildren {
   PortalRoute: typeof PortalRoute
   PropertiesRoute: typeof PropertiesRouteWithChildren
   RoomsRoute: typeof RoomsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitRoute: typeof TransitRoute
 }
 
@@ -307,6 +320,13 @@ declare module '@tanstack/react-router' {
       path: '/transit'
       fullPath: '/transit'
       preLoaderRoute: typeof TransitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rooms': {
@@ -535,6 +555,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortalRoute: PortalRoute,
   PropertiesRoute: PropertiesRouteWithChildren,
   RoomsRoute: RoomsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitRoute: TransitRoute,
 }
 export const routeTree = rootRouteImport

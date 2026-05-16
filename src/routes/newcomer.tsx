@@ -3,7 +3,19 @@ import { ExternalLink, Phone } from "lucide-react";
 import { NEWCOMER_LINKS, EMERGENCY } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/newcomer")({ component: NewcomerPage });
+export const Route = createFileRoute("/newcomer")({
+  component: NewcomerPage,
+  head: () => ({
+    meta: [
+      { title: "Newcomer Guide — Zorba Rentals" },
+      { name: "description", content: "Helpful links and emergency contacts for newcomers settling into Aylmer-Gatineau and the Ottawa region." },
+      { property: "og:title", content: "Newcomer Guide — Aylmer-Gatineau & Ottawa" },
+      { property: "og:description", content: "City services, immigration, transit and emergency numbers for newcomers." },
+      { property: "og:url", content: "/newcomer" },
+    ],
+    links: [{ rel: "canonical", href: "/newcomer" }],
+  }),
+});
 
 function NewcomerPage() {
   return (

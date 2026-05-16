@@ -5,7 +5,19 @@ import { PROPERTIES } from "@/data/properties";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { T } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/properties/")({ component: PropertiesPage });
+export const Route = createFileRoute("/properties/")({
+  component: PropertiesPage,
+  head: () => ({
+    meta: [
+      { title: "Our Locations — Zorba Rentals Aylmer-Gatineau" },
+      { name: "description", content: "Three furnished guest houses across Aylmer-Gatineau: 102 Chemin d'Amour, 58 Rue Conrad Valéra, and 260 Av. de la Colline." },
+      { property: "og:title", content: "Our Locations — Zorba Rentals" },
+      { property: "og:description", content: "Three furnished guest houses across Aylmer-Gatineau." },
+      { property: "og:url", content: "/properties" },
+    ],
+    links: [{ rel: "canonical", href: "/properties" }],
+  }),
+});
 
 interface RoomRow { id: string; property_id?: string | null; address?: string | null; current_status?: string | null; base_rate?: number | null; }
 

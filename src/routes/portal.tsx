@@ -2,7 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Lock, CreditCard, Mail, MessageCircle } from "lucide-react";
 import { T } from "@/i18n/LanguageProvider";
 
-export const Route = createFileRoute("/portal")({ component: PortalPlaceholder });
+export const Route = createFileRoute("/portal")({
+  component: PortalPlaceholder,
+  head: () => ({
+    meta: [
+      { title: "Tenant Portal — Zorba Rentals" },
+      { name: "description", content: "Sign in to your tenant portal to view your lease, payments and messages." },
+      { name: "robots", content: "noindex" },
+    ],
+    links: [{ rel: "canonical", href: "/portal" }],
+  }),
+});
 
 function PortalPlaceholder() {
   return (

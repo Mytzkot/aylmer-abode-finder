@@ -1,0 +1,12 @@
+{
+  "name": "Zorba Rentals",
+  "short_name": "Zorba",
+  "description": "Furnished monthly room rentals in Aylmer-Gatineau, 15 minutes from downtown Ottawa.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fdf8ee",
+  "theme_color": "#0b2545",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "any", "type": "image/x-icon" }
+  ]
+}

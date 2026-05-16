@@ -3,7 +3,19 @@ import { CreditCard, Send, Banknote, Wallet, Smartphone } from "lucide-react";
 import { T } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
-export const Route = createFileRoute("/pay")({ component: PayOnline });
+export const Route = createFileRoute("/pay")({
+  component: PayOnline,
+  head: () => ({
+    meta: [
+      { title: "Pay Rent Online — Zorba Rentals" },
+      { name: "description", content: "Pay your monthly rent online with credit card, PayPal or e-Transfer." },
+      { property: "og:title", content: "Pay Rent Online — Zorba Rentals" },
+      { property: "og:url", content: "/pay" },
+      { name: "robots", content: "noindex" },
+    ],
+    links: [{ rel: "canonical", href: "/pay" }],
+  }),
+});
 
 const METHODS = [
   { name: "Credit / Debit Card", desc: "Visa, Mastercard, Amex via Stripe", icon: CreditCard, badge: "Stripe" },

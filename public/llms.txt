@@ -1,0 +1,25 @@
+# Zorba Rentals
+
+> Furnished monthly room rentals in Aylmer-Gatineau, Quebec — a 15-minute direct bus to downtown Ottawa. No credit check, only the first month's rent to move in. Wi-Fi and utilities included.
+
+Zorba Rentals operates three furnished guest houses in Aylmer-Gatineau, QC, serving students, newcomers, contract workers and visitors to the National Capital Region. Rooms come fully furnished (queen bed, smart TV, mini-fridge, coffee maker, keypad lock, fast Wi-Fi, all utilities). Flexible month-to-month stays, no credit check required.
+
+## Pages
+
+- [Home](/): Overview, locations and contact form
+- [Locations](/properties): Three furnished guest houses across Aylmer-Gatineau
+- [102 Chemin d'Amour](/properties/102-amour): Property details, rooms and amenities
+- [58 Rue Conrad Valéra](/properties/58-conrad): Property details, rooms and amenities
+- [260 Av. de la Colline](/properties/260-colline): Property details, rooms and amenities
+- [All Rooms](/rooms): Browse every available room with filters and pricing
+- [Apply](/apply): Online rental application form
+- [Book](/book): Short-stay booking (daily or weekly)
+- [About](/about): About Zorba Rentals
+- [FAQ](/faq): Answers about Wi-Fi, furnishings, utilities, credit, pets, transit
+- [Transit](/transit): STO bus lines to downtown Ottawa, UQO, Algonquin, U of O
+- [Newcomer Guide](/newcomer): Settlement links and emergency contacts
+
+## Optional
+
+- [Pay Rent Online](/pay): Existing-tenant payment page
+- [Tenant Portal](/portal): Existing-tenant sign-in

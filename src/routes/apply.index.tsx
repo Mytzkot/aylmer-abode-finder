@@ -13,6 +13,16 @@ export const Route = createFileRoute("/apply/")({
     room: typeof s.room === "string" ? s.room : undefined,
   }),
   component: ApplyPage,
+  head: () => ({
+    meta: [
+      { title: "Apply for a Furnished Room — Zorba Rentals" },
+      { name: "description", content: "Apply online for a furnished monthly room in Aylmer-Gatineau. No credit check, first month only to move in." },
+      { property: "og:title", content: "Apply for a Furnished Room — Zorba Rentals" },
+      { property: "og:description", content: "No credit check. First month only to move in." },
+      { property: "og:url", content: "/apply" },
+    ],
+    links: [{ rel: "canonical", href: "/apply" }],
+  }),
 });
 
 interface Occupant { name: string; relation: string; age: string }
@@ -110,14 +120,37 @@ function ApplyPage() {
     const budgetLabel = budgetSel === "any" ? "any budget" : `$${budgetSel}/month`;
     const exactRoomId = matchedRooms.length === 1 ? matchedRooms[0].id : null;
 
+    // Validate user input with zod before sending anything to the backend.
+    const { applySchema, firstError } = await import("@/lib/validation");
+    const parsed = applySchema.safeParse({
+      first_name: form.first_name,
+      surname: form.surname,
+      telephone: form.telephone,
+      email: form.email,
+      present_address: form.present_address,
+      reason_for_moving: form.reason_for_moving,
+      current_landlord_name: form.current_landlord_name,
+      current_landlord_phone: form.current_landlord_phone,
+      date_of_birth: form.date_of_birth,
+      monthly_income: form.monthly_income ? Number(form.monthly_income) : null,
+      employer_name: form.employer_name,
+      employer_phone: form.employer_phone,
+      school_name: form.name_of_school,
+      additional_information: form.additional_information,
+    });
+    if (!parsed.success) {
+      setSubmitting(false);
+      toast.error(firstError(parsed.error));
+      return;
+    }
+
     const payload = {
-      ...form,
+      ...parsed.data,
       stay_type: "Monthly",
       is_student: isStudent,
-      additional_occupants: occupants,
+      additional_occupants: occupants.slice(0, 10),
       room_id: exactRoomId,
-      additional_information: `${form.additional_information || ""}\n[Preferred: ${locationLabel} around ${budgetLabel} — match best fit]`.trim(),
-      monthly_income: form.monthly_income ? Number(form.monthly_income) : null,
+      additional_information: `${parsed.data.additional_information || ""}\n[Preferred: ${locationLabel} around ${budgetLabel} — match best fit]`.trim().slice(0, 2000),
     };
 
     if (!isSupabaseConfigured) {
@@ -129,6 +162,7 @@ function ApplyPage() {
     if (error) { toast.error(error.message); return; }
     setDone(true);
   };
+
 
   if (done) {
     const propLabel = LOCATION_OPTIONS.find((o) => o.value === locationSel);
