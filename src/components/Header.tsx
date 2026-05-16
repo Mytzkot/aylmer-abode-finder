@@ -29,29 +29,29 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur text-surface-dark border-b border-ink/10 w-full">
-        <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-3">
-          <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0">
+        <div className="mx-auto max-w-7xl px-3 sm:px-4 h-16 md:h-20 flex items-center justify-between gap-2">
+          <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0 min-w-0">
             <img
               src={logo}
               alt="Zorba Guest Houses"
-              className="h-14 md:h-16 w-auto"
+              className="h-10 sm:h-12 md:h-16 w-auto"
             />
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <LanguageToggle />
             <Link
               to="/book"
-              className="btn-pill bg-surface-dark text-white hover:brightness-110 text-[14px] px-4 py-2.5 font-typewriter uppercase tracking-[0.14em] font-bold"
+              className="btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
             >
               <T>Book Now</T>
             </Link>
             <button
               onClick={() => setOpen(true)}
-              className="touch-min p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              className="touch-min p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
               aria-label={openMenu}
             >
-              <Menu className="w-6 h-6" strokeWidth={2.25} />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.25} />
             </button>
           </div>
         </div>
