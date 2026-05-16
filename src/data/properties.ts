@@ -65,6 +65,8 @@ export const PROPERTIES: PropertyMeta[] = [
     id: "260-colline",
     address: "260 Av. de la Colline",
     city: "Gatineau, QC",
+    lat: 45.41260,
+    lng: -75.78180,
     images: [
       imgColline,
       "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200&q=80",
