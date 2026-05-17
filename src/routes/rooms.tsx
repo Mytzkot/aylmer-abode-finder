@@ -142,7 +142,28 @@ function RoomsShop() {
     } else if (category !== "all") {
       out = out.filter(r => r.property_id === category);
     }
-    if (availOnly) out = out.filter(r => (r.current_status || "").toLowerCase() === "available");
+    // Effective "free on" timestamp combining manual booked_until and live
+    // lease_end from the tenants table. Past dates collapse to "available now".
+    const freeOn = (r: RoomRow): number => {
+      const status = (r.current_status || "").toLowerCase();
+      const candidates: number[] = [];
+      if (r.booked_until) {
+        const t = Date.parse(r.booked_until);
+        if (Number.isFinite(t)) candidates.push(t);
+      }
+      const leaseEnd = leaseEndByRoom[r.id];
+      if (leaseEnd) {
+        const t = Date.parse(leaseEnd);
+        if (Number.isFinite(t)) candidates.push(t);
+      }
+      const latest = candidates.length ? Math.max(...candidates) : 0;
+      // If status says available and nothing in the future occupies it → 0.
+      if (latest <= now) return status === "rented" ? Number.POSITIVE_INFINITY : 0;
+      return latest;
+    };
+    const isAvailableNow = (r: RoomRow) => freeOn(r) === 0;
+
+    if (availOnly) out = out.filter(isAvailableNow);
     const lo = minPrice ? Number(minPrice) : null;
     const hi = maxPrice ? Number(maxPrice) : null;
     out = out.filter(r => {
@@ -164,21 +185,14 @@ function RoomsShop() {
     else if (sort === "price_desc") out.sort((a, b) => price(b) - price(a) || alphaCmp(a, b));
     else if (sort === "available") {
       // Available rooms first; remaining sorted by soonest return-to-market
-      // (booked_until ascending; nulls last), then alphabetical.
-      const isAvail = (r: RoomRow) => (r.current_status || "").toLowerCase() === "available";
-      const freeOn = (r: RoomRow) => {
-        if (isAvail(r)) return 0;
-        if (!r.booked_until) return Number.POSITIVE_INFINITY;
-        const t = Date.parse(r.booked_until);
-        return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
-      };
+      // (effective free-on date ascending; never-free last), then alphabetical.
       out.sort((a, b) => freeOn(a) - freeOn(b) || alphaCmp(a, b));
     } else {
       // Default: alphabetical by property (Amour, Colline, Conrad…) then room.
       out.sort(alphaCmp);
     }
     return out;
-  }, [rooms, propById, category, minPrice, maxPrice, availOnly, sort]);
+  }, [rooms, propById, leaseEndByRoom, now, category, minPrice, maxPrice, availOnly, sort]);
 
   const heading =
     category === "all" ? "All Rooms"
