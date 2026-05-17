@@ -79,7 +79,7 @@ const SHARED_AMENITIES = [
 const HOUSE_RULES = [
   { label: "Check-in", value: "Anytime — keypad self check-in" },
   { label: "Check-out", value: "Flexible — coordinate with host" },
-  { label: "Minimum stay", value: "1 month (daily/weekly available on request)" },
+  { label: "Minimum stay", value: "1 month" },
   { label: "Payment", value: "First month's rent to move in · no credit check" },
   { label: "Pets", value: "Not allowed" },
   { label: "Smoking", value: "No smoking indoors" },
@@ -89,7 +89,7 @@ const HOUSE_RULES = [
 const FAQ = [
   { q: "Are utilities included?", a: "Yes — heating, electricity, water, and Wi-Fi are all included in the monthly rate." },
   { q: "Do you require a credit check?", a: "No. You only need the first month's rent to move in." },
-  { q: "Can I stay short-term?", a: "Yes — daily and weekly rates are available on request via the Book page." },
+  { q: "What's the minimum stay?", a: "We rent on a monthly basis only — minimum one month, with flexible month-to-month renewal." },
   { q: "How do I get the keys?", a: "Every door has a personal keypad code so you can self check-in anytime, day or night." },
 ];
 

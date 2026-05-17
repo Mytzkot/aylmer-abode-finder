@@ -8,9 +8,9 @@ export const Route = createFileRoute("/book/")({
   head: () => ({
     meta: [
       { title: "Book a Room — Zorba Rentals" },
-      { name: "description", content: "Book a daily or weekly stay at one of our furnished guest houses in Aylmer-Gatineau." },
+      { name: "description", content: "Book a monthly stay at one of our furnished guest houses in Aylmer-Gatineau." },
       { property: "og:title", content: "Book a Room — Zorba Rentals" },
-      { property: "og:description", content: "Daily and weekly stays in furnished rooms across Aylmer-Gatineau." },
+      { property: "og:description", content: "Monthly furnished rooms across Aylmer-Gatineau." },
       { property: "og:url", content: "/book" },
     ],
     links: [{ rel: "canonical", href: "/book" }],

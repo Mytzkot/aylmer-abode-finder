@@ -11,7 +11,7 @@ export const Route = createFileRoute("/book/$roomId")({
   head: ({ params }) => ({
     meta: [
       { title: "Book Your Stay — Zorba Rentals" },
-      { name: "description", content: "Request a daily or weekly stay in a furnished room." },
+      { name: "description", content: "Request a monthly stay in a furnished room." },
       { property: "og:title", content: "Book Your Stay — Zorba Rentals" },
       { property: "og:url", content: `/book/${params.roomId}` },
       { name: "robots", content: "noindex" },
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/book/$roomId")({
 function BookPage() {
   const { roomId } = Route.useParams();
   const { t } = useLang();
-  const [stayType, setStayType] = useState<"Daily" | "Weekly">("Daily");
+  const stayType = "Monthly" as const;
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
   const [name, setName] = useState("");
@@ -115,13 +115,8 @@ function BookPage() {
         <AmenityIcons />
 
         <form onSubmit={submit} className="space-y-4 bg-card border border-border rounded-2xl p-5">
-          <div className="grid grid-cols-2 gap-2">
-            {(["Daily", "Weekly"] as const).map(s => (
-              <button type="button" key={s} onClick={() => setStayType(s)}
-                className={`btn-pill ${stayType === s ? "btn-ink" : "btn-cream"}`}>
-                <T>{s}</T> {s === "Daily" ? "$80" : "$400"}
-              </button>
-            ))}
+          <div className="rounded-xl bg-cream px-4 py-3 text-center text-ink font-semibold">
+            <T>Monthly stay — from $750/month</T>
           </div>
 
           <Field label={t.book.checkin}><input required type="date" value={checkin} onChange={e => setCheckin(e.target.value)} className={inputCls} /></Field>
