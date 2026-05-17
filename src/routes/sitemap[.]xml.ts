@@ -55,6 +55,15 @@ export const Route = createFileRoute("/sitemap.xml")({
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>`;
 
+        // Automated guard: the sitemap must never contain daily/weekly wording,
+        // including in changefreq hints. Fail loud so regressions surface in logs.
+        const forbidden = xml.match(/daily|weekly/i);
+        if (forbidden) {
+          throw new Error(
+            `sitemap.xml contains forbidden rental-frequency wording: "${forbidden[0]}"`,
+          );
+        }
+
         return new Response(xml, {
           headers: {
             "Content-Type": "application/xml",
