@@ -93,7 +93,7 @@ async function flush(lang: "fr" | "ar") {
   const map = new Map<string, string>();
   try {
     const { translateBatch } = await import("@/lib/translate.functions");
-    const CHUNK = 60;
+    const CHUNK = 20;
     for (let i = 0; i < uniqueTexts.length; i += CHUNK) {
       const slice = uniqueTexts.slice(i, i + CHUNK);
       const { translations: out } = await translateBatch({ data: { texts: slice, targetLang: lang } });
