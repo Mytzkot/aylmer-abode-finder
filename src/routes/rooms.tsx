@@ -60,7 +60,7 @@ function RoomsShop() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [availOnly, setAvailOnly] = useState(false);
-  const [sort, setSort] = useState<Sort>("newest");
+  const [sort, setSort] = useState<Sort>("alpha");
 
   useEffect(() => {
     (async () => {
