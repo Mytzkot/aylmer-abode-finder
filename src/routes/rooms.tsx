@@ -101,9 +101,31 @@ function RoomsShop() {
       return true;
     });
     const price = (r: RoomRow) => r.rate_monthly ?? r.base_rate ?? 0;
-    if (sort === "price_asc") out.sort((a, b) => price(a) - price(b));
-    else if (sort === "price_desc") out.sort((a, b) => price(b) - price(a));
-    else out.sort((a, b) => (b.created_at || "").localeCompare(a.created_at || ""));
+    const propName = (r: RoomRow) => {
+      const p = r.property_id ? propById[r.property_id] : null;
+      return (p?.short_name || p?.address || "zzz").toLowerCase();
+    };
+    const roomLabel = (r: RoomRow) => (r.name || r.room_number || "").toLowerCase();
+    const alphaCmp = (a: RoomRow, b: RoomRow) =>
+      propName(a).localeCompare(propName(b)) || roomLabel(a).localeCompare(roomLabel(b));
+
+    if (sort === "price_asc") out.sort((a, b) => price(a) - price(b) || alphaCmp(a, b));
+    else if (sort === "price_desc") out.sort((a, b) => price(b) - price(a) || alphaCmp(a, b));
+    else if (sort === "available") {
+      // Available rooms first; remaining sorted by soonest return-to-market
+      // (booked_until ascending; nulls last), then alphabetical.
+      const isAvail = (r: RoomRow) => (r.current_status || "").toLowerCase() === "available";
+      const freeOn = (r: RoomRow) => {
+        if (isAvail(r)) return 0;
+        if (!r.booked_until) return Number.POSITIVE_INFINITY;
+        const t = Date.parse(r.booked_until);
+        return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
+      };
+      out.sort((a, b) => freeOn(a) - freeOn(b) || alphaCmp(a, b));
+    } else {
+      // Default: alphabetical by property (Amour, Colline, Conrad…) then room.
+      out.sort(alphaCmp);
+    }
     return out;
   }, [rooms, propById, category, minPrice, maxPrice, availOnly, sort]);
 
