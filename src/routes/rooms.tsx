@@ -31,7 +31,7 @@ interface RoomRow {
 }
 interface PropertyRow { id: string; slug: string; address: string; short_name: string | null; }
 
-type Sort = "newest" | "price_desc" | "price_asc";
+type Sort = "alpha" | "available" | "price_desc" | "price_asc";
 
 // Properties we hide from the sidebar filter (kept in DB for future use)
 const HIDDEN_PROPERTY_SLUGS = new Set(["162-eddy"]);
