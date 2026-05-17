@@ -13,7 +13,7 @@ Zorba Rentals operates three furnished guest houses in Aylmer-Gatineau, QC, serv
 - [260 Av. de la Colline](/properties/260-colline): Property details, rooms and amenities
 - [All Rooms](/rooms): Browse every available room with filters and pricing
 - [Apply](/apply): Online rental application form
-- [Book](/book): Short-stay booking (daily or weekly)
+- [Book](/book): Monthly furnished-room booking
 - [About](/about): About Zorba Rentals
 - [FAQ](/faq): Answers about Wi-Fi, furnishings, utilities, credit, pets, transit
 - [Transit](/transit): STO bus lines to downtown Ottawa, UQO, Algonquin, U of O
