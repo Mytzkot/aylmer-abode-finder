@@ -25,10 +25,10 @@ export const Route = createFileRoute("/sitemap.xml")({
         const propertyPaths = PROPERTIES.map((p) => ({
           path: `/properties/${p.id}`,
           priority: "0.8",
-          changefreq: "weekly" as const,
+          changefreq: "monthly" as const,
         }));
 
-        let roomPaths: { path: string; priority: string; changefreq: "weekly" }[] = [];
+        let roomPaths: { path: string; priority: string; changefreq: "monthly" }[] = [];
         try {
           const { data: rooms } = await supabase
             .from("rooms")
@@ -40,7 +40,7 @@ export const Route = createFileRoute("/sitemap.xml")({
               .map((r) => ({
                 path: `/properties/${r.properties!.slug}/${r.slug}`,
                 priority: "0.7",
-                changefreq: "weekly" as const,
+                changefreq: "monthly" as const,
               }));
           }
         } catch {
