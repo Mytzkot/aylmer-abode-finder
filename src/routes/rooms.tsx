@@ -216,7 +216,8 @@ function RoomsShop() {
               <p className="text-sm font-semibold text-ink">{resultsLine}</p>
               <select value={sort} onChange={e => setSort(e.target.value as Sort)}
                 className="px-3 py-2 rounded-lg border border-ink/30 bg-background text-sm text-ink font-medium">
-                <option value="newest">Newest</option>
+                <option value="alpha">Alphabetical (A–Z)</option>
+                <option value="available">Available first</option>
                 <option value="price_desc">Price (High - Low)</option>
                 <option value="price_asc">Price (Low - High)</option>
               </select>
