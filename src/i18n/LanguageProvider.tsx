@@ -93,16 +93,22 @@ async function flush(lang: "fr" | "ar") {
   const map = new Map<string, string>();
   try {
     const { translateBatch } = await import("@/lib/translate.functions");
-    const CHUNK = 60;
+    const CHUNK = 20;
+    const slices: string[][] = [];
     for (let i = 0; i < uniqueTexts.length; i += CHUNK) {
-      const slice = uniqueTexts.slice(i, i + CHUNK);
-      const { translations: out } = await translateBatch({ data: { texts: slice, targetLang: lang } });
+      slices.push(uniqueTexts.slice(i, i + CHUNK));
+    }
+    const results = await Promise.all(
+      slices.map((slice) => translateBatch({ data: { texts: slice, targetLang: lang } })),
+    );
+    results.forEach(({ translations: out }, k) => {
+      const slice = slices[k];
       slice.forEach((src, j) => {
         const tr = out[j] ?? src;
         map.set(src, tr);
         memCache[lang].set(src, tr);
       });
-    }
+    });
     scheduleSave(lang);
   } catch (e) {
     console.error("translateBatch failed:", e);
