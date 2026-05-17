@@ -52,7 +52,10 @@ function Section({ title, children, defaultOpen = true }: { title: string; child
 function RoomsShop() {
   const [rooms, setRooms] = useState<RoomRow[]>([]);
   const [props, setProps] = useState<PropertyRow[]>([]);
+  // Map: room_id -> latest active lease_end ISO date (for real-time availability)
+  const [leaseEndByRoom, setLeaseEndByRoom] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(() => Date.now());
 
   // category: 'all' | 'rentals' | 'extras' | property_id
   const [category, setCategory] = useState<string>("all");
@@ -62,17 +65,65 @@ function RoomsShop() {
   const [availOnly, setAvailOnly] = useState(false);
   const [sort, setSort] = useState<Sort>("alpha");
 
-  useEffect(() => {
-    (async () => {
-      const [{ data: rs }, { data: ps }] = await Promise.all([
-        supabase.from("rooms").select("id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at"),
+  const loadAvailability = useMemo(
+    () => async () => {
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const [{ data: rs }, { data: ps }, { data: ts }] = await Promise.all([
+        supabase
+          .from("rooms")
+          .select(
+            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at",
+          ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
+        // Active leases — anything ending today or later still occupies the room.
+        supabase
+          .from("tenants")
+          .select("room_id, lease_end")
+          .gte("lease_end", todayIso),
       ]);
       setRooms((rs as RoomRow[]) || []);
       setProps((ps as PropertyRow[]) || []);
+      const next: Record<string, string> = {};
+      for (const t of (ts as Array<{ room_id: string | null; lease_end: string | null }>) || []) {
+        if (!t.room_id || !t.lease_end) continue;
+        const prev = next[t.room_id];
+        // Keep the latest lease_end per room (longest occupation).
+        if (!prev || t.lease_end > prev) next[t.room_id] = t.lease_end;
+      }
+      setLeaseEndByRoom(next);
+      setNow(Date.now());
       setLoading(false);
-    })();
-  }, []);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    loadAvailability();
+
+    // Real-time: refresh when rooms or tenants change in the backend.
+    const channel = supabase
+      .channel("rooms-availability")
+      .on("postgres_changes", { event: "*", schema: "public", table: "rooms" }, () => loadAvailability())
+      .on("postgres_changes", { event: "*", schema: "public", table: "tenants" }, () => loadAvailability())
+      .subscribe();
+
+    // Refresh when the tab regains focus / becomes visible.
+    const onFocus = () => loadAvailability();
+    const onVis = () => { if (document.visibilityState === "visible") loadAvailability(); };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+
+    // Tick the clock once an hour so date-based ordering stays accurate
+    // for long-lived sessions (lease ends crossing midnight).
+    const tick = window.setInterval(() => setNow(Date.now()), 60 * 60 * 1000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+      window.clearInterval(tick);
+    };
+  }, [loadAvailability]);
 
   const visibleProps = useMemo(() => props.filter(p => !HIDDEN_PROPERTY_SLUGS.has(p.slug)), [props]);
   const propById = useMemo(() => Object.fromEntries(props.map(p => [p.id, p])), [props]);
@@ -91,7 +142,28 @@ function RoomsShop() {
     } else if (category !== "all") {
       out = out.filter(r => r.property_id === category);
     }
-    if (availOnly) out = out.filter(r => (r.current_status || "").toLowerCase() === "available");
+    // Effective "free on" timestamp combining manual booked_until and live
+    // lease_end from the tenants table. Past dates collapse to "available now".
+    const freeOn = (r: RoomRow): number => {
+      const status = (r.current_status || "").toLowerCase();
+      const candidates: number[] = [];
+      if (r.booked_until) {
+        const t = Date.parse(r.booked_until);
+        if (Number.isFinite(t)) candidates.push(t);
+      }
+      const leaseEnd = leaseEndByRoom[r.id];
+      if (leaseEnd) {
+        const t = Date.parse(leaseEnd);
+        if (Number.isFinite(t)) candidates.push(t);
+      }
+      const latest = candidates.length ? Math.max(...candidates) : 0;
+      // If status says available and nothing in the future occupies it → 0.
+      if (latest <= now) return status === "rented" ? Number.POSITIVE_INFINITY : 0;
+      return latest;
+    };
+    const isAvailableNow = (r: RoomRow) => freeOn(r) === 0;
+
+    if (availOnly) out = out.filter(isAvailableNow);
     const lo = minPrice ? Number(minPrice) : null;
     const hi = maxPrice ? Number(maxPrice) : null;
     out = out.filter(r => {
@@ -113,21 +185,14 @@ function RoomsShop() {
     else if (sort === "price_desc") out.sort((a, b) => price(b) - price(a) || alphaCmp(a, b));
     else if (sort === "available") {
       // Available rooms first; remaining sorted by soonest return-to-market
-      // (booked_until ascending; nulls last), then alphabetical.
-      const isAvail = (r: RoomRow) => (r.current_status || "").toLowerCase() === "available";
-      const freeOn = (r: RoomRow) => {
-        if (isAvail(r)) return 0;
-        if (!r.booked_until) return Number.POSITIVE_INFINITY;
-        const t = Date.parse(r.booked_until);
-        return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
-      };
+      // (effective free-on date ascending; never-free last), then alphabetical.
       out.sort((a, b) => freeOn(a) - freeOn(b) || alphaCmp(a, b));
     } else {
       // Default: alphabetical by property (Amour, Colline, Conrad…) then room.
       out.sort(alphaCmp);
     }
     return out;
-  }, [rooms, propById, category, minPrice, maxPrice, availOnly, sort]);
+  }, [rooms, propById, leaseEndByRoom, now, category, minPrice, maxPrice, availOnly, sort]);
 
   const heading =
     category === "all" ? "All Rooms"
