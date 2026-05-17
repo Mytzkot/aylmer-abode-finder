@@ -52,7 +52,10 @@ function Section({ title, children, defaultOpen = true }: { title: string; child
 function RoomsShop() {
   const [rooms, setRooms] = useState<RoomRow[]>([]);
   const [props, setProps] = useState<PropertyRow[]>([]);
+  // Map: room_id -> latest active lease_end ISO date (for real-time availability)
+  const [leaseEndByRoom, setLeaseEndByRoom] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(() => Date.now());
 
   // category: 'all' | 'rentals' | 'extras' | property_id
   const [category, setCategory] = useState<string>("all");
@@ -62,17 +65,65 @@ function RoomsShop() {
   const [availOnly, setAvailOnly] = useState(false);
   const [sort, setSort] = useState<Sort>("alpha");
 
-  useEffect(() => {
-    (async () => {
-      const [{ data: rs }, { data: ps }] = await Promise.all([
-        supabase.from("rooms").select("id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at"),
+  const loadAvailability = useMemo(
+    () => async () => {
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const [{ data: rs }, { data: ps }, { data: ts }] = await Promise.all([
+        supabase
+          .from("rooms")
+          .select(
+            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at",
+          ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
+        // Active leases — anything ending today or later still occupies the room.
+        supabase
+          .from("tenants")
+          .select("room_id, lease_end")
+          .gte("lease_end", todayIso),
       ]);
       setRooms((rs as RoomRow[]) || []);
       setProps((ps as PropertyRow[]) || []);
+      const next: Record<string, string> = {};
+      for (const t of (ts as Array<{ room_id: string | null; lease_end: string | null }>) || []) {
+        if (!t.room_id || !t.lease_end) continue;
+        const prev = next[t.room_id];
+        // Keep the latest lease_end per room (longest occupation).
+        if (!prev || t.lease_end > prev) next[t.room_id] = t.lease_end;
+      }
+      setLeaseEndByRoom(next);
+      setNow(Date.now());
       setLoading(false);
-    })();
-  }, []);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    loadAvailability();
+
+    // Real-time: refresh when rooms or tenants change in the backend.
+    const channel = supabase
+      .channel("rooms-availability")
+      .on("postgres_changes", { event: "*", schema: "public", table: "rooms" }, () => loadAvailability())
+      .on("postgres_changes", { event: "*", schema: "public", table: "tenants" }, () => loadAvailability())
+      .subscribe();
+
+    // Refresh when the tab regains focus / becomes visible.
+    const onFocus = () => loadAvailability();
+    const onVis = () => { if (document.visibilityState === "visible") loadAvailability(); };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+
+    // Tick the clock once an hour so date-based ordering stays accurate
+    // for long-lived sessions (lease ends crossing midnight).
+    const tick = window.setInterval(() => setNow(Date.now()), 60 * 60 * 1000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+      window.clearInterval(tick);
+    };
+  }, [loadAvailability]);
 
   const visibleProps = useMemo(() => props.filter(p => !HIDDEN_PROPERTY_SLUGS.has(p.slug)), [props]);
   const propById = useMemo(() => Object.fromEntries(props.map(p => [p.id, p])), [props]);
