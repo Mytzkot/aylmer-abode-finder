@@ -289,26 +289,14 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col md:flex-row md:items-end md:justify-between gap-4 text-[13px] text-white/75">
+        {/* Bottom bar — left block stacked, right block on one line, vertically aligned */}
+        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[13px] text-white/80">
           <div className="space-y-1 text-center md:text-left">
-            <p className="font-semibold text-white/90">
+            <p className="font-semibold text-white">
               © 2026 Zorba Rentals. All rights reserved.
             </p>
             <p className="text-white/75">
               Ottawa/Hull NCR — National Capital Region
-            </p>
-            <p className="text-white/70">
-              Designed by{" "}
-              <a
-                href="https://RootsWingsFly.com"
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold text-white hover:text-coral hover:underline"
-              >
-                @RootsWingsFly
-              </a>{" "}
-              — website design &amp; builds, inquiries welcome
             </p>
           </div>
           <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
@@ -329,6 +317,23 @@ export function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Designer credit strip — beige/cream, sits below the navy footer */}
+      <div className="bg-cream text-ink/80 border-t border-cream-deep/40">
+        <div className="mx-auto max-w-[1280px] px-6 sm:px-8 py-4 text-center text-[13px] md:text-[14px]">
+          Designed by{" "}
+          <a
+            href="https://RootsWingsFly.com"
+            target="_blank"
+            rel="noreferrer"
+            className="font-bold text-ink hover:text-coral hover:underline"
+          >
+            @RootsWingsFly
+          </a>{" "}
+          — website design &amp; builds, inquiries welcome
+        </div>
+      </div>
     </footer>
   );
 }
+

@@ -1,11 +1,14 @@
-import { MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone, Send } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
+// Note: the chatbot bubble (FaqChatbot) renders on top of this stack
+// at bottom-[168px], so this stack of 3 buttons + the chatbot form
+// one unified bottom-right vertical column.
 export function FloatingContactBar() {
   const { t } = useLang();
   const items = [
-    { href: CONTACT.messenger, label: "Messenger", icon: MessageCircle, color: "bg-[#0084FF] text-white" },
+    { href: CONTACT.messenger, label: "Messenger", icon: Send, color: "bg-[#0084FF] text-white" },
     { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
   ];

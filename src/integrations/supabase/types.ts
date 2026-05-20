@@ -293,6 +293,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          rating: number
+          review_date: string
+          review_text: string
+          reviewer_name: string
+          sort_order: number
+          source: string
+          verified: boolean
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rating: number
+          review_date?: string
+          review_text: string
+          reviewer_name: string
+          sort_order?: number
+          source?: string
+          verified?: boolean
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          rating?: number
+          review_date?: string
+          review_text?: string
+          reviewer_name?: string
+          sort_order?: number
+          source?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
       rooms: {
         Row: {
           airbnb_listing_url: string | null
