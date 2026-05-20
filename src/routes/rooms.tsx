@@ -238,6 +238,17 @@ function RoomsShop() {
           <T>Show available only</T>
         </label>
       </div>
+
+      {/* Reset */}
+      <div className="md:pb-2">
+        <button
+          type="button"
+          onClick={resetFilters}
+          className="px-4 py-2.5 rounded-lg border border-ink/25 bg-background text-sm font-bold text-ink hover:bg-cream-deep transition-colors"
+        >
+          <T>Reset Filters</T>
+        </button>
+      </div>
     </div>
   );
 
