@@ -336,49 +336,4 @@ export function Footer() {
     </footer>
   );
 }
-          <div className="space-y-1 text-center md:text-left">
-            <p className="font-semibold text-white">
-              © 2026 Zorba Rentals. All rights reserved.
-            </p>
-            <p className="text-white/75">
-              Ottawa/Hull NCR — National Capital Region
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
-            <VisitorCount />
-            <span className="text-white/30">·</span>
-            <a
-              href="https://aylmer-rooms-hub.lovable.app/"
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold hover:text-white hover:underline"
-            >
-              zorbaco.com
-            </a>
-            <span className="text-white/30">·</span>
-            <span className="font-medium italic inline-flex items-center gap-1">
-              Website made with love <span className="text-coral not-italic">♥</span>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Designer credit strip — beige/cream, sits below the navy footer */}
-      <div className="bg-cream text-ink/80 border-t border-cream-deep/40">
-        <div className="mx-auto max-w-[1280px] px-6 sm:px-8 py-4 text-center text-[13px] md:text-[14px]">
-          Designed by{" "}
-          <a
-            href="https://RootsWingsFly.com"
-            target="_blank"
-            rel="noreferrer"
-            className="font-bold text-ink hover:text-coral hover:underline"
-          >
-            @RootsWingsFly
-          </a>{" "}
-          — website design &amp; builds, inquiries welcome
-        </div>
-      </div>
-    </footer>
-  );
-}
 
