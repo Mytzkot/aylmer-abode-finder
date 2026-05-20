@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
+import { FlexibleStays } from "@/components/FlexibleStays";
 import { ArrowLeft, ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Youtube, MapPin, Calendar, FileText, Home } from "lucide-react";
 
 function mapsUrl(address: string, city: string) {
@@ -93,10 +94,11 @@ interface PropertyRow {
 interface RoomRow {
   id: string; slug: string | null; room_number: string | null; name: string | null;
   current_status: string | null;
-  rate_monthly: number | null; rate_weekly: number | null; rate_nightly: number | null; base_rate: number | null;
+  rate_monthly: number | null; base_rate: number | null;
   image_urls: string[] | null; booked_until: string | null;
   youtube_video_url: string | null; airbnb_listing_url: string | null;
   description_en: string | null; description_fr: string | null;
+  features: string[] | null;
 }
 interface SimilarRow {
   id: string; slug: string | null; name: string | null;
@@ -226,8 +228,14 @@ function RoomDetail() {
               <aside className="space-y-4">
                 <div>
                   <h1 className="font-display text-2xl md:text-3xl text-ink leading-tight">{room.name}</h1>
-                  {price != null && <p className="mt-1 text-xl font-bold text-ink">CAD${Number(price).toFixed(2)}</p>}
+                  {price != null && <p className="mt-1 text-xl font-bold text-ink">CAD${Number(price).toFixed(2)} <span className="text-base font-medium text-ink/60">/ month</span></p>}
                 </div>
+
+                {room.features && room.features.length > 0 && (
+                  <p className="text-sm text-ink/80 font-medium">
+                    {room.features.join(" · ")}
+                  </p>
+                )}
 
                 <span className={`inline-block px-2.5 py-1 rounded-full text-[11px] font-bold ${
                   isAvail ? "bg-success text-white" : "bg-destructive text-white"
@@ -324,8 +332,10 @@ function RoomDetail() {
               </aside>
             </div>
 
+            <FlexibleStays />
+
             {/* Back link */}
-            <div className="mt-10">
+            <div className="mt-6">
               <Link to="/properties/$id" params={{ id: slug }} className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:underline">
                 <ArrowLeft className="w-4 h-4 flip-rtl" /> {prop.address}
               </Link>
@@ -346,7 +356,7 @@ function RoomDetail() {
                         </div>
                         <div className="pt-2">
                           <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{s.name}</h3>
-                          {sPrice != null && <p className="text-sm text-ink font-medium">CAD${Number(sPrice).toFixed(2)}</p>}
+                          {sPrice != null && <p className="text-sm text-ink font-medium">CAD${Number(sPrice).toFixed(2)} <span className="text-ink/60 font-normal">/ month</span></p>}
                         </div>
                       </Link>
                     );

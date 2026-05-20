@@ -17,6 +17,7 @@ import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PayRouteImport } from './routes/pay'
 import { Route as NewcomerRouteImport } from './routes/newcomer'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ExtrasRouteImport } from './routes/extras'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as ApplyRouteImport } from './routes/apply'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -71,6 +72,11 @@ const NewcomerRoute = NewcomerRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExtrasRoute = ExtrasRouteImport.update({
+  id: '/extras',
+  path: '/extras',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookRoute = BookRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/apply': typeof ApplyRouteWithChildren
   '/book': typeof BookRouteWithChildren
+  '/extras': typeof ExtrasRoute
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/pay': typeof PayRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
+  '/extras': typeof ExtrasRoute
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/pay': typeof PayRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/apply': typeof ApplyRouteWithChildren
   '/book': typeof BookRouteWithChildren
+  '/extras': typeof ExtrasRoute
   '/faq': typeof FaqRoute
   '/newcomer': typeof NewcomerRoute
   '/pay': typeof PayRoute
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/apply'
     | '/book'
+    | '/extras'
     | '/faq'
     | '/newcomer'
     | '/pay'
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/extras'
     | '/faq'
     | '/newcomer'
     | '/pay'
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/apply'
     | '/book'
+    | '/extras'
     | '/faq'
     | '/newcomer'
     | '/pay'
@@ -303,6 +315,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   ApplyRoute: typeof ApplyRouteWithChildren
   BookRoute: typeof BookRouteWithChildren
+  ExtrasRoute: typeof ExtrasRoute
   FaqRoute: typeof FaqRoute
   NewcomerRoute: typeof NewcomerRoute
   PayRoute: typeof PayRoute
@@ -369,6 +382,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/extras': {
+      id: '/extras'
+      path: '/extras'
+      fullPath: '/extras'
+      preLoaderRoute: typeof ExtrasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book': {
@@ -549,6 +569,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   ApplyRoute: ApplyRouteWithChildren,
   BookRoute: BookRouteWithChildren,
+  ExtrasRoute: ExtrasRoute,
   FaqRoute: FaqRoute,
   NewcomerRoute: NewcomerRoute,
   PayRoute: PayRoute,

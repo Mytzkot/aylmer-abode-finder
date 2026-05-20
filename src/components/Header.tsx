@@ -10,6 +10,7 @@ const FULL_NAV = [
   { to: "/", label: "Home" },
   { to: "/rooms", label: "All Rooms" },
   { to: "/properties", label: "Locations" },
+  { to: "/extras", label: "Extras" },
   { to: "/book", label: "Booking Page" },
   { to: "/pay", label: "Pay Online" },
   { to: "/portal", label: "Tenant Portal" },
@@ -41,6 +42,7 @@ export function Header() {
           <nav className="hidden lg:flex items-center gap-1 mr-1">
             {[
               { to: "/properties", label: "Locations" },
+              { to: "/extras", label: "Extras" },
               { to: "/apply", label: "Apply Now" },
               { to: "/about", label: "About Us" },
               { to: "/#contact", label: "Contact Us" },
