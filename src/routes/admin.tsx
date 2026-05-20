@@ -87,6 +87,14 @@ function AdminLayout() {
             </Link>
           ))}
         </nav>
+        <div className="mt-4 mb-2 px-3 py-2 rounded-xl bg-cream/60 border border-border text-xs">
+          <div className="flex items-center gap-1.5 text-ink/60 font-semibold uppercase tracking-wider mb-0.5">
+            <Eye className="w-3.5 h-3.5" /> Site visitors
+          </div>
+          <div className="text-lg font-bold text-ink">
+            {visitors !== null ? visitors.toLocaleString() : "—"}
+          </div>
+        </div>
         <button onClick={signOut} className="touch-min flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-cream text-ink/60">
           <LogOut className="w-4 h-4" /> Sign out
         </button>
