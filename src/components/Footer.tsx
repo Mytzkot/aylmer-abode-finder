@@ -1,7 +1,23 @@
-import { MessageCircle, Phone, Facebook, Youtube, Instagram, Mail, MapPin, Send } from "lucide-react";
+import {
+  MessageCircle,
+  Phone,
+  Facebook,
+  Youtube,
+  Instagram,
+  Mail,
+  MapPin,
+  Send,
+  Globe,
+  Eye,
+  CreditCard,
+  Play,
+} from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { CONTACT, PROPERTIES } from "@/data/properties";
+import { useEffect, useState } from "react";
+import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
+import { useServerFn } from "@tanstack/react-start";
+import { getVisitorCount } from "@/lib/visitor-counter.functions";
 import logo from "@/assets/zorba-logo-blue.png";
 
 const SOCIALS = [
@@ -9,93 +25,182 @@ const SOCIALS = [
   { href: CONTACT.messenger, Icon: Send, label: "Messenger", color: "bg-[#0084FF] text-white" },
   { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
   { href: CONTACT.youtube, Icon: Youtube, label: "YouTube", color: "bg-[#FF0000] text-white" },
-  { href: "https://instagram.com", Icon: Instagram, label: "Instagram", color: "bg-gradient-to-tr from-[#FEDA75] via-[#FA7E1E] to-[#D62976] text-white" },
+  { href: CONTACT.instagram, Icon: Instagram, label: "Instagram", color: "bg-gradient-to-tr from-[#FEDA75] via-[#FA7E1E] to-[#D62976] text-white" },
   { href: CONTACT.email, Icon: Mail, label: "Email", color: "bg-white text-surface-dark" },
 ];
 
-const PAYMENT_METHODS = ["Visa", "Mastercard", "Amex", "Stripe", "PayPal", "Interac e-Transfer", "Apple Pay", "Google Pay"];
-
 function ColTitle({ children }: { children: React.ReactNode }) {
-  return <h3 className="font-bold text-white text-sm uppercase tracking-[0.14em] mb-4">{children}</h3>;
+  return (
+    <h3 className="font-extrabold text-white text-[15px] uppercase tracking-[0.16em] mb-3">
+      {children}
+    </h3>
+  );
 }
 
-const linkCls = "block text-sm font-medium text-white/80 hover:text-white hover:underline transition";
+const linkCls =
+  "block text-[15px] md:text-[16px] font-semibold text-white/85 hover:text-white hover:underline transition leading-snug";
 
 function FLink({ to, href, children }: { to?: string; href?: string; children: React.ReactNode }) {
-  if (href) return <a href={href} className={linkCls} target={href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">{children}</a>;
-  return <Link to={to!} className={linkCls}>{children}</Link>;
+  if (href)
+    return (
+      <a
+        href={href}
+        className={linkCls}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    );
+  return (
+    <Link to={to!} className={linkCls}>
+      {children}
+    </Link>
+  );
+}
+
+function IconLink({
+  href,
+  Icon,
+  children,
+}: {
+  href: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel="noreferrer"
+      className="flex items-center gap-2 text-[15px] md:text-[16px] font-semibold text-white/85 hover:text-white hover:underline transition leading-snug"
+    >
+      <Icon className="w-4 h-4 shrink-0 text-coral" />
+      <span className="truncate">{children}</span>
+    </a>
+  );
+}
+
+function VisitorCount() {
+  const fetchCount = useServerFn(getVisitorCount);
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchCount()
+      .then((r) => {
+        if (!cancelled) setCount(r.count);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchCount]);
+
+  return (
+    <span className="inline-flex items-center gap-1.5 text-white/70">
+      <Eye className="w-3.5 h-3.5" />
+      {count !== null ? `${count.toLocaleString()} ` : ""}
+      <T>visitors</T>
+    </span>
+  );
 }
 
 export function Footer() {
   return (
     <footer className="bg-surface-dark text-white pb-32 md:pb-24">
-      <div className="mx-auto max-w-6xl px-6 pt-16 md:pt-20">
+      <div className="mx-auto max-w-6xl px-6 pt-14 md:pt-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {/* Col 1 — Brand */}
           <div>
             <div className="bg-white rounded-2xl p-3 inline-flex items-center justify-center shadow-md mb-4">
               <img src={logo} alt="Zorba Rentals" className="h-16 w-auto object-contain" />
             </div>
-            <p className="text-sm text-white/80 leading-relaxed mb-4">
+            <p className="text-[15px] text-white/85 leading-relaxed mb-3 font-medium">
               <T>Furnished monthly rooms in Aylmer-Gatineau. No credit check, only first month to move in. 15 min direct bus to downtown Ottawa.</T>
             </p>
-            <div className="flex items-center gap-2 text-sm font-medium text-white/80">
-              <MapPin className="w-4 h-4 shrink-0" />
+            <div className="flex items-center gap-2 text-[15px] font-semibold text-white/85">
+              <MapPin className="w-4 h-4 shrink-0 text-coral" />
               <span>Aylmer-Gatineau, QC</span>
             </div>
+            <a
+              href={CONTACT.youtube}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex items-center gap-2 text-[14px] font-semibold text-coral hover:underline"
+            >
+              <Play className="w-4 h-4" /> <T>View room tours on YouTube</T>
+            </a>
           </div>
 
           {/* Col 2 — Stay */}
           <div>
             <ColTitle><T>Stay</T></ColTitle>
-            <div className="space-y-2">
-              <FLink to="/rooms"><T>All Rooms</T></FLink>
-              {PROPERTIES.map((p) => (
-                <Link key={p.id} to="/properties/$id" params={{ id: p.id }} className={linkCls}>
-                  {p.address}
+            <ul className="space-y-1.5">
+              <li><FLink to="/rooms"><T>All Rooms</T></FLink></li>
+              {PROPERTIES.map((p) => {
+                const map = PROPERTY_MAP_LINKS[p.id];
+                return (
+                  <li key={p.id}>
+                    <a
+                      href={map?.short ?? "#"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={linkCls}
+                      title={map?.full}
+                    >
+                      {map?.full ?? p.address}
+                    </a>
+                  </li>
+                );
+              })}
+              <li><FLink to="/book"><T>Booking Page</T></FLink></li>
+              <li><FLink to="/portal"><T>Tenant Portal</T></FLink></li>
+              <li><FLink to="/extras"><T>Extras</T></FLink></li>
+              <li>
+                <Link to="/pay" className={linkCls + " text-coral hover:text-coral"}>
+                  <span className="inline-flex items-center gap-1.5">
+                    <CreditCard className="w-4 h-4" /> <T>Payment Options →</T>
+                  </span>
                 </Link>
-              ))}
-              <FLink to="/book"><T>Booking Page</T></FLink>
-              <FLink to="/portal"><T>Tenant Portal</T></FLink>
-              <FLink to="/extras"><T>Extras</T></FLink>
-            </div>
+              </li>
+            </ul>
           </div>
 
           {/* Col 3 — Company */}
           <div>
             <ColTitle><T>Company</T></ColTitle>
-            <div className="space-y-2">
-              <FLink to="/about"><T>About Us</T></FLink>
-              <FLink to="/faq"><T>FAQ</T></FLink>
-              <FLink to="/faq"><T>How It Works</T></FLink>
-              <FLink to="/newcomer"><T>Newcomer Guide</T></FLink>
-              <FLink to="/transit"><T>Transit</T></FLink>
-              <FLink to="/apply"><T>Apply Now</T></FLink>
-            </div>
+            <ul className="space-y-1.5">
+              <li><FLink to="/about"><T>About Us</T></FLink></li>
+              <li><FLink to="/faq"><T>FAQ</T></FLink></li>
+              <li><FLink to="/faq"><T>How It Works</T></FLink></li>
+              <li><FLink to="/newcomer"><T>Newcomer Guide</T></FLink></li>
+              <li><FLink to="/transit"><T>Transit</T></FLink></li>
+              <li><FLink to="/apply"><T>Apply Now</T></FLink></li>
+            </ul>
           </div>
 
-          {/* Col 4 — Contact */}
+          {/* Col 4 — Connect */}
           <div>
-            <ColTitle><T>Contact</T></ColTitle>
-            <div className="space-y-2">
-              <a href={CONTACT.tel} className={linkCls + " flex items-center gap-2"}>
-                <Phone className="w-4 h-4 shrink-0" /> 1-343-202-5460
-              </a>
-              <a href={CONTACT.whatsapp} target="_blank" rel="noreferrer" className={linkCls + " flex items-center gap-2"}>
-                <MessageCircle className="w-4 h-4 shrink-0" /> WhatsApp
-              </a>
-              <a href={CONTACT.email} className={linkCls + " flex items-center gap-2"}>
-                <Mail className="w-4 h-4 shrink-0" /> zorbagraphic@gmail.com
-              </a>
-              <p className="text-xs italic text-white/70 pt-2">
-                Je parle arabe et anglais — Texte en français
-              </p>
-            </div>
+            <ColTitle><T>Connect</T></ColTitle>
+            <ul className="space-y-1.5">
+              <li><IconLink href={CONTACT.tel} Icon={Phone}>1-343-202-5460</IconLink></li>
+              <li><IconLink href={CONTACT.whatsapp} Icon={MessageCircle}>{CONTACT.whatsappShort}</IconLink></li>
+              <li><IconLink href={CONTACT.messenger} Icon={Send}>{CONTACT.messengerShort}</IconLink></li>
+              <li><IconLink href={CONTACT.facebook} Icon={Facebook}>{CONTACT.facebookShort}</IconLink></li>
+              <li><IconLink href={CONTACT.youtube} Icon={Youtube}>{CONTACT.youtubeShort}</IconLink></li>
+              <li><IconLink href={CONTACT.instagram} Icon={Instagram}>{CONTACT.instagramShort}</IconLink></li>
+              <li><IconLink href={CONTACT.email} Icon={Mail}>{CONTACT.emailShort}</IconLink></li>
+              <li><IconLink href={CONTACT.website} Icon={Globe}>{CONTACT.websiteShort}</IconLink></li>
+            </ul>
+            <p className="text-[13px] italic text-white/70 pt-3 font-medium">
+              Je parle arabe et anglais — Texte en français
+            </p>
           </div>
         </div>
 
-        {/* Social row */}
-        <div className="mt-12 pt-8 border-t border-white/15">
+        {/* Social icons row */}
+        <div className="mt-10 pt-6 border-t border-white/15">
           <div className="flex flex-wrap items-center justify-center gap-3">
             {SOCIALS.map(({ href, Icon, label, color }) => (
               <a
@@ -105,7 +210,7 @@ export function Footer() {
                 rel="noreferrer"
                 aria-label={label}
                 title={label}
-                className={`w-10 h-10 rounded-full ${color} shadow hover:scale-110 transition flex items-center justify-center`}
+                className={`w-11 h-11 rounded-full ${color} shadow hover:scale-110 transition flex items-center justify-center`}
               >
                 <Icon className="w-4 h-4" strokeWidth={2.25} />
               </a>
@@ -113,31 +218,23 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Payment methods */}
-        <div className="mt-8">
-          <p className="text-xs uppercase tracking-[0.14em] text-white/60 text-center mb-3 font-semibold">
-            <T>Accepted Payment Methods</T>
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {PAYMENT_METHODS.map((m) => (
-              <span key={m} className="px-3 py-1.5 rounded-md bg-white/10 text-white/90 text-xs font-semibold tracking-wide border border-white/15">
-                {m}
-              </span>
-            ))}
-          </div>
-        </div>
-
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/70">
-          <p className="font-medium">
-            © {new Date().getFullYear()} Zorba Rentals · Aylmer-Gatineau, QC
+        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-white/75">
+          <p className="font-semibold">
+            © 2026 Zorba Rentals · Aylmer-Gatineau, QC
           </p>
-          <div className="flex items-center gap-4">
-            <a href="https://aylmer-rooms-hub.lovable.app" target="_blank" rel="noreferrer" className="hover:text-white hover:underline">
+          <VisitorCount />
+          <div className="flex items-center gap-3">
+            <a
+              href="https://aylmer-rooms-hub.lovable.app"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold hover:text-white hover:underline"
+            >
               aylmer-rooms-hub.lovable.app
             </a>
             <span className="text-white/40">·</span>
-            <span className="text-white/60">zorbaco.com (coming soon)</span>
+            <span className="text-white/70 font-semibold">zorbaco.com (coming soon)</span>
           </div>
         </div>
       </div>
