@@ -332,8 +332,10 @@ function RoomDetail() {
               </aside>
             </div>
 
+            <FlexibleStays />
+
             {/* Back link */}
-            <div className="mt-10">
+            <div className="mt-6">
               <Link to="/properties/$id" params={{ id: slug }} className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:underline">
                 <ArrowLeft className="w-4 h-4 flip-rtl" /> {prop.address}
               </Link>
@@ -354,7 +356,7 @@ function RoomDetail() {
                         </div>
                         <div className="pt-2">
                           <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{s.name}</h3>
-                          {sPrice != null && <p className="text-sm text-ink font-medium">CAD${Number(sPrice).toFixed(2)}</p>}
+                          {sPrice != null && <p className="text-sm text-ink font-medium">CAD${Number(sPrice).toFixed(2)} <span className="text-ink/60 font-normal">/ month</span></p>}
                         </div>
                       </Link>
                     );
