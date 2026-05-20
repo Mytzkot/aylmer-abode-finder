@@ -93,8 +93,16 @@ function HomePage() {
         </div>
       </section>
 
+      {/* FLEXIBLE STAYS */}
+      <section className="bg-cream">
+        <div className="mx-auto max-w-3xl px-4 pb-6">
+          <FlexibleStays />
+        </div>
+      </section>
+
       {/* CONTACT */}
       <section id="contact" className="bg-cream-deep/30 scroll-mt-20">
+
         <div className="mx-auto max-w-3xl px-4 py-14 md:py-20">
           <h2 className="font-display text-3xl md:text-5xl text-ink text-center">{h.contactTitle}</h2>
           <p className="mt-4 text-center text-ink/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
