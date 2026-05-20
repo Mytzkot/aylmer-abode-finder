@@ -137,13 +137,13 @@ function NewsletterSignup() {
   return (
     <div className="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5">
       <h4 className="font-extrabold text-white text-[16px] mb-1">
-        <T>Get Room Availability Updates</T>
+        <T>Get Notified About Available Rooms</T>
       </h4>
       <p className="text-[13px] text-white/75 mb-3 leading-snug">
-        <T>Be the first to know when a room opens up. Join our list.</T>
+        <T>Want us to email you when a room opens up? Join our mailing list.</T>
       </p>
       {status === "ok" ? (
-        <p className="text-[14px] font-semibold text-coral">{msg}</p>
+        <p className="text-[14px] font-semibold text-coral"><T>You're on the list — thanks!</T></p>
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
@@ -157,9 +157,9 @@ function NewsletterSignup() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="rounded-md bg-coral text-white font-bold text-[14px] px-4 py-2 hover:opacity-90 transition disabled:opacity-60"
+            className="rounded-md bg-coral text-white font-bold text-[14px] px-4 py-2 hover:opacity-90 transition disabled:opacity-60 whitespace-nowrap"
           >
-            {status === "loading" ? "..." : "Subscribe"}
+            {status === "loading" ? "..." : "Sign Me Up"}
           </button>
         </form>
       )}
