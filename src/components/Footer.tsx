@@ -178,7 +178,7 @@ const SHORT_ADDRESSES: Record<string, string> = {
 
 export function Footer() {
   return (
-    <footer className="bg-surface-dark text-white pb-56 md:pb-44">
+    <footer className="bg-surface-dark text-white pb-16 md:pb-20">
       <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 pt-16 md:pt-20">
         <div className="grid gap-12 lg:gap-10 lg:grid-cols-12 items-start">
           {/* Left section — brand + newsletter */}
@@ -289,8 +289,8 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar — left block stacked, right block on one line, vertically aligned */}
-        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[13px] text-white/80">
+        {/* Bottom bar — left and right blocks vertically centered against each other */}
+        <div className="mt-8 py-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[13px] text-white/80">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-semibold text-white">
               © 2026 Zorba Rentals. All rights reserved.
@@ -318,9 +318,9 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Designer credit strip — beige/cream, sits below the navy footer */}
+      {/* Designer credit strip — beige/cream, generous breathing room */}
       <div className="bg-cream text-ink/80 border-t border-cream-deep/40">
-        <div className="mx-auto max-w-[1280px] px-6 sm:px-8 py-4 text-center text-[13px] md:text-[14px]">
+        <div className="mx-auto max-w-[1280px] px-6 sm:px-8 py-9 md:py-10 text-center text-[15px] leading-relaxed">
           Designed by{" "}
           <a
             href="https://RootsWingsFly.com"
