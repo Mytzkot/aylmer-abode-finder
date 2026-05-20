@@ -14,8 +14,10 @@ function AdminLayout() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [visitors, setVisitors] = useState<number | null>(null);
   const path = useRouterState({ select: s => s.location.pathname });
   const navigate = useNavigate();
+  const fetchVisitors = useServerFn(getVisitorCount);
 
   useEffect(() => {
     if (!isSupabaseConfigured) { setLoading(false); return; }
@@ -23,6 +25,10 @@ function AdminLayout() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setUser(s?.user ?? null));
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (user) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
+  }, [user, fetchVisitors]);
 
   useEffect(() => {
     if (user && path === "/admin") navigate({ to: "/admin/applications" });
