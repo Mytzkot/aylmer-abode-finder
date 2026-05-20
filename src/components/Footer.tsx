@@ -290,11 +290,28 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 pt-5 border-t border-white/15 grid gap-4 md:grid-cols-3 items-center text-[13px] text-white/75">
-          <p className="font-semibold text-center md:text-left">
-            © 2026 Zorba Rentals · Ottawa/Hull NCR — National Capital Region
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col md:flex-row md:items-end md:justify-between gap-4 text-[13px] text-white/75">
+          <div className="space-y-1 text-center md:text-left">
+            <p className="font-semibold text-white/90">
+              © 2026 Zorba Rentals. All rights reserved.
+            </p>
+            <p className="text-white/75">
+              Ottawa/Hull NCR — National Capital Region
+            </p>
+            <p className="text-white/70">
+              Designed by{" "}
+              <a
+                href="https://RootsWingsFly.com"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-white hover:text-coral hover:underline"
+              >
+                @RootsWingsFly
+              </a>{" "}
+              — website design &amp; builds, inquiries welcome
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
             <VisitorCount />
             <span className="text-white/30">·</span>
             <a
@@ -309,19 +326,6 @@ export function Footer() {
             <span className="font-medium italic inline-flex items-center gap-1">
               Website made with love <span className="text-coral not-italic">♥</span>
             </span>
-          </div>
-          <div className="text-center md:text-right">
-            <a
-              href="https://RootsWingsFly.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-white hover:text-coral hover:underline"
-            >
-              Designed by @RootsWingsFly
-            </a>
-            <p className="text-[11px] text-white/55 mt-0.5 italic">
-              Website design &amp; builds — inquiries welcome
-            </p>
           </div>
         </div>
       </div>
