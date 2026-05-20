@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      addon_requests: {
+        Row: {
+          addon_id: string | null
+          addon_name: string | null
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          phone: string | null
+          quantity: number
+        }
+        Insert: {
+          addon_id?: string | null
+          addon_name?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          phone?: string | null
+          quantity?: number
+        }
+        Update: {
+          addon_id?: string | null
+          addon_name?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string | null
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "addon_requests_addon_id_fkey"
+            columns: ["addon_id"]
+            isOneToOne: false
+            referencedRelation: "addons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      addons: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          description_fr: string | null
+          id: string
+          image_url: string | null
+          name: string
+          name_fr: string | null
+          price: number | null
+          price_unit: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          description_fr?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          name_fr?: string | null
+          price?: number | null
+          price_unit?: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          description_fr?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          name_fr?: string | null
+          price?: number | null
+          price_unit?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       applications: {
         Row: {
           additional_information: string | null
@@ -198,6 +284,7 @@ export type Database = {
           current_status: string
           description_en: string | null
           description_fr: string | null
+          features: string[] | null
           id: string
           image_urls: string[] | null
           name: string | null
@@ -220,6 +307,7 @@ export type Database = {
           current_status?: string
           description_en?: string | null
           description_fr?: string | null
+          features?: string[] | null
           id?: string
           image_urls?: string[] | null
           name?: string | null
@@ -242,6 +330,7 @@ export type Database = {
           current_status?: string
           description_en?: string | null
           description_fr?: string | null
+          features?: string[] | null
           id?: string
           image_urls?: string[] | null
           name?: string | null
