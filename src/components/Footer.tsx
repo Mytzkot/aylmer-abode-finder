@@ -137,13 +137,13 @@ function NewsletterSignup() {
   return (
     <div className="mt-6 rounded-2xl bg-white/5 border border-white/10 p-5">
       <h4 className="font-extrabold text-white text-[16px] mb-1">
-        <T>Get Room Availability Updates</T>
+        <T>Get Notified About Available Rooms</T>
       </h4>
       <p className="text-[13px] text-white/75 mb-3 leading-snug">
-        <T>Be the first to know when a room opens up. Join our list.</T>
+        <T>Want us to email you when a room opens up? Join our mailing list.</T>
       </p>
       {status === "ok" ? (
-        <p className="text-[14px] font-semibold text-coral">{msg}</p>
+        <p className="text-[14px] font-semibold text-coral"><T>You're on the list — thanks!</T></p>
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
@@ -157,9 +157,9 @@ function NewsletterSignup() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="rounded-md bg-coral text-white font-bold text-[14px] px-4 py-2 hover:opacity-90 transition disabled:opacity-60"
+            className="rounded-md bg-coral text-white font-bold text-[14px] px-4 py-2 hover:opacity-90 transition disabled:opacity-60 whitespace-nowrap"
           >
-            {status === "loading" ? "..." : "Subscribe"}
+            {status === "loading" ? "..." : "Sign Me Up"}
           </button>
         </form>
       )}
@@ -178,7 +178,7 @@ const SHORT_ADDRESSES: Record<string, string> = {
 
 export function Footer() {
   return (
-    <footer className="bg-surface-dark text-white pb-32 md:pb-24">
+    <footer className="bg-surface-dark text-white pb-56 md:pb-44">
       <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 pt-16 md:pt-20">
         <div className="grid gap-12 lg:gap-10 lg:grid-cols-12 items-start">
           {/* Left section — brand + newsletter */}
@@ -290,11 +290,28 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 pt-5 border-t border-white/15 grid gap-4 md:grid-cols-3 items-center text-[13px] text-white/75">
-          <p className="font-semibold text-center md:text-left">
-            © 2026 Zorba Rentals · Ottawa/Hull NCR — National Capital Region
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col md:flex-row md:items-end md:justify-between gap-4 text-[13px] text-white/75">
+          <div className="space-y-1 text-center md:text-left">
+            <p className="font-semibold text-white/90">
+              © 2026 Zorba Rentals. All rights reserved.
+            </p>
+            <p className="text-white/75">
+              Ottawa/Hull NCR — National Capital Region
+            </p>
+            <p className="text-white/70">
+              Designed by{" "}
+              <a
+                href="https://RootsWingsFly.com"
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold text-white hover:text-coral hover:underline"
+              >
+                @RootsWingsFly
+              </a>{" "}
+              — website design &amp; builds, inquiries welcome
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
             <VisitorCount />
             <span className="text-white/30">·</span>
             <a
@@ -309,19 +326,6 @@ export function Footer() {
             <span className="font-medium italic inline-flex items-center gap-1">
               Website made with love <span className="text-coral not-italic">♥</span>
             </span>
-          </div>
-          <div className="text-center md:text-right">
-            <a
-              href="https://RootsWingsFly.com"
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-white hover:text-coral hover:underline"
-            >
-              Designed by @RootsWingsFly
-            </a>
-            <p className="text-[11px] text-white/55 mt-0.5 italic">
-              Website design &amp; builds — inquiries welcome
-            </p>
           </div>
         </div>
       </div>
