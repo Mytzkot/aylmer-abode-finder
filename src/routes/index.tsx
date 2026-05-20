@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES, CONTACT } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
 import { FlexibleStays } from "@/components/FlexibleStays";
+import { WhatsIncluded } from "@/components/WhatsIncluded";
 import heroImg from "@/assets/hero-room.jpg";
 
 const LocationsMap = lazy(() => import("@/components/LocationsMap"));
@@ -92,6 +93,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* WHAT'S INCLUDED */}
+      <WhatsIncluded variant="condensed" />
 
       {/* FLEXIBLE STAYS */}
       <section className="bg-cream">
