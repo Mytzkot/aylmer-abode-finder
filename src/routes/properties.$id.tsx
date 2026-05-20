@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { PROPERTIES, CONTACT } from "@/data/properties";
+import { PROPERTIES, CONTACT, PROPERTY_MAP_LINKS } from "@/data/properties";
 import {
   ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle,
   ExternalLink, Footprints, MapPin, CheckCircle2, ShieldCheck, KeyRound,
