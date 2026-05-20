@@ -1,4 +1,4 @@
-import { MessageCircle, Mail } from "lucide-react";
+import { MessageCircle, Mail, Phone } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
@@ -14,17 +14,22 @@ export function FlexibleStays() {
     lang === "fr" ? "Séjours flexibles" : lang === "ar" ? "إقامات مرنة" : "Flexible Stays";
   const contactLabel =
     lang === "fr" ? "Nous contacter" : lang === "ar" ? "اتصل بنا" : "Contact Us";
+  const callLabel =
+    lang === "fr" ? "Appelez-nous" : lang === "ar" ? "اتصل بنا هاتفياً" : "Call Us";
 
   return (
     <section className="bg-card border border-brand/30 rounded-2xl p-5 md:p-6 my-6">
       <h3 className="font-display text-xl md:text-2xl text-ink mb-2">{heading}</h3>
       <p className="text-sm md:text-base text-ink/80 mb-4 leading-relaxed">{text}</p>
       <div className="flex flex-wrap gap-2">
-        <a
-          href="/#contact"
-          className="btn-pill btn-ink text-sm px-4 py-2.5"
-        >
+        <a href="/#contact" className="btn-pill btn-ink text-sm px-4 py-2.5">
           <Mail className="w-4 h-4" /> {contactLabel}
+        </a>
+        <a
+          href={CONTACT.tel}
+          className="btn-pill bg-emerald-600 text-white hover:brightness-110 text-sm px-4 py-2.5 font-bold"
+        >
+          <Phone className="w-4 h-4" /> {callLabel}
         </a>
         <a
           href={CONTACT.whatsapp}

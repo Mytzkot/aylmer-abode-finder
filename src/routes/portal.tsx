@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Lock, CreditCard, Mail, MessageCircle } from "lucide-react";
 import { T } from "@/i18n/LanguageProvider";
+import { TenantMessageForm } from "@/components/TenantMessageForm";
 
 export const Route = createFileRoute("/portal")({
   component: PortalPlaceholder,
@@ -15,6 +17,7 @@ export const Route = createFileRoute("/portal")({
 });
 
 function PortalPlaceholder() {
+  const [showForm, setShowForm] = useState(false);
   return (
     <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
       <div className="rounded-3xl bg-card border border-border/60 p-8 md:p-12 text-center shadow-lg">
@@ -53,11 +56,26 @@ function PortalPlaceholder() {
           <Link to="/pay" className="btn-pill btn-coral px-6 py-3">
             <T>Pay Online Now</T>
           </Link>
-          <Link to="/#contact" className="btn-pill btn-outline-ink px-6 py-3">
+          <button
+            onClick={() => setShowForm((v) => !v)}
+            className="btn-pill btn-outline-ink px-6 py-3"
+          >
             <T>Contact Landlord</T>
-          </Link>
+          </button>
         </div>
       </div>
+
+      {showForm && (
+        <div className="mt-8 rounded-3xl bg-card border border-border/60 p-6 md:p-8 shadow-lg">
+          <h2 className="font-display text-2xl md:text-3xl text-ink mb-1">
+            <T>Send us a message</T>
+          </h2>
+          <p className="text-ink/70 mb-5 text-sm">
+            <T>Tell us your location and room number — we'll reply by phone, email or WhatsApp.</T>
+          </p>
+          <TenantMessageForm />
+        </div>
+      )}
     </main>
   );
 }

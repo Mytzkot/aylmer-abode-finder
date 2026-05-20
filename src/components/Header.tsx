@@ -6,6 +6,18 @@ import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
 import logo from "@/assets/zorba-logo-transparent.png";
 
+const DESKTOP_NAV = [
+  { to: "/", label: "Home", exact: true },
+  { to: "/properties", label: "Locations" },
+  { to: "/rooms", label: "All Rooms" },
+  { to: "/extras", label: "Extras" },
+  { to: "/apply", label: "Apply Now" },
+  { to: "/about", label: "About Us" },
+  { to: "/faq", label: "FAQ" },
+  { to: "/newcomer", label: "Newcomer Guide" },
+  { to: "/#contact", label: "Contact Us" },
+];
+
 const FULL_NAV = [
   { to: "/", label: "Home" },
   { to: "/rooms", label: "All Rooms" },
@@ -35,23 +47,17 @@ export function Header() {
             <img
               src={logo}
               alt="Zorba Guest Houses"
-              className="h-10 sm:h-12 md:h-16 w-auto"
+              className="h-12 sm:h-14 md:h-16 w-auto"
             />
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1 mr-1">
-            {[
-              { to: "/properties", label: "Locations" },
-              { to: "/extras", label: "Extras" },
-              { to: "/apply", label: "Apply Now" },
-              { to: "/about", label: "About Us" },
-              { to: "/#contact", label: "Contact Us" },
-            ].map((l) =>
+          <nav className="hidden xl:flex items-center gap-0.5 mr-1">
+            {DESKTOP_NAV.map((l) =>
               l.to.startsWith("/#") ? (
                 <a
                   key={l.to}
                   href={l.to}
-                  className="px-3 py-2 rounded-lg text-[16px] font-typewriter uppercase tracking-[0.1em] font-bold text-surface-dark hover:bg-surface-dark/10"
+                  className="px-2.5 py-2 rounded-lg text-[17px] font-bold text-surface-dark hover:bg-surface-dark/10 whitespace-nowrap"
                 >
                   <T>{l.label}</T>
                 </a>
@@ -59,8 +65,9 @@ export function Header() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className="px-3 py-2 rounded-lg text-[16px] font-typewriter uppercase tracking-[0.1em] font-bold text-surface-dark hover:bg-surface-dark/10"
+                  className="px-2.5 py-2 rounded-lg text-[17px] font-bold text-surface-dark hover:bg-surface-dark/10 whitespace-nowrap"
                   activeProps={{ className: "bg-surface-dark/10" }}
+                  activeOptions={l.exact ? { exact: true } : undefined}
                 >
                   <T>{l.label}</T>
                 </Link>
@@ -72,16 +79,23 @@ export function Header() {
             <LanguageToggle />
             <Link
               to="/book"
-              className="hidden min-[380px]:inline-flex btn-pill bg-surface-dark text-white hover:brightness-110 text-[11px] sm:text-[13px] md:text-[14px] px-2.5 sm:px-3.5 md:px-4 py-2 md:py-2.5 font-typewriter uppercase tracking-[0.1em] sm:tracking-[0.14em] font-bold whitespace-nowrap"
+              className="hidden min-[380px]:inline-flex btn-pill bg-surface-dark text-white hover:brightness-110 text-[12px] sm:text-[14px] md:text-[15px] px-3 sm:px-4 py-2 md:py-2.5 font-bold uppercase tracking-wide whitespace-nowrap"
             >
               <T>Book Now</T>
             </Link>
             <button
               onClick={() => setOpen(true)}
-              className="shrink-0 p-1.5 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              className="shrink-0 p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark xl:hidden"
               aria-label={openMenu}
             >
-              <Menu className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.25} />
+              <Menu className="w-6 h-6" strokeWidth={2.25} />
+            </button>
+            <button
+              onClick={() => setOpen(true)}
+              className="hidden xl:inline-flex shrink-0 p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              aria-label={openMenu}
+            >
+              <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
           </div>
         </div>

@@ -373,6 +373,39 @@ export type Database = {
         }
         Relationships: []
       }
+      tenant_messages: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          location: string
+          message: string
+          phone: string | null
+          room_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          location: string
+          message: string
+          phone?: string | null
+          room_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          location?: string
+          message?: string
+          phone?: string | null
+          room_number?: string | null
+        }
+        Relationships: []
+      }
       tenants: {
         Row: {
           application_id: string | null
