@@ -96,6 +96,12 @@ export default function LocationsMap() {
               <div className="text-xs text-gray-600 mb-1.5">{p.city}</div>
               <div className="flex flex-col gap-1">
                 <a
+                  href={`/properties/${p.id}`}
+                  className="text-coral font-semibold underline text-xs"
+                >
+                  View Property →
+                </a>
+                <a
                   href={`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"

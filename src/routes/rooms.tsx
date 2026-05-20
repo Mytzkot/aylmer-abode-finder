@@ -1,17 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { SlidersHorizontal, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
+import { Slider } from "@/components/ui/slider";
 import housekeepingIcon from "@/assets/housekeeping-icon.jpg";
 
 export const Route = createFileRoute("/rooms")({
   component: RoomsShop,
   head: () => ({
     meta: [
-      { title: "Room Rentals — WingPad" },
-      { name: "description", content: "Browse all furnished monthly rooms across our Gatineau / Ottawa locations." },
+      { title: "All Rooms — Zorba Rentals" },
+      { name: "description", content: "Browse all furnished rooms across our Aylmer-Gatineau locations." },
+      { property: "og:title", content: "All Rooms — Zorba Rentals" },
+      { property: "og:description", content: "Browse all furnished rooms across our Aylmer-Gatineau locations." },
     ],
   }),
 });
@@ -31,39 +34,27 @@ interface RoomRow {
 }
 interface PropertyRow { id: string; slug: string; address: string; short_name: string | null; }
 
-type Sort = "alpha" | "available" | "price_desc" | "price_asc";
+type Sort = "available" | "price_asc" | "price_desc";
+type StayType = "any" | "daily" | "weekly" | "monthly";
 
-// Properties we hide from the sidebar filter (kept in DB for future use)
 const HIDDEN_PROPERTY_SLUGS = new Set(["162-eddy"]);
-
-function Section({ title, children, defaultOpen = true }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="border-t border-ink/20 pt-3">
-      <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between text-ink font-bold py-1">
-        <span><T>{title}</T></span>
-        <ChevronDown className={`w-4 h-4 transition ${open ? "" : "-rotate-90"}`} />
-      </button>
-      {open && <div className="mt-2 space-y-2 text-sm">{children}</div>}
-    </div>
-  );
-}
+const PRICE_MIN = 50;
+const PRICE_MAX = 1500;
 
 function RoomsShop() {
   const [rooms, setRooms] = useState<RoomRow[]>([]);
   const [props, setProps] = useState<PropertyRow[]>([]);
-  // Map: room_id -> latest active lease_end ISO date (for real-time availability)
   const [leaseEndByRoom, setLeaseEndByRoom] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [now, setNow] = useState(() => Date.now());
 
-  // category: 'all' | 'rentals' | 'extras' | property_id
-  const [category, setCategory] = useState<string>("all");
-  const [propsOpen, setPropsOpen] = useState(true);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
+  // Filter state
+  const [locationId, setLocationId] = useState<string>("all");
+  const [stayType, setStayType] = useState<StayType>("any");
+  const [priceRange, setPriceRange] = useState<[number, number]>([PRICE_MIN, PRICE_MAX]);
   const [availOnly, setAvailOnly] = useState(false);
-  const [sort, setSort] = useState<Sort>("alpha");
+  const [sort, setSort] = useState<Sort>("available");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const loadAvailability = useMemo(
     () => async () => {
@@ -75,7 +66,6 @@ function RoomsShop() {
             "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at",
           ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
-        // Active leases — anything ending today or later still occupies the room.
         supabase
           .from("tenants")
           .select("room_id, lease_end")
@@ -87,7 +77,6 @@ function RoomsShop() {
       for (const t of (ts as Array<{ room_id: string | null; lease_end: string | null }>) || []) {
         if (!t.room_id || !t.lease_end) continue;
         const prev = next[t.room_id];
-        // Keep the latest lease_end per room (longest occupation).
         if (!prev || t.lease_end > prev) next[t.room_id] = t.lease_end;
       }
       setLeaseEndByRoom(next);
@@ -99,24 +88,16 @@ function RoomsShop() {
 
   useEffect(() => {
     loadAvailability();
-
-    // Real-time: refresh when rooms or tenants change in the backend.
     const channel = supabase
       .channel("rooms-availability")
       .on("postgres_changes", { event: "*", schema: "public", table: "rooms" }, () => loadAvailability())
       .on("postgres_changes", { event: "*", schema: "public", table: "tenants" }, () => loadAvailability())
       .subscribe();
-
-    // Refresh when the tab regains focus / becomes visible.
     const onFocus = () => loadAvailability();
     const onVis = () => { if (document.visibilityState === "visible") loadAvailability(); };
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onVis);
-
-    // Tick the clock once an hour so date-based ordering stays accurate
-    // for long-lived sessions (lease ends crossing midnight).
     const tick = window.setInterval(() => setNow(Date.now()), 60 * 60 * 1000);
-
     return () => {
       supabase.removeChannel(channel);
       window.removeEventListener("focus", onFocus);
@@ -130,20 +111,15 @@ function RoomsShop() {
 
   const filtered = useMemo(() => {
     let out = rooms.slice();
-    // Hide rooms belonging to hidden properties
     out = out.filter(r => !r.property_id || !HIDDEN_PROPERTY_SLUGS.has(propById[r.property_id]?.slug || ""));
-    // Hide the 5x5 storage extra
     out = out.filter(r => !/storage|5x5/i.test(r.name || ""));
+    // Hide non-property "extras" rows from the public rooms catalogue.
+    out = out.filter(r => !!r.property_id);
 
-    if (category === "extras") {
-      out = out.filter(r => !r.property_id);
-    } else if (category === "rentals") {
-      out = out.filter(r => !!r.property_id);
-    } else if (category !== "all") {
-      out = out.filter(r => r.property_id === category);
+    if (locationId !== "all") {
+      out = out.filter(r => r.property_id === locationId);
     }
-    // Effective "free on" timestamp combining manual booked_until and live
-    // lease_end from the tenants table. Past dates collapse to "available now".
+
     const freeOn = (r: RoomRow): number => {
       const status = (r.current_status || "").toLowerCase();
       const candidates: number[] = [];
@@ -157,21 +133,20 @@ function RoomsShop() {
         if (Number.isFinite(t)) candidates.push(t);
       }
       const latest = candidates.length ? Math.max(...candidates) : 0;
-      // If status says available and nothing in the future occupies it → 0.
       if (latest <= now) return status === "rented" ? Number.POSITIVE_INFINITY : 0;
       return latest;
     };
     const isAvailableNow = (r: RoomRow) => freeOn(r) === 0;
 
     if (availOnly) out = out.filter(isAvailableNow);
-    const lo = minPrice ? Number(minPrice) : null;
-    const hi = maxPrice ? Number(maxPrice) : null;
+
+    const [lo, hi] = priceRange;
     out = out.filter(r => {
       const p = r.rate_monthly ?? r.base_rate ?? 0;
-      if (lo != null && p < lo) return false;
-      if (hi != null && p > hi) return false;
-      return true;
+      if (p <= 0) return true; // keep rooms with no price set
+      return p >= lo && p <= hi;
     });
+
     const price = (r: RoomRow) => r.rate_monthly ?? r.base_rate ?? 0;
     const propName = (r: RoomRow) => {
       const p = r.property_id ? propById[r.property_id] : null;
@@ -183,144 +158,205 @@ function RoomsShop() {
 
     if (sort === "price_asc") out.sort((a, b) => price(a) - price(b) || alphaCmp(a, b));
     else if (sort === "price_desc") out.sort((a, b) => price(b) - price(a) || alphaCmp(a, b));
-    else if (sort === "available") {
-      // Available rooms first; remaining sorted by soonest return-to-market
-      // (effective free-on date ascending; never-free last), then alphabetical.
-      out.sort((a, b) => freeOn(a) - freeOn(b) || alphaCmp(a, b));
-    } else {
-      // Default: alphabetical by property (Amour, Colline, Conrad…) then room.
-      out.sort(alphaCmp);
-    }
+    else out.sort((a, b) => freeOn(a) - freeOn(b) || alphaCmp(a, b));
+
     return out;
-  }, [rooms, propById, leaseEndByRoom, now, category, minPrice, maxPrice, availOnly, sort]);
+  }, [rooms, propById, leaseEndByRoom, now, locationId, priceRange, availOnly, sort]);
 
-  const heading =
-    category === "all" ? "All Rooms"
-    : category === "rentals" ? "Rentals"
-    : category === "extras" ? "Extras"
-    : (propById[category]?.short_name || propById[category]?.address || "Rooms");
-  const resultsLine = useTranslated(`${filtered.length} results`);
+  const headingEN = "Available Rooms";
+  const headingFR = "Chambres Disponibles";
+  const resultsLabel = useTranslated(`${filtered.length} ${filtered.length === 1 ? "room" : "rooms"}`);
 
-  const hasExtras = useMemo(() => rooms.some(r => !r.property_id), [rooms]);
+  const resetFilters = () => {
+    setLocationId("all");
+    setStayType("any");
+    setPriceRange([PRICE_MIN, PRICE_MAX]);
+    setAvailOnly(false);
+  };
+
+  const FiltersPanel = (
+    <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-5">
+      {/* Location */}
+      <div className="flex-1 min-w-[160px]">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
+          <T>Location</T>
+        </label>
+        <select
+          value={locationId}
+          onChange={(e) => setLocationId(e.target.value)}
+          className="w-full px-3 py-2.5 rounded-lg border border-ink/25 bg-background text-sm text-ink font-medium"
+        >
+          <option value="all">All Locations</option>
+          {visibleProps.map((p) => (
+            <option key={p.id} value={p.id}>{p.short_name || p.address}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Stay type */}
+      <div className="flex-1 min-w-[140px]">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
+          <T>Stay Type</T>
+        </label>
+        <select
+          value={stayType}
+          onChange={(e) => setStayType(e.target.value as StayType)}
+          className="w-full px-3 py-2.5 rounded-lg border border-ink/25 bg-background text-sm text-ink font-medium"
+        >
+          <option value="any">Any</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+      </div>
+
+      {/* Price range slider */}
+      <div className="flex-1 min-w-[220px]">
+        <label className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
+          <T>Price</T> · ${priceRange[0]} – ${priceRange[1]}
+        </label>
+        <div className="px-1 pt-2">
+          <Slider
+            value={priceRange}
+            min={PRICE_MIN}
+            max={PRICE_MAX}
+            step={50}
+            onValueChange={(v) => setPriceRange([v[0], v[1]] as [number, number])}
+          />
+        </div>
+      </div>
+
+      {/* Availability toggle */}
+      <div className="md:pb-2">
+        <label className="inline-flex items-center gap-2 text-sm font-semibold text-ink cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={availOnly}
+            onChange={(e) => setAvailOnly(e.target.checked)}
+            className="w-4 h-4 accent-coral"
+          />
+          <T>Show available only</T>
+        </label>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-cream">
-      <main className="flex-1 mx-auto max-w-6xl w-full px-4 py-8 md:py-12">
-        <div className="grid md:grid-cols-[220px_1fr] gap-8">
-          {/* SIDEBAR */}
-          <aside className="space-y-4 text-sm text-ink">
-            <div>
-              <p className="font-bold text-ink mb-2"><T>Browse by category</T></p>
-              <ul className="space-y-1">
-                <li>
-                  <button onClick={() => setCategory("all")}
-                    className={`text-left w-full ${category === "all" ? "font-bold text-ink underline" : "text-ink hover:underline"}`}>
-                    <T>All Rooms</T>
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => setCategory("rentals")}
-                    className={`text-left w-full ${category === "rentals" ? "font-bold text-ink underline" : "text-ink hover:underline"}`}>
-                    <T>Rentals</T>
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => setPropsOpen(!propsOpen)}
-                    className="text-left w-full inline-flex items-center gap-1 text-ink hover:underline">
-                    {propsOpen ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                    <span><T>Properties</T></span>
-                  </button>
-                  {propsOpen && (
-                    <ul className="ps-5 mt-1 space-y-1">
-                      {visibleProps.map(p => (
-                        <li key={p.id}>
-                          <button onClick={() => setCategory(p.id)}
-                            className={`text-left w-full ${category === p.id ? "font-bold text-ink underline" : "text-ink hover:underline"}`}>
-                            {p.short_name || p.address}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-                {hasExtras && (
-                  <li>
-                    <button onClick={() => setCategory("extras")}
-                      className={`text-left w-full ${category === "extras" ? "font-bold text-ink underline" : "text-ink hover:underline"}`}>
-                      <T>Extras</T>
-                    </button>
-                  </li>
-                )}
-              </ul>
-            </div>
+      <main className="flex-1 mx-auto max-w-7xl w-full px-4 py-8 md:py-12">
+        <header className="mb-6 md:mb-8">
+          <h1 className="font-display text-3xl md:text-5xl text-ink leading-tight">
+            {headingEN} <span className="text-ink/40">/</span> <span className="text-coral">{headingFR}</span>
+          </h1>
+          <p className="text-sm text-ink/60 mt-2">{resultsLabel}</p>
+        </header>
 
-            <Section title="Price range (CAD$)">
-              <div className="flex items-center gap-2">
-                <input value={minPrice} onChange={e => setMinPrice(e.target.value)} placeholder="Min" inputMode="numeric"
-                  className="w-full px-2 py-1.5 rounded border border-ink/30 bg-background text-sm text-ink" />
-                <span className="text-ink">–</span>
-                <input value={maxPrice} onChange={e => setMaxPrice(e.target.value)} placeholder="Max" inputMode="numeric"
-                  className="w-full px-2 py-1.5 rounded border border-ink/30 bg-background text-sm text-ink" />
-              </div>
-            </Section>
-
-            <Section title="Availability">
-              <label className="flex items-center gap-2 text-ink">
-                <input type="checkbox" checked={availOnly} onChange={e => setAvailOnly(e.target.checked)} />
-                <T>Available only</T>
-              </label>
-            </Section>
-          </aside>
-
-          {/* GRID */}
-          <section>
-            {category !== "all" && (
-              <h1 className="font-display text-3xl md:text-4xl text-ink mb-4"><T>{heading}</T></h1>
-            )}
-            <div className="flex items-center justify-between mb-5">
-              <p className="text-sm font-semibold text-ink">{resultsLine}</p>
-              <select value={sort} onChange={e => setSort(e.target.value as Sort)}
-                className="px-3 py-2 rounded-lg border border-ink/30 bg-background text-sm text-ink font-medium">
-                <option value="alpha">Alphabetical (A–Z)</option>
-                <option value="available">Available first</option>
-                <option value="price_desc">Price (High - Low)</option>
-                <option value="price_asc">Price (Low - High)</option>
-              </select>
-            </div>
-
-            {loading ? (
-              <p className="text-ink"><T>Loading…</T></p>
-            ) : filtered.length === 0 ? (
-              <p className="text-ink"><T>No rooms match these filters.</T></p>
-            ) : (
-              <div className="grid gap-x-5 gap-y-8 grid-cols-2 md:grid-cols-3">
-                {filtered.map(r => {
-                  const p = r.property_id ? propById[r.property_id] : null;
-                  const fallback = PROPERTIES.find(x => p && x.id === p.slug)?.images[0];
-                  const isHousekeeping = /housekeep|cleaning/i.test(r.name || "");
-                  const img = (r.image_urls && r.image_urls[0]) || (isHousekeeping ? housekeepingIcon : fallback);
-                  const price = r.rate_monthly ?? r.base_rate;
-                  const to = p ? "/properties/$id/$roomSlug" : "/rooms";
-                  return (
-                    <Link key={r.id}
-                      to={to}
-                      params={p ? { id: p.slug, roomSlug: r.slug || r.id } : undefined}
-                      className="group block">
-                      <div className="aspect-square bg-cream-deep overflow-hidden rounded-md">
-                        {img && <img src={img} alt={r.name || ""} loading="lazy"
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
-                      </div>
-                      <div className="pt-2">
-                        <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{r.name || `Room ${r.room_number}`}</h3>
-                        {price != null && <p className="text-sm text-ink font-medium">CAD${Number(price).toFixed(2)}</p>}
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </section>
+        {/* Desktop filter bar */}
+        <div className="hidden md:block bg-card border border-border/60 rounded-2xl p-5 shadow-sm mb-6">
+          {FiltersPanel}
         </div>
+
+        {/* Mobile filter trigger + sort row */}
+        <div className="md:hidden flex items-center gap-2 mb-5">
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-ink/25 bg-card text-sm font-bold text-ink"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            <T>Filters</T>
+          </button>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as Sort)}
+            className="flex-1 px-3 py-2.5 rounded-lg border border-ink/25 bg-card text-sm text-ink font-medium"
+          >
+            <option value="available">Availability</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+          </select>
+        </div>
+
+        {/* Desktop sort row */}
+        <div className="hidden md:flex items-center justify-end mb-5">
+          <label className="text-xs font-bold uppercase tracking-wider text-ink/60 mr-2">
+            <T>Sort</T>
+          </label>
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value as Sort)}
+            className="px-3 py-2 rounded-lg border border-ink/25 bg-card text-sm text-ink font-medium"
+          >
+            <option value="available">Availability</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+          </select>
+        </div>
+
+        {/* Mobile drawer */}
+        {mobileOpen && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            <div className="absolute inset-0 bg-ink/50" onClick={() => setMobileOpen(false)} />
+            <div className="absolute bottom-0 inset-x-0 bg-card rounded-t-3xl p-5 max-h-[85vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-display text-xl text-ink"><T>Filters</T></h2>
+                <button onClick={() => setMobileOpen(false)} aria-label="Close" className="p-2 -mr-2">
+                  <X className="w-5 h-5 text-ink" />
+                </button>
+              </div>
+              {FiltersPanel}
+              <div className="mt-6 flex gap-2">
+                <button
+                  onClick={resetFilters}
+                  className="flex-1 py-3 rounded-lg border border-ink/25 text-ink font-bold"
+                >
+                  <T>Reset</T>
+                </button>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 py-3 rounded-lg bg-surface-dark text-white font-bold"
+                >
+                  <T>Show results</T>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {loading ? (
+          <p className="text-ink"><T>Loading…</T></p>
+        ) : filtered.length === 0 ? (
+          <p className="text-ink"><T>No rooms match these filters.</T></p>
+        ) : (
+          <div className="grid gap-x-5 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {filtered.map(r => {
+              const p = r.property_id ? propById[r.property_id] : null;
+              const fallback = PROPERTIES.find(x => p && x.id === p.slug)?.images[0];
+              const isHousekeeping = /housekeep|cleaning/i.test(r.name || "");
+              const img = (r.image_urls && r.image_urls[0]) || (isHousekeeping ? housekeepingIcon : fallback);
+              const price = r.rate_monthly ?? r.base_rate;
+              const to = p ? "/properties/$id/$roomSlug" : "/rooms";
+              return (
+                <Link key={r.id}
+                  to={to}
+                  params={p ? { id: p.slug, roomSlug: r.slug || r.id } : undefined}
+                  className="group block">
+                  <div className="aspect-square bg-cream-deep overflow-hidden rounded-md">
+                    {img && <img src={img} alt={r.name || ""} loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
+                  </div>
+                  <div className="pt-2">
+                    <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{r.name || `Room ${r.room_number}`}</h3>
+                    {price != null && <p className="text-sm text-ink font-medium">CAD${Number(price).toFixed(2)}</p>}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
+        {/* stayType is reserved for future per-stay pricing; no-op for now */}
+        {stayType !== "any" && <span className="sr-only">Filtered by {stayType}</span>}
       </main>
     </div>
   );
