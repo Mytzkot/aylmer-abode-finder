@@ -102,9 +102,9 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Giant logo on a soft white badge so brand colors stay readable on navy */}
-      <div className="mt-10 md:mt-14 px-4 select-none flex justify-center" aria-hidden="true">
-        <div className="w-full max-w-[1100px] bg-white rounded-[2.5rem] shadow-2xl px-8 py-6 md:px-12 md:py-10">
+      {/* Small logo badge, left-aligned within the footer content column */}
+      <div className="mt-10 md:mt-14 select-none mx-auto max-w-6xl px-6" aria-hidden="true">
+        <div className="w-full max-w-[220px] bg-white rounded-2xl shadow-xl px-4 py-2.5">
           <img src={logo} alt="" className="w-full h-auto" />
         </div>
       </div>
