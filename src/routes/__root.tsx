@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingContactBar } from "@/components/FloatingContactBar";
+import { FaqChatbot } from "@/components/FaqChatbot";
 
 import appCss from "../styles.css?url";
 
