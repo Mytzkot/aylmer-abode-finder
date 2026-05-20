@@ -31,14 +31,14 @@ const SOCIALS = [
 
 function ColTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="font-extrabold text-white text-[15px] uppercase tracking-[0.16em] mb-3">
+    <h3 className="font-extrabold text-coral text-[14px] uppercase tracking-[0.18em] mb-4">
       {children}
     </h3>
   );
 }
 
 const linkCls =
-  "block text-[15px] md:text-[16px] font-semibold text-white/85 hover:text-white hover:underline transition leading-snug";
+  "block text-[15px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight";
 
 function FLink({ to, href, children }: { to?: string; href?: string; children: React.ReactNode }) {
   if (href)
@@ -62,10 +62,12 @@ function FLink({ to, href, children }: { to?: string; href?: string; children: R
 function IconLink({
   href,
   Icon,
+  iconColor,
   children,
 }: {
   href: string;
   Icon: React.ComponentType<{ className?: string }>;
+  iconColor: string;
   children: React.ReactNode;
 }) {
   return (
@@ -73,9 +75,9 @@ function IconLink({
       href={href}
       target={href.startsWith("http") ? "_blank" : undefined}
       rel="noreferrer"
-      className="flex items-center gap-2 text-[15px] md:text-[16px] font-semibold text-white/85 hover:text-white hover:underline transition leading-snug"
+      className="flex items-center gap-2.5 text-[15px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight"
     >
-      <Icon className="w-4 h-4 shrink-0 text-coral" />
+      <Icon className={`w-[18px] h-[18px] shrink-0 ${iconColor}`} />
       <span className="truncate">{children}</span>
     </a>
   );
@@ -106,11 +108,17 @@ function VisitorCount() {
   );
 }
 
+const SHORT_ADDRESSES: Record<string, string> = {
+  "102-amour": "102 Chemin d'Amour",
+  "58-conrad": "58 Rue Conrad-Valéra",
+  "260-colline": "260 Avenue de la Colline",
+};
+
 export function Footer() {
   return (
     <footer className="bg-surface-dark text-white pb-32 md:pb-24">
-      <div className="mx-auto max-w-6xl px-6 pt-14 md:pt-16">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto max-w-6xl px-6 pt-16 md:pt-20">
+        <div className="grid gap-12 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 items-start">
           {/* Col 1 — Brand */}
           <div>
             <div className="bg-white rounded-2xl p-3 inline-flex items-center justify-center shadow-md mb-4">
@@ -129,14 +137,14 @@ export function Footer() {
               rel="noreferrer"
               className="mt-3 inline-flex items-center gap-2 text-[14px] font-semibold text-coral hover:underline"
             >
-              <Play className="w-4 h-4" /> <T>View room tours on YouTube</T>
+              <Youtube className="w-4 h-4 text-[#FF0000]" /> <T>View room tours on YouTube</T>
             </a>
           </div>
 
           {/* Col 2 — Stay */}
           <div>
             <ColTitle><T>Stay</T></ColTitle>
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               <li><FLink to="/rooms"><T>All Rooms</T></FLink></li>
               {PROPERTIES.map((p) => {
                 const map = PROPERTY_MAP_LINKS[p.id];
@@ -149,7 +157,7 @@ export function Footer() {
                       className={linkCls}
                       title={map?.full}
                     >
-                      {map?.full ?? p.address}
+                      {SHORT_ADDRESSES[p.id] ?? p.address}
                     </a>
                   </li>
                 );
@@ -170,7 +178,7 @@ export function Footer() {
           {/* Col 3 — Company */}
           <div>
             <ColTitle><T>Company</T></ColTitle>
-            <ul className="space-y-1.5">
+            <ul className="space-y-2">
               <li><FLink to="/about"><T>About Us</T></FLink></li>
               <li><FLink to="/faq"><T>FAQ</T></FLink></li>
               <li><FLink to="/faq"><T>How It Works</T></FLink></li>
@@ -183,15 +191,15 @@ export function Footer() {
           {/* Col 4 — Connect */}
           <div>
             <ColTitle><T>Connect</T></ColTitle>
-            <ul className="space-y-1.5">
-              <li><IconLink href={CONTACT.tel} Icon={Phone}>1-343-202-5460</IconLink></li>
-              <li><IconLink href={CONTACT.whatsapp} Icon={MessageCircle}>{CONTACT.whatsappShort}</IconLink></li>
-              <li><IconLink href={CONTACT.messenger} Icon={Send}>{CONTACT.messengerShort}</IconLink></li>
-              <li><IconLink href={CONTACT.facebook} Icon={Facebook}>{CONTACT.facebookShort}</IconLink></li>
-              <li><IconLink href={CONTACT.youtube} Icon={Youtube}>{CONTACT.youtubeShort}</IconLink></li>
-              <li><IconLink href={CONTACT.instagram} Icon={Instagram}>{CONTACT.instagramShort}</IconLink></li>
-              <li><IconLink href={CONTACT.email} Icon={Mail}>{CONTACT.emailShort}</IconLink></li>
-              <li><IconLink href={CONTACT.website} Icon={Globe}>{CONTACT.websiteShort}</IconLink></li>
+            <ul className="space-y-2">
+              <li><IconLink href={CONTACT.tel} Icon={Phone} iconColor="text-emerald-400">1-343-202-5460</IconLink></li>
+              <li><IconLink href={CONTACT.whatsapp} Icon={MessageCircle} iconColor="text-[#25D366]">{CONTACT.whatsappShort}</IconLink></li>
+              <li><IconLink href={CONTACT.messenger} Icon={Send} iconColor="text-[#0084FF]">{CONTACT.messengerShort}</IconLink></li>
+              <li><IconLink href={CONTACT.facebook} Icon={Facebook} iconColor="text-[#1877F2]">{CONTACT.facebookShort}</IconLink></li>
+              <li><IconLink href={CONTACT.youtube} Icon={Youtube} iconColor="text-[#FF0000]">{CONTACT.youtubeShort}</IconLink></li>
+              <li><IconLink href={CONTACT.instagram} Icon={Instagram} iconColor="text-[#D62976]">{CONTACT.instagramShort}</IconLink></li>
+              <li><IconLink href={CONTACT.email} Icon={Mail} iconColor="text-coral">{CONTACT.emailShort}</IconLink></li>
+              <li><IconLink href={CONTACT.website} Icon={Globe} iconColor="text-sky-400">{CONTACT.websiteShort}</IconLink></li>
             </ul>
             <p className="text-[13px] italic text-white/70 pt-3 font-medium">
               Je parle arabe et anglais — Texte en français
@@ -200,7 +208,7 @@ export function Footer() {
         </div>
 
         {/* Social icons row */}
-        <div className="mt-10 pt-6 border-t border-white/15">
+        <div className="mt-12 pt-8 border-t border-white/15">
           <div className="flex flex-wrap items-center justify-center gap-3">
             {SOCIALS.map(({ href, Icon, label, color }) => (
               <a
@@ -220,9 +228,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-8 pt-5 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-white/75">
-          <p className="font-semibold">
-            © 2026 Zorba Rentals · Aylmer-Gatineau, QC
-          </p>
+          <p className="font-semibold">© 2026 Zorba Rentals · Aylmer-Gatineau, QC</p>
           <VisitorCount />
           <div className="flex items-center gap-3">
             <a
