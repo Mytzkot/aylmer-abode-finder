@@ -120,10 +120,15 @@ export const CONTACT = {
 };
 
 export const FAQ_KB: { q: string; a: string; keywords: string[] }[] = [
-  { q: "Is Wi-Fi included?", a: "Yes — high-speed Wi-Fi is included in every room at no extra cost.", keywords: ["wifi", "wi-fi", "internet", "wi fi"] },
-  { q: "What furniture is in the room?", a: "Each room includes a queen bed, smart TV, mini-fridge, coffee maker, keypad lock, desk, and wardrobe.", keywords: ["furnish", "furniture", "bed", "tv", "fridge", "desk"] },
-  { q: "Are utilities included?", a: "Yes — heating, electricity, water, and Wi-Fi are all included.", keywords: ["utilities", "heat", "electric", "water", "hydro"] },
-  { q: "Do you check credit?", a: "No credit check required. Only the first month's rent is needed to move in.", keywords: ["credit", "score", "check"] },
-  { q: "Do you allow pets?", a: "No pets are allowed at any of our properties.", keywords: ["pet", "dog", "cat", "animal"] },
-  { q: "How is the bus access?", a: "Direct STO buses (40, 50, 59, 800) get you to downtown Ottawa in about 15 minutes.", keywords: ["bus", "transit", "sto", "transport"] },
+  { q: "Is Wi-Fi included?", a: "Yes, fast Wi-Fi and all utilities are included in your monthly rent.", keywords: ["wifi", "wi-fi", "internet", "wi fi", "utilities", "heat", "electric", "water", "hydro"] },
+  { q: "What furniture comes with the room?", a: "Every room has a queen bed with linens & duvet, a 32\" Roku Smart TV, desk, chair, wardrobe, mini-fridge, kettle, and coffee maker.", keywords: ["furnish", "furniture", "bed", "tv", "fridge", "desk", "wardrobe", "kettle", "coffee"] },
+  { q: "Do I need a credit check?", a: "No credit check and no credit score needed. Only the first month's rent is required to move in.", keywords: ["credit", "score", "check", "deposit", "move in"] },
+  { q: "Are pets allowed?", a: "Currently we do not allow pets.", keywords: ["pet", "dog", "cat", "animal"] },
+  { q: "How do I get to UQO / downtown?", a: "One direct bus ride to UQO (about 10 minutes). 15-minute direct bus to downtown Ottawa/Hull. We're only 8km from downtown.", keywords: ["bus", "transit", "sto", "transport", "uqo", "downtown", "ottawa", "hull", "university"] },
+  { q: "What's the kitchen like?", a: "Each guest house has a full shared kitchen with a stove, microwave, air fryer, fridge/freezer, and dishes.", keywords: ["kitchen", "stove", "microwave", "cook", "air fryer", "dishes"] },
+  { q: "Is there parking and laundry?", a: "Yes — free parking and free laundry at every location.", keywords: ["parking", "park", "laundry", "washer", "dryer"] },
+  { q: "How do I apply?", a: "Click \"Apply Now\", choose a location and budget, and fill in the form. We review and contact you to arrange a viewing.", keywords: ["apply", "application", "form", "sign up", "book"] },
+  { q: "What does it cost?", a: "Monthly rooms range from $750 to $1600 depending on size and availability.", keywords: ["cost", "price", "rent", "rate", "how much", "monthly"] },
+  { q: "Is housekeeping included?", a: "Yes — bi-weekly housekeeping of all common areas (kitchen, bathrooms, laundry room).", keywords: ["housekeeping", "cleaning", "clean", "maid"] },
+  { q: "Can I talk to a person?", a: "Yes! Call or text 1-343-202-5460, or message us on WhatsApp.", keywords: ["person", "human", "talk", "call", "phone", "contact", "speak"] },
 ];
