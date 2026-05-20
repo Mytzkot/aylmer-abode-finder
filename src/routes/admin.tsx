@@ -1,7 +1,9 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { useServerFn } from "@tanstack/react-start";
+import { getVisitorCount } from "@/lib/visitor-counter.functions";
 import { toast } from "sonner";
 import logo from "@/assets/zorba-logo.png";
 
