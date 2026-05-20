@@ -116,6 +116,7 @@ function RootComponent() {
           <div className="flex-1 flex flex-col"><Outlet /></div>
           <Footer />
           <FloatingContactBar />
+          <FaqChatbot />
         </div>
         <Toaster position="top-center" richColors />
       </LanguageProvider>
