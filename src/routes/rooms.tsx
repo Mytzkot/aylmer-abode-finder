@@ -35,7 +35,6 @@ interface RoomRow {
 interface PropertyRow { id: string; slug: string; address: string; short_name: string | null; }
 
 type Sort = "available" | "price_asc" | "price_desc";
-type StayType = "any" | "daily" | "weekly" | "monthly";
 
 const HIDDEN_PROPERTY_SLUGS = new Set(["162-eddy"]);
 const PRICE_MIN = 50;
@@ -50,7 +49,7 @@ function RoomsShop() {
 
   // Filter state
   const [locationId, setLocationId] = useState<string>("all");
-  const [stayType, setStayType] = useState<StayType>("any");
+  
   const [priceRange, setPriceRange] = useState<[number, number]>([PRICE_MIN, PRICE_MAX]);
   const [availOnly, setAvailOnly] = useState(false);
   const [sort, setSort] = useState<Sort>("available");
@@ -169,7 +168,6 @@ function RoomsShop() {
 
   const resetFilters = () => {
     setLocationId("all");
-    setStayType("any");
     setPriceRange([PRICE_MIN, PRICE_MAX]);
     setAvailOnly(false);
   };
@@ -193,22 +191,6 @@ function RoomsShop() {
         </select>
       </div>
 
-      {/* Stay type */}
-      <div className="flex-1 min-w-[140px]">
-        <label className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
-          <T>Stay Type</T>
-        </label>
-        <select
-          value={stayType}
-          onChange={(e) => setStayType(e.target.value as StayType)}
-          className="w-full px-3 py-2.5 rounded-lg border border-ink/25 bg-background text-sm text-ink font-medium"
-        >
-          <option value="any">Any</option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-      </div>
 
       {/* Price range slider */}
       <div className="flex-1 min-w-[220px]">
@@ -358,16 +340,13 @@ function RoomsShop() {
                   </div>
                   <div className="pt-2">
                     <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{r.name || `Room ${r.room_number}`}</h3>
-                    {price != null && <p className="text-sm text-ink font-medium">CAD${Number(price).toFixed(2)}</p>}
+                    {price != null && <p className="text-sm text-ink font-medium">CAD${Number(price).toFixed(2)} <span className="text-ink/60 font-normal">/ <T>month</T></span></p>}
                   </div>
                 </Link>
               );
             })}
           </div>
         )}
-
-        {/* stayType is reserved for future per-stay pricing; no-op for now */}
-        {stayType !== "any" && <span className="sr-only">Filtered by {stayType}</span>}
       </main>
     </div>
   );
