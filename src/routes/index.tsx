@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Facebook } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES, CONTACT } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
 import { FlexibleStays } from "@/components/FlexibleStays";
 import { WhatsIncluded } from "@/components/WhatsIncluded";
+import { useServerFn } from "@tanstack/react-start";
+import { incrementVisitorCount } from "@/lib/visitor-counter.functions";
 import heroImg from "@/assets/hero-room.jpg";
 
 const LocationsMap = lazy(() => import("@/components/LocationsMap"));
@@ -28,8 +30,13 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { t } = useLang();
   const h = t.home;
+  const bump = useServerFn(incrementVisitorCount);
+  useEffect(() => {
+    bump().catch(() => {});
+  }, [bump]);
   return (
     <div className="min-h-screen flex flex-col bg-cream">
+
 
       {/* HERO */}
       <section className="bg-cream">

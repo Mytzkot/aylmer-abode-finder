@@ -1,7 +1,9 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { useServerFn } from "@tanstack/react-start";
+import { getVisitorCount } from "@/lib/visitor-counter.functions";
 import { toast } from "sonner";
 import logo from "@/assets/zorba-logo.png";
 
@@ -12,8 +14,10 @@ function AdminLayout() {
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [visitors, setVisitors] = useState<number | null>(null);
   const path = useRouterState({ select: s => s.location.pathname });
   const navigate = useNavigate();
+  const fetchVisitors = useServerFn(getVisitorCount);
 
   useEffect(() => {
     if (!isSupabaseConfigured) { setLoading(false); return; }
@@ -21,6 +25,10 @@ function AdminLayout() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setUser(s?.user ?? null));
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (user) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
+  }, [user, fetchVisitors]);
 
   useEffect(() => {
     if (user && path === "/admin") navigate({ to: "/admin/applications" });
@@ -79,6 +87,14 @@ function AdminLayout() {
             </Link>
           ))}
         </nav>
+        <div className="mt-4 mb-2 px-3 py-2 rounded-xl bg-cream/60 border border-border text-xs">
+          <div className="flex items-center gap-1.5 text-ink/60 font-semibold uppercase tracking-wider mb-0.5">
+            <Eye className="w-3.5 h-3.5" /> Site visitors
+          </div>
+          <div className="text-lg font-bold text-ink">
+            {visitors !== null ? visitors.toLocaleString() : "—"}
+          </div>
+        </div>
         <button onClick={signOut} className="touch-min flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium hover:bg-cream text-ink/60">
           <LogOut className="w-4 h-4" /> Sign out
         </button>

@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { PROPERTIES, CONTACT } from "@/data/properties";
+import { PROPERTIES, CONTACT, PROPERTY_MAP_LINKS } from "@/data/properties";
 import {
   ArrowLeft, Wifi, BedDouble, Utensils, WashingMachine, ParkingCircle,
   ExternalLink, Footprints, MapPin, CheckCircle2, ShieldCheck, KeyRound,
@@ -173,9 +173,28 @@ function PropertyHub() {
                   </span>
                 </div>
                 <h1 className="font-display text-3xl md:text-4xl text-ink mt-2">{prop.address}</h1>
-                <p className="text-ink/70 text-sm mt-1 inline-flex items-center gap-1">
-                  <MapPin className="w-4 h-4" /> {prop.city}, QC
-                </p>
+                {PROPERTY_MAP_LINKS[prop.id] ? (
+                  <a
+                    href={PROPERTY_MAP_LINKS[prop.id].short}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-coral hover:underline text-sm mt-1 inline-flex items-center gap-1 font-semibold"
+                  >
+                    <MapPin className="w-4 h-4" /> {PROPERTY_MAP_LINKS[prop.id].full}
+                  </a>
+                ) : (
+                  <p className="text-ink/70 text-sm mt-1 inline-flex items-center gap-1">
+                    <MapPin className="w-4 h-4" /> {prop.city}, QC
+                  </p>
+                )}
+                <a
+                  href={CONTACT.youtube}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-ink/80 hover:text-coral"
+                >
+                  🎥 <T>View room tours on our YouTube channel</T>
+                </a>
               </div>
               <div className="flex flex-col items-start md:items-end gap-2">
                 {minPrice != null && (

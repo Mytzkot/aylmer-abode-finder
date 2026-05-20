@@ -51,7 +51,7 @@ export function Header() {
                 <a
                   key={l.to}
                   href={l.to}
-                  className="px-3 py-2 rounded-lg text-[13px] font-typewriter uppercase tracking-[0.12em] font-bold text-surface-dark hover:bg-surface-dark/10"
+                  className="px-3 py-2 rounded-lg text-[16px] font-typewriter uppercase tracking-[0.1em] font-bold text-surface-dark hover:bg-surface-dark/10"
                 >
                   <T>{l.label}</T>
                 </a>
@@ -59,7 +59,7 @@ export function Header() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className="px-3 py-2 rounded-lg text-[13px] font-typewriter uppercase tracking-[0.12em] font-bold text-surface-dark hover:bg-surface-dark/10"
+                  className="px-3 py-2 rounded-lg text-[16px] font-typewriter uppercase tracking-[0.1em] font-bold text-surface-dark hover:bg-surface-dark/10"
                   activeProps={{ className: "bg-surface-dark/10" }}
                 >
                   <T>{l.label}</T>

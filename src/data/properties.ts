@@ -110,14 +110,29 @@ export const EMERGENCY = [
 export const CONTACT = {
   phone: "+13432025460",
   whatsapp: "https://wa.me/13432025460",
+  whatsappShort: "wa.me/13432025460",
   sms: "sms:+13432025460",
   tel: "tel:+13432025460",
   messenger: "https://m.me/Lisa.Mona.Mich",
-  facebook: "https://www.facebook.com/ZorbaRentals",
-  youtube: "https://youtube.com/@shakeshake-m7t",
+  messengerShort: "m.me/Lisa.Mona.Mich",
+  facebook: "https://www.facebook.com/ZorbaRentals/",
+  facebookShort: "facebook.com/ZorbaRentals",
+  youtube: "https://www.youtube.com/@shakeshake-m7t",
+  youtubeShort: "youtube.com/@shakeshake-m7t",
+  instagram: "https://www.instagram.com/zorbarentals",
+  instagramShort: "instagram.com/zorbarentals",
   email: "mailto:zorbagraphic@gmail.com",
+  emailShort: "zorbagraphic@gmail.com",
   website: "https://zorbaco.com",
+  websiteShort: "zorbaco.com",
 };
+
+export const PROPERTY_MAP_LINKS: Record<string, { full: string; short: string }> = {
+  "102-amour": { full: "102 Chemin d'Amour, Gatineau, J9H 5V4", short: "https://bit.ly/4ihMIeD" },
+  "58-conrad": { full: "58 Rue Conrad-Valéra, Gatineau, J9J 3L7", short: "https://bit.ly/3OFEvTX" },
+  "260-colline": { full: "260 Avenue de la Colline, Gatineau, J9J 1M1", short: "https://bit.ly/4eWMAOM" },
+};
+
 
 export const FAQ_KB: { q: string; a: string; keywords: string[] }[] = [
   { q: "Is Wi-Fi included?", a: "Yes, fast Wi-Fi and all utilities are included in your monthly rent.", keywords: ["wifi", "wi-fi", "internet", "wi fi", "utilities", "heat", "electric", "water", "hydro"] },
