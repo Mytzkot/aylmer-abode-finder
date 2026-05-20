@@ -355,6 +355,24 @@ export type Database = {
           },
         ]
       }
+      site_stats: {
+        Row: {
+          id: string
+          updated_at: string
+          visitor_count: number
+        }
+        Insert: {
+          id: string
+          updated_at?: string
+          visitor_count?: number
+        }
+        Update: {
+          id?: string
+          updated_at?: string
+          visitor_count?: number
+        }
+        Relationships: []
+      }
       tenants: {
         Row: {
           application_id: string | null
@@ -456,6 +474,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_site_visitors: { Args: never; Returns: number }
     }
     Enums: {
       app_role: "admin" | "staff" | "user"
