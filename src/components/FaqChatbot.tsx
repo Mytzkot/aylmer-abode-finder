@@ -80,14 +80,14 @@ export function FaqChatbot() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-[188px] end-4 z-[60] w-12 h-12 rounded-full bg-coral text-white shadow-2xl flex items-center justify-center active:scale-95 hover:scale-105 transition ring-2 ring-white/40"
+          className="fixed right-4 top-1/2 -translate-y-1/2 -mt-[64px] z-[60] w-[54px] h-[54px] rounded-full bg-coral text-white shadow-2xl flex items-center justify-center active:scale-95 hover:scale-105 transition ring-2 ring-white/40"
           aria-label={openLabel}
         >
           <Bot className="w-6 h-6" />
         </button>
       )}
       {open && (
-        <div className="fixed bottom-[188px] end-4 z-[60] w-[92vw] max-w-sm h-[28rem] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden">
+        <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[60] w-[92vw] max-w-sm h-[28rem] bg-card rounded-2xl shadow-2xl border border-border flex flex-col overflow-hidden">
           <div className="flex items-center justify-between p-3 border-b border-border bg-ink text-cream">
             <div className="flex items-center gap-2 font-semibold">
               <Bot className="w-5 h-5 text-coral" /> {title}
