@@ -1,17 +1,17 @@
-import { Bot, X, Send } from "lucide-react";
+import { Bot, X, Send, Phone, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
-import { FAQ_KB } from "@/data/properties";
+import { FAQ_KB, CONTACT } from "@/data/properties";
 
-interface Msg { role: "user" | "bot"; text: string }
+interface Msg { role: "user" | "bot"; text: string; fallback?: boolean }
 
-const FALLBACK = "I can answer questions about Wi-Fi, furnishings, utilities, credit checks, pets, and bus access. For anything else, please WhatsApp +1 343-202-5460.";
+const FALLBACK = "I'm not sure about that one — please contact us directly:";
 
-function answer(q: string): string {
+function answer(q: string): { text: string; fallback?: boolean } {
   const lower = q.toLowerCase();
   const hit = FAQ_KB.find(f => f.keywords.some(k => lower.includes(k)));
-  if (hit) return hit.a;
-  return FALLBACK;
+  if (hit) return { text: hit.a };
+  return { text: FALLBACK, fallback: true };
 }
 
 function Bubble({ text, isUser }: { text: string; isUser: boolean }) {
