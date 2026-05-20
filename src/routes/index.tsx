@@ -4,6 +4,7 @@ import { Facebook } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES, CONTACT } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
+import { FlexibleStays } from "@/components/FlexibleStays";
 import heroImg from "@/assets/hero-room.jpg";
 
 const LocationsMap = lazy(() => import("@/components/LocationsMap"));
