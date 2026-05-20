@@ -151,6 +151,9 @@ function HomePage() {
         </div>
       </section>
 
+      {/* CUSTOMER REVIEWS — just above footer */}
+      <ReviewsSection />
+
     </div>
   );
 }
