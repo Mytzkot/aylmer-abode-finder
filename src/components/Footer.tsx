@@ -178,7 +178,7 @@ const SHORT_ADDRESSES: Record<string, string> = {
 
 export function Footer() {
   return (
-    <footer className="bg-surface-dark text-white pb-32 md:pb-24">
+    <footer className="bg-surface-dark text-white pb-56 md:pb-44">
       <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 pt-16 md:pt-20">
         <div className="grid gap-12 lg:gap-10 lg:grid-cols-12 items-start">
           {/* Left section — brand + newsletter */}
