@@ -117,8 +117,8 @@ const SHORT_ADDRESSES: Record<string, string> = {
 export function Footer() {
   return (
     <footer className="bg-surface-dark text-white pb-32 md:pb-24">
-      <div className="mx-auto max-w-6xl px-6 pt-16 md:pt-20">
-        <div className="grid gap-12 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 items-start">
+      <div className="w-full px-6 sm:px-12 lg:px-16 pt-16 md:pt-20">
+        <div className="grid gap-12 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-16 items-start">
           {/* Col 1 — Brand */}
           <div>
             <div className="bg-white rounded-2xl p-3 inline-flex items-center justify-center shadow-md mb-4">
