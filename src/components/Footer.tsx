@@ -227,21 +227,20 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-white/75">
-          <p className="font-semibold">© 2026 Zorba Rentals · Aylmer-Gatineau, QC</p>
+        <div className="mt-8 pt-5 border-t border-white/15 flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 text-[13px] text-white/75 text-center sm:text-left">
+          <p className="font-semibold">© 2026 Zorba Rentals · Ottawa/Hull NCR — National Capital Region</p>
           <VisitorCount />
-          <div className="flex items-center gap-3">
-            <a
-              href="https://aylmer-rooms-hub.lovable.app"
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold hover:text-white hover:underline"
-            >
-              aylmer-rooms-hub.lovable.app
-            </a>
-            <span className="text-white/40">·</span>
-            <span className="text-white/70 font-semibold">zorbaco.com (coming soon)</span>
-          </div>
+          <a
+            href="https://aylmer-rooms-hub.lovable.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold hover:text-white hover:underline"
+          >
+            zorbaco.com
+          </a>
+          <p className="font-medium italic inline-flex items-center gap-1">
+            Website made with love <span className="text-coral not-italic">♥</span>
+          </p>
         </div>
       </div>
     </footer>
