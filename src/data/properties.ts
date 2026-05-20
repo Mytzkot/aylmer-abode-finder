@@ -113,7 +113,7 @@ export const CONTACT = {
   sms: "sms:+13432025460",
   tel: "tel:+13432025460",
   messenger: "https://m.me/Lisa.Mona.Mich",
-  facebook: "https://facebook.com/ZorbaRentals/",
+  facebook: "https://www.facebook.com/ZorbaRentals",
   youtube: "https://youtube.com/@shakeshake-m7t",
   email: "mailto:zorbagraphic@gmail.com",
   website: "https://zorbaco.com",

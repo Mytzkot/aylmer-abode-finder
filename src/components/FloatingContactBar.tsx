@@ -1,11 +1,11 @@
-import { MessageCircle, Phone, Facebook } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
 export function FloatingContactBar() {
   const { t } = useLang();
   const items = [
-    { href: CONTACT.messenger, label: "FB Messenger", icon: Facebook, color: "bg-[#0084FF] text-white" },
+    { href: CONTACT.messenger, label: "Messenger", icon: MessageCircle, color: "bg-[#0084FF] text-white" },
     { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
     { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
   ];

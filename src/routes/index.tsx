@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
+import { Facebook } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
-import { PROPERTIES } from "@/data/properties";
+import { PROPERTIES, CONTACT } from "@/data/properties";
 import { useLang } from "@/i18n/LanguageProvider";
 import heroImg from "@/assets/hero-room.jpg";
 
@@ -101,6 +102,18 @@ function HomePage() {
 
           <div className="mt-10">
             <ContactForm />
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href={CONTACT.facebook}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 btn-pill bg-[#1877F2] text-white px-5 py-3 font-bold hover:brightness-110"
+            >
+              <Facebook className="w-5 h-5" strokeWidth={2.25} />
+              Visit us on Facebook
+            </a>
           </div>
         </div>
       </section>

@@ -1,45 +1,22 @@
-## Redesign Footer — Black with Big ZORBA Wordmark
+## Fix social icons: separate Messenger and Facebook page
 
-Match the Lodgify-style reference: dark footer, four columns of links, socials inline, and a giant "ZORBA" wordmark across the bottom.
+### Issue
+The floating contact bar shows a Facebook icon that links to Messenger (`m.me/...`). It should be a Messenger icon. The actual Facebook page (`https://www.facebook.com/ZorbaRentals`) isn't surfaced as its own action.
 
-### Changes to `src/components/Footer.tsx` (only file touched)
+### Changes
 
-Replace the current cream footer with a single dark section:
+**1. `src/components/FloatingContactBar.tsx`**
+- Change the first pill's icon from `Facebook` to `MessageCircle` (Messenger), keep it linking to `CONTACT.messenger`, keep the `#0084FF` Messenger blue, and update the `label`/`title` to "Messenger".
+- (WhatsApp keeps `MessageCircle` — fine, both messaging apps share that glyph, distinguished by their brand colors green vs. blue.)
 
-1. **Background**: solid black (`bg-ink` / near-black), cream text, brand-blue accents on hover.
+**2. `src/data/properties.ts`**
+- Update `CONTACT.facebook` to `https://www.facebook.com/ZorbaRentals` (current value has a trailing slash variant).
 
-2. **Top row — four link columns** (stacked on mobile, 4 cols on md+):
-   - **Zorba** — Home, About Us, FAQ, Newcomer Guide, Transit
-   - **Stay** — All Rooms, Properties (102 Amour, 58 Conrad, 260 Colline), Daily/Weekly Booking
-   - **Apply** — Apply Now, Contact, How it works
-   - **Support & Contact** — Phone (+1 343 987 4565), Email (zorbagraphic@gmail.com), WhatsApp, Messenger, Address line (Aylmer-Gatineau, QC)
+**3. Add Facebook page link to the Contact section on the home page (`src/routes/index.tsx`)**
+- Below the `<ContactForm />` inside `#contact`, add a small "Visit us on Facebook" link/button using the `Facebook` lucide icon in Facebook blue (`#1877F2`), opening `CONTACT.facebook` in a new tab.
 
-3. **Divider + socials row**: existing 6 social pills (WhatsApp, Phone, Facebook, YouTube, Instagram, Messenger) aligned left; language note / copyright aligned right.
-
-4. **Giant ZORBA wordmark**: full-width display text at the bottom in Fraunces 900, brand-blue (`text-brand`), clamped to viewport (`text-[18vw]`), tight leading, slightly clipped baseline — same vibe as "Lodgify" in the reference.
-
-5. Keep the existing `pb-32 md:pb-24` so the floating contact bar doesn't overlap.
-
-6. All link text stays bilingual via the existing `<T>` wrapper.
+**4. Footer (`src/components/Footer.tsx`)**
+- The `SOCIALS` array already has a separate Facebook pill linking to `CONTACT.facebook` — no change needed, it will now point to the corrected URL via the data file.
 
 ### Out of scope
-- No new routes, data, or business logic.
-- No changes to `Header`, `FloatingContactBar`, or page content.
-- No new assets (the giant "ZORBA" is rendered as text, not an image).
-
-### Visual sketch
-
-```text
-┌────────────────────────────────────────────────────────────┐
-│ ZORBA          STAY            APPLY          SUPPORT      │
-│ Home           All Rooms       Apply Now      +1 343…      │
-│ About          102 Amour       Contact        email@…      │
-│ FAQ            58 Conrad       How it works   WhatsApp     │
-│ Newcomer       260 Colline                    Aylmer, QC   │
-│ Transit        Book Daily                                  │
-│────────────────────────────────────────────────────────────│
-│ [ws][ph][fb][yt][ig][msg]              © 2026 Zorba ·  EN  │
-│                                                            │
-│  ZZZZZ  OOOOO  RRRRR  BBBBB  AAAAA   ← giant wordmark     │
-└────────────────────────────────────────────────────────────┘
-```
+- No layout/styling overhaul, no copy changes elsewhere, no new routes.
