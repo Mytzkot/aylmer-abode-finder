@@ -1,32 +1,23 @@
-import { MessageCircle, Phone, Send } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import { CONTACT } from "@/data/properties";
 
-// Note: the chatbot bubble (FaqChatbot) renders on top of this stack
-// at bottom-[168px], so this stack of 3 buttons + the chatbot form
-// one unified bottom-right vertical column.
+// Only WhatsApp here. The chatbot bubble (FaqChatbot) renders directly above
+// it. Both are vertically centered on the right edge of the viewport.
 export function FloatingContactBar() {
   const { t } = useLang();
-  const items = [
-    { href: CONTACT.messenger, label: "Messenger", icon: Send, color: "bg-[#0084FF] text-white" },
-    { href: CONTACT.whatsapp, label: t.contact.whatsapp, icon: MessageCircle, color: "bg-[#25D366] text-white" },
-    { href: CONTACT.tel, label: t.contact.call, icon: Phone, color: "bg-surface-dark text-white" },
-  ];
   return (
-    <div className="fixed bottom-4 end-4 z-[60] flex flex-col items-end gap-2 pointer-events-none">
-      {items.map((it) => (
-        <a
-          key={it.label}
-          href={it.href}
-          target={it.href.startsWith("http") ? "_blank" : undefined}
-          rel="noreferrer"
-          aria-label={it.label}
-          title={it.label}
-          className={`pointer-events-auto w-11 h-11 inline-flex items-center justify-center rounded-full ${it.color} shadow-xl active:scale-95 hover:scale-105 transition ring-2 ring-white/40`}
-        >
-          <it.icon className="w-[18px] h-[18px]" strokeWidth={2.25} />
-        </a>
-      ))}
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[60] pointer-events-none">
+      <a
+        href={CONTACT.whatsapp}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={t.contact.whatsapp}
+        title={t.contact.whatsapp}
+        className="pointer-events-auto mt-[64px] w-[54px] h-[54px] inline-flex items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl active:scale-95 hover:scale-105 transition ring-2 ring-white/40"
+      >
+        <MessageCircle className="w-6 h-6" strokeWidth={2.25} />
+      </a>
     </div>
   );
 }
