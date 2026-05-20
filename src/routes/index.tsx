@@ -30,8 +30,13 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { t } = useLang();
   const h = t.home;
+  const bump = useServerFn(incrementVisitorCount);
+  useEffect(() => {
+    bump().catch(() => {});
+  }, [bump]);
   return (
     <div className="min-h-screen flex flex-col bg-cream">
+
 
       {/* HERO */}
       <section className="bg-cream">
