@@ -8,6 +8,7 @@ import { FlexibleStays } from "@/components/FlexibleStays";
 import { WhatsIncluded } from "@/components/WhatsIncluded";
 import { useServerFn } from "@tanstack/react-start";
 import { incrementVisitorCount } from "@/lib/visitor-counter.functions";
+import { ReviewsSection } from "@/components/ReviewsSection";
 import heroImg from "@/assets/hero-room.jpg";
 
 const LocationsMap = lazy(() => import("@/components/LocationsMap"));
