@@ -8,7 +8,7 @@ import {
   MapPin,
   Send,
   Globe,
-  Eye,
+  
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -16,7 +16,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 import { useServerFn } from "@tanstack/react-start";
-import { getVisitorCount } from "@/lib/visitor-counter.functions";
+
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
 import logo from "@/assets/zorba-logo-blue.png";
 
@@ -83,30 +83,6 @@ function IconLink({
   );
 }
 
-function VisitorCount() {
-  const fetchCount = useServerFn(getVisitorCount);
-  const [count, setCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchCount()
-      .then((r) => {
-        if (!cancelled) setCount(r.count);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [fetchCount]);
-
-  return (
-    <span className="inline-flex items-center gap-1.5 text-white/70">
-      <Eye className="w-3.5 h-3.5" />
-      {count !== null ? `${count.toLocaleString()} ` : ""}
-      <T>visitors</T>
-    </span>
-  );
-}
 
 function NewsletterSignup() {
   const subscribe = useServerFn(subscribeNewsletter);
