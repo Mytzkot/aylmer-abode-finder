@@ -11,7 +11,6 @@ import { LanguageProvider } from "@/i18n/LanguageProvider";
 import { Toaster } from "sonner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { FloatingContactBar } from "@/components/FloatingContactBar";
 import { FaqChatbot } from "@/components/FaqChatbot";
 
 import appCss from "../styles.css?url";
@@ -115,7 +114,6 @@ function RootComponent() {
           <Header />
           <div className="flex-1 flex flex-col"><Outlet /></div>
           <Footer />
-          <FloatingContactBar />
           <FaqChatbot />
         </div>
         <Toaster position="top-center" richColors />

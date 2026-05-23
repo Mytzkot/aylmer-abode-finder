@@ -8,7 +8,7 @@ import {
   MapPin,
   Send,
   Globe,
-  Eye,
+  
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -16,7 +16,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 import { useServerFn } from "@tanstack/react-start";
-import { getVisitorCount } from "@/lib/visitor-counter.functions";
+
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
 import logo from "@/assets/zorba-logo-blue.png";
 
@@ -38,7 +38,7 @@ function ColTitle({ children }: { children: React.ReactNode }) {
 }
 
 const linkCls =
-  "block text-[15px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight";
+  "block text-[14px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight break-words";
 
 function FLink({ to, href, children }: { to?: string; href?: string; children: React.ReactNode }) {
   if (href)
@@ -75,38 +75,14 @@ function IconLink({
       href={href}
       target={href.startsWith("http") ? "_blank" : undefined}
       rel="noreferrer"
-      className="flex items-center gap-2.5 text-[15px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight"
+      className="flex items-start gap-2.5 text-[14px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight"
     >
-      <Icon className={`w-[18px] h-[18px] shrink-0 ${iconColor}`} />
-      <span className="truncate">{children}</span>
+      <Icon className={`w-[18px] h-[18px] shrink-0 mt-0.5 ${iconColor}`} />
+      <span className="min-w-0 break-all">{children}</span>
     </a>
   );
 }
 
-function VisitorCount() {
-  const fetchCount = useServerFn(getVisitorCount);
-  const [count, setCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetchCount()
-      .then((r) => {
-        if (!cancelled) setCount(r.count);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [fetchCount]);
-
-  return (
-    <span className="inline-flex items-center gap-1.5 text-white/70">
-      <Eye className="w-3.5 h-3.5" />
-      {count !== null ? `${count.toLocaleString()} ` : ""}
-      <T>visitors</T>
-    </span>
-  );
-}
 
 function NewsletterSignup() {
   const subscribe = useServerFn(subscribeNewsletter);
@@ -178,8 +154,8 @@ const SHORT_ADDRESSES: Record<string, string> = {
 
 export function Footer() {
   return (
-    <footer className="bg-surface-dark text-white pb-16 md:pb-20">
-      <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-8 pt-16 md:pt-20">
+    <footer className="bg-surface-dark text-white pb-10 md:pb-20">
+      <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-6 pt-16 md:pt-20">
         <div className="grid gap-12 lg:gap-10 lg:grid-cols-12 items-start">
           {/* Left section — brand + newsletter */}
           <div className="lg:col-span-5">
@@ -289,8 +265,8 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom bar — left and right blocks vertically centered against each other */}
-        <div className="mt-8 py-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[13px] text-white/80">
+        {/* Bottom bar */}
+        <div className="mt-8 py-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[12px] md:text-[13px] text-white/80">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-semibold text-white">
               © 2026 Zorba Rentals. All rights reserved.
@@ -299,9 +275,7 @@ export function Footer() {
               Ottawa/Hull NCR — National Capital Region
             </p>
           </div>
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
-            <VisitorCount />
-            <span className="text-white/30">·</span>
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-2 gap-y-1">
             <a
               href="https://aylmer-rooms-hub.lovable.app/"
               target="_blank"
@@ -318,9 +292,9 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Designer credit strip — beige/cream, generous breathing room */}
+      {/* Designer credit strip */}
       <div className="bg-cream text-ink/80 border-t border-cream-deep/40">
-        <div className="mx-auto max-w-[1280px] px-6 sm:px-8 py-9 md:py-10 text-center text-[15px] leading-relaxed">
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-8 py-6 md:py-10 text-center text-[14px] md:text-[15px] leading-relaxed">
           Designed by{" "}
           <a
             href="https://RootsWingsFly.com"
