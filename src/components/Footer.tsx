@@ -12,7 +12,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
 import { T } from "@/i18n/LanguageProvider";
 import { useServerFn } from "@tanstack/react-start";

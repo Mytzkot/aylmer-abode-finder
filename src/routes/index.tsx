@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { Facebook } from "lucide-react";
 import { ContactForm } from "@/components/ContactForm";
 import { PROPERTIES, CONTACT } from "@/data/properties";
-import { useLang } from "@/i18n/LanguageProvider";
+import { useLang, T } from "@/i18n/LanguageProvider";
 import { FlexibleStays } from "@/components/FlexibleStays";
 import { WhatsIncluded } from "@/components/WhatsIncluded";
 import { useServerFn } from "@tanstack/react-start";
@@ -133,7 +133,7 @@ function HomePage() {
               className="inline-flex items-center gap-2 btn-pill bg-[#1877F2] text-white px-5 py-3 font-bold hover:brightness-110"
             >
               <Facebook className="w-5 h-5" strokeWidth={2.25} />
-              Visit us on Facebook
+              <T>Visit us on Facebook</T>
             </a>
           </div>
         </div>
@@ -142,7 +142,7 @@ function HomePage() {
       {/* MAP */}
       <section className="bg-cream pb-10 md:pb-14">
         <div className="mx-auto max-w-7xl px-4">
-          <h2 className="font-display text-2xl md:text-4xl text-ink text-center mb-4">Find Us On The Map</h2>
+          <h2 className="font-display text-2xl md:text-4xl text-ink text-center mb-4"><T>Find Us On The Map</T></h2>
           <div className="rounded-3xl overflow-hidden border border-border/60 shadow-lg">
             <Suspense fallback={<div className="w-full h-[320px] bg-cream-deep/40 animate-pulse" />}>
               <LocationsMap />
