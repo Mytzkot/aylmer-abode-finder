@@ -80,7 +80,7 @@ export function FaqChatbot() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed right-4 top-1/2 -translate-y-1/2 -mt-[64px] z-[60] w-[54px] h-[54px] rounded-full bg-coral text-white shadow-2xl flex items-center justify-center active:scale-95 hover:scale-105 transition ring-2 ring-white/40"
+          className="fixed right-4 top-1/2 -translate-y-1/2 z-[60] w-[54px] h-[54px] rounded-full bg-coral text-white shadow-2xl flex items-center justify-center active:scale-95 hover:scale-105 transition ring-2 ring-white/40"
           aria-label={openLabel}
         >
           <Bot className="w-6 h-6" />
