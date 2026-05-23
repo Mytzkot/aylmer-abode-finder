@@ -125,7 +125,7 @@
     letter-spacing: 0.05em;
   }
   [dir="rtl"] .flip-rtl { transform: scaleX(-1); }
-  button, a { min-height: 44px; }
+  /* Tap-target minimum is opt-in via .touch-min so dense link lists (e.g. footer) stay compact. */
   .touch-min { min-height: 44px; min-width: 44px; }
 }
 
