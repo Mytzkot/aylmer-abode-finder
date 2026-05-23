@@ -184,7 +184,7 @@ export function Footer() {
           <div className="lg:col-span-7 grid gap-10 sm:grid-cols-3 sm:gap-8">
             <div>
               <ColTitle><T>Stay</T></ColTitle>
-              <ul className="space-y-2.5">
+              <ul className="space-y-1">
                 <li><FLink to="/rooms"><T>All Rooms</T></FLink></li>
                 {PROPERTIES.map((p) => {
                   const map = PROPERTY_MAP_LINKS[p.id];
@@ -217,7 +217,7 @@ export function Footer() {
 
             <div>
               <ColTitle><T>Company</T></ColTitle>
-              <ul className="space-y-2.5">
+              <ul className="space-y-1">
                 <li><FLink to="/about"><T>About Us</T></FLink></li>
                 <li><FLink to="/faq"><T>FAQ</T></FLink></li>
                 <li><FLink to="/faq"><T>How It Works</T></FLink></li>
@@ -229,7 +229,7 @@ export function Footer() {
 
             <div>
               <ColTitle><T>Connect</T></ColTitle>
-              <ul className="space-y-2.5">
+              <ul className="space-y-1">
                 <li><IconLink href={CONTACT.tel} Icon={Phone} iconColor="text-emerald-400">1-343-202-5460</IconLink></li>
                 <li><IconLink href={CONTACT.whatsapp} Icon={MessageCircle} iconColor="text-[#25D366]">{CONTACT.whatsappShort}</IconLink></li>
                 <li><IconLink href={CONTACT.messenger} Icon={Send} iconColor="text-[#0084FF]">{CONTACT.messengerShort}</IconLink></li>
