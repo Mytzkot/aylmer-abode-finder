@@ -90,7 +90,6 @@ function RoomsShop() {
     const channel = supabase
       .channel("rooms-availability")
       .on("postgres_changes", { event: "*", schema: "public", table: "rooms" }, () => loadAvailability())
-      .on("postgres_changes", { event: "*", schema: "public", table: "tenants" }, () => loadAvailability())
       .subscribe();
     const onFocus = () => loadAvailability();
     const onVis = () => { if (document.visibilityState === "visible") loadAvailability(); };
