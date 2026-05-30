@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Zorba Rentals — Furnished Monthly Rooms in Aylmer-Gatineau" },
-      { name: "description", content: "Furnished monthly room rentals in Aylmer-Gatineau, 15 minutes by direct bus to downtown Ottawa. No credit check, first month only to move in. Wi-Fi and utilities included." },
+      { name: "description", content: "Furnished monthly rooms in Aylmer-Gatineau. 15-min direct bus to downtown Ottawa. No credit check, first month only. Wi-Fi and utilities included." },
       { property: "og:title", content: "Zorba Rentals — Furnished Monthly Rooms in Aylmer-Gatineau" },
       { property: "og:description", content: "Furnished monthly rooms, 15-min direct bus to downtown Ottawa. No credit check." },
       { property: "og:type", content: "website" },

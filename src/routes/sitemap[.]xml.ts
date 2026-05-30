@@ -3,8 +3,7 @@ import type {} from "@tanstack/react-start";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 
-// TODO: replace with your project URL once a custom domain is set.
-const BASE_URL = "";
+const BASE_URL = "https://aylmer-rooms-hub.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -16,6 +15,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/rooms", priority: "0.9", changefreq: "monthly" as const },
           { path: "/apply", priority: "0.8", changefreq: "monthly" as const },
           { path: "/book", priority: "0.8", changefreq: "monthly" as const },
+          { path: "/extras", priority: "0.6", changefreq: "monthly" as const },
           { path: "/about", priority: "0.6", changefreq: "monthly" as const },
           { path: "/faq", priority: "0.6", changefreq: "monthly" as const },
           { path: "/transit", priority: "0.5", changefreq: "monthly" as const },
