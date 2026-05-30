@@ -17,6 +17,7 @@ export const Route = createFileRoute("/rooms")({
       { property: "og:description", content: "Browse all furnished rooms across our Aylmer-Gatineau locations." },
       { property: "og:url", content: "/rooms" },
     ],
+    links: [{ rel: "canonical", href: "/rooms" }],
   }),
 });
 
@@ -176,10 +177,11 @@ function RoomsShop() {
     <div className="flex flex-col md:flex-row md:items-end gap-4 md:gap-5">
       {/* Location */}
       <div className="flex-1 min-w-[160px]">
-        <label className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
+        <label htmlFor="rooms-location" className="block text-[11px] font-bold uppercase tracking-wider text-ink/60 mb-1.5">
           <T>Location</T>
         </label>
         <select
+          id="rooms-location"
           value={locationId}
           onChange={(e) => setLocationId(e.target.value)}
           className="w-full px-3 py-2.5 rounded-lg border border-ink/25 bg-background text-sm text-ink font-medium"
@@ -259,7 +261,11 @@ function RoomsShop() {
             <SlidersHorizontal className="w-4 h-4" />
             <T>Filters</T>
           </button>
+          <label htmlFor="rooms-sort-mobile" className="sr-only">
+            <T>Sort</T>
+          </label>
           <select
+            id="rooms-sort-mobile"
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
             className="flex-1 px-3 py-2.5 rounded-lg border border-ink/25 bg-card text-sm text-ink font-medium"
@@ -272,10 +278,11 @@ function RoomsShop() {
 
         {/* Desktop sort row */}
         <div className="hidden md:flex items-center justify-end mb-5">
-          <label className="text-xs font-bold uppercase tracking-wider text-ink/60 mr-2">
+          <label htmlFor="rooms-sort-desktop" className="text-xs font-bold uppercase tracking-wider text-ink/60 mr-2">
             <T>Sort</T>
           </label>
           <select
+            id="rooms-sort-desktop"
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
             className="px-3 py-2 rounded-lg border border-ink/25 bg-card text-sm text-ink font-medium"
