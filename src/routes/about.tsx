@@ -7,7 +7,11 @@ export const Route = createFileRoute("/about")({
     meta: [
       { title: "About Us — Zorba Rentals" },
       { name: "description", content: "About Zorba Rentals — comfortable furnished rooms in Aylmer-Gatineau." },
+      { property: "og:title", content: "About Us — Zorba Rentals" },
+      { property: "og:description", content: "About Zorba Rentals — comfortable furnished rooms in Aylmer-Gatineau." },
+      { property: "og:url", content: "/about" },
     ],
+    links: [{ rel: "canonical", href: "/about" }],
   }),
   component: AboutPage,
 });

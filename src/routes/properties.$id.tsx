@@ -30,7 +30,7 @@ export const Route = createFileRoute("/properties/$id")({
         { name: "description", content: desc },
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
-        { property: "og:type", content: "place" },
+        { property: "og:type", content: "website" },
         { property: "og:url", content: `/properties/${params.id}` },
         ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
       ],

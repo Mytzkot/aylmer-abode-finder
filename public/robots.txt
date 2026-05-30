@@ -4,3 +4,5 @@ Disallow: /admin
 Disallow: /pay
 Disallow: /portal
 Disallow: /book/$roomId
+
+Sitemap: https://aylmer-rooms-hub.lovable.app/sitemap.xml

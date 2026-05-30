@@ -15,6 +15,7 @@ export const Route = createFileRoute("/rooms")({
       { name: "description", content: "Browse all furnished rooms across our Aylmer-Gatineau locations." },
       { property: "og:title", content: "All Rooms — Zorba Rentals" },
       { property: "og:description", content: "Browse all furnished rooms across our Aylmer-Gatineau locations." },
+      { property: "og:url", content: "/rooms" },
     ],
   }),
 });
