@@ -190,8 +190,7 @@ function RoomCard({
   return (
     <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
       <div>
-        <div className="font-bold">{room.name || room.address || room.id}</div>
-        {room.address && <div className="text-xs text-muted-foreground">{room.address}</div>}
+        <div className="font-bold">{room.name || room.id}</div>
       </div>
 
       <div className="flex items-center justify-between">
