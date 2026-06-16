@@ -260,7 +260,7 @@ export function Footer() {
                 <ContactItem
                   href={CONTACT.facebookProfile}
                   Icon={Facebook}
-                  label="Facebook"
+                  label="Facebook (profile)"
                   iconColor="text-[#1877F2]"
                 />
                 <ContactItem
