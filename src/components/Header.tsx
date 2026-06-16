@@ -120,9 +120,7 @@ export function Header() {
               <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
 
-            >
-              <Menu className="w-6 h-6" strokeWidth={2.25} />
-            </button>
+
           </div>
         </div>
       </header>
