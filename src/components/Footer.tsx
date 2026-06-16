@@ -7,8 +7,6 @@ import {
   Mail,
   MapPin,
   Send,
-  Globe,
-  
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -19,15 +17,6 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
 import logo from "@/assets/zorba-logo-blue.png";
-
-const SOCIALS = [
-  { href: CONTACT.facebook, Icon: Facebook, label: "Facebook", color: "bg-[#1877F2] text-white" },
-  { href: CONTACT.messenger, Icon: Send, label: "Messenger", color: "bg-[#0084FF] text-white" },
-  { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
-  { href: CONTACT.youtube, Icon: Youtube, label: "YouTube", color: "bg-[#FF0000] text-white" },
-  { href: CONTACT.instagram, Icon: Instagram, label: "Instagram", color: "bg-gradient-to-tr from-[#FEDA75] via-[#FA7E1E] to-[#D62976] text-white" },
-  { href: CONTACT.email, Icon: Mail, label: "Email", color: "bg-white text-surface-dark" },
-];
 
 function ColTitle({ children }: { children: React.ReactNode }) {
   return (
