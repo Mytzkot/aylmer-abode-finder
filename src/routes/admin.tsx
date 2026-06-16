@@ -11,6 +11,7 @@ export const Route = createFileRoute("/admin")({ component: AdminLayout });
 
 function AdminLayout() {
   const [user, setUser] = useState<any | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
@@ -26,18 +27,45 @@ function AdminLayout() {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  // Verify admin role server-side via user_roles; non-admins are signed out.
   useEffect(() => {
-    if (user) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
-  }, [user, fetchVisitors]);
+    if (!user) { setIsAdmin(null); return; }
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (cancelled) return;
+      if (error || !data) {
+        setIsAdmin(false);
+        await supabase.auth.signOut();
+        toast.error("This account does not have admin access.");
+        navigate({ to: "/" });
+      } else {
+        setIsAdmin(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [user, navigate]);
 
   useEffect(() => {
-    if (user && path === "/admin") navigate({ to: "/admin/applications" });
-  }, [user, path, navigate]);
+    if (user && isAdmin) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
+  }, [user, isAdmin, fetchVisitors]);
+
+  useEffect(() => {
+    if (user && isAdmin && path === "/admin") navigate({ to: "/admin/applications" });
+  }, [user, isAdmin, path, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
     const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if (error) toast.error(error.message);
+    if (error) {
+      console.error("Admin sign-in error:", error);
+      toast.error("Invalid email or password.");
+    }
   };
 
   const signOut = async () => { await supabase.auth.signOut(); };

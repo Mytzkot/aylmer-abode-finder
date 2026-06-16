@@ -29,11 +29,13 @@ function NotFoundComponent() {
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
+  // Log full error to console for debugging; do not expose details to users.
+  if (typeof window !== "undefined") console.error("Route error:", error);
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold">Something went wrong</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <p className="mt-2 text-sm text-muted-foreground">An unexpected error occurred. Please try again.</p>
         <button onClick={() => { router.invalidate(); reset(); }} className="mt-6 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">Try again</button>
       </div>
     </div>

@@ -81,7 +81,7 @@ function BookPage() {
       additional_information: `Booking request — Room: ${roomId} · Check-in: ${parsed.data.checkin} · Check-out: ${parsed.data.checkout}`,
     });
     setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { console.error("Booking submit error:", error); toast.error("We couldn't submit your booking. Please try again."); return; }
     setDone(true);
   };
 
