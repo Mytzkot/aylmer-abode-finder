@@ -64,10 +64,10 @@ function ContactItem({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center gap-1.5 text-white/90 hover:text-white transition group"
+      className="flex flex-row items-center gap-3 text-white/90 hover:text-white transition group"
     >
       <Icon
-        className={`w-6 h-6 ${iconColor} group-hover:scale-110 transition`}
+        className={`w-5 h-5 ${iconColor} group-hover:scale-110 transition shrink-0`}
       />
       <span className="text-[13px] font-semibold leading-tight">{label}</span>
     </a>
@@ -171,7 +171,7 @@ export function Footer() {
           </div>
 
           {/* Right section — 3 link columns grouped together */}
-          <div className="lg:col-span-7 grid gap-10 sm:grid-cols-3 sm:gap-8">
+          <div className="lg:col-span-7 grid gap-10 sm:grid-cols-2 sm:gap-8">
             <div>
               <ColTitle><T>Stay</T></ColTitle>
               <ul className="space-y-1">
@@ -218,9 +218,8 @@ export function Footer() {
             </div>
 
             <div>
-              {/* Contact Us */}
               <ColTitle><T>Contact Us</T></ColTitle>
-              <div className="flex flex-wrap gap-4 mb-6">
+              <div className="flex flex-col gap-3">
                 <ContactItem
                   href={CONTACT.tel}
                   Icon={FaPhone}
@@ -246,20 +245,21 @@ export function Footer() {
                   iconColor="text-[#0084FF]"
                 />
               </div>
+            </div>
 
-              {/* Follow Us */}
+            <div>
               <ColTitle><T>Follow Us</T></ColTitle>
-              <div className="flex flex-wrap gap-4 mb-4">
+              <div className="flex flex-col gap-3">
                 <ContactItem
                   href={CONTACT.facebook}
                   Icon={FaFacebook}
-                  label="Facebook"
+                  label="Facebook Business Page"
                   iconColor="text-[#1877F2]"
                 />
                 <ContactItem
                   href={CONTACT.facebookProfile}
                   Icon={FaFacebookF}
-                  label="Facebook (profile)"
+                  label="Facebook Profile"
                   iconColor="text-[#1877F2]"
                 />
                 <ContactItem
@@ -275,8 +275,10 @@ export function Footer() {
                   iconColor="text-[#FF0000]"
                 />
               </div>
+            </div>
 
-              <p className="text-[13px] italic text-white/70 pt-2 font-medium">
+            <div className="sm:col-span-2">
+              <p className="text-[13px] italic text-white/70 font-medium">
                 Je parle arabe et anglais — Texte en français
               </p>
             </div>
