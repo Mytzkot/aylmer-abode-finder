@@ -171,7 +171,7 @@ export function Footer() {
           </div>
 
           {/* Right section — 3 link columns grouped together */}
-          <div className="lg:col-span-7 grid gap-10 sm:grid-cols-3 sm:gap-8">
+          <div className="lg:col-span-7 grid gap-10 sm:grid-cols-2 sm:gap-8">
             <div>
               <ColTitle><T>Stay</T></ColTitle>
               <ul className="space-y-1">
