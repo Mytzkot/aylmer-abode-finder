@@ -1,23 +1,44 @@
+import { Globe, Check } from "lucide-react";
 import { useLang } from "@/i18n/LanguageProvider";
 import type { Lang } from "@/i18n/translations";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const OPTS: { code: Lang; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "ar", label: "العربية" },
+];
 
 export function LanguageToggle() {
   const { lang, setLang } = useLang();
-  const opts: { code: Lang; label: string }[] = [
-    { code: "en", label: "EN" }, { code: "fr", label: "FR" }, { code: "ar", label: "AR" },
-  ];
+  const current = OPTS.find((o) => o.code === lang) ?? OPTS[0];
+
   return (
-    <div className="inline-flex rounded-full bg-cream-deep p-0.5 sm:p-1 text-[11px] sm:text-sm">
-      {opts.map((o) => (
-        <button
-          key={o.code}
-          onClick={() => setLang(o.code)}
-          className={`px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full transition font-semibold ${lang === o.code ? "bg-ink text-primary-foreground" : "text-ink/70 hover:text-ink"}`}
-          aria-label={`Switch to ${o.label}`}
-        >
-          {o.label}
-        </button>
-      ))}
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        className="inline-flex items-center gap-1 px-2 py-2 rounded-lg hover:bg-surface-dark/10 text-surface-dark font-semibold text-sm"
+        aria-label="Change language"
+      >
+        <Globe className="w-5 h-5" strokeWidth={2} />
+        <span className="uppercase text-xs">{current.code}</span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="min-w-[10rem]">
+        {OPTS.map((o) => (
+          <DropdownMenuItem
+            key={o.code}
+            onClick={() => setLang(o.code)}
+            className="flex items-center justify-between gap-2 cursor-pointer"
+          >
+            <span>{o.label}</span>
+            {lang === o.code && <Check className="w-4 h-4" />}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
