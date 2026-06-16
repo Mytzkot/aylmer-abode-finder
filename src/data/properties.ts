@@ -110,21 +110,13 @@ export const EMERGENCY = [
 export const CONTACT = {
   phone: "+13432025460",
   whatsapp: "https://wa.me/13432025460",
-  whatsappShort: "wa.me/13432025460",
-  sms: "sms:+13432025460",
   tel: "tel:+13432025460",
-  messenger: "https://m.me/Lisa.Mona.Mich",
-  messengerShort: "m.me/Lisa.Mona.Mich",
+  messenger: "https://m.me/ZorbaRents",
   facebook: "https://www.facebook.com/ZorbaRentals/",
-  facebookShort: "facebook.com/ZorbaRentals",
-  youtube: "https://www.youtube.com/@shakeshake-m7t",
-  youtubeShort: "youtube.com/@shakeshake-m7t",
-  instagram: "https://www.instagram.com/zorbarentals",
-  instagramShort: "instagram.com/zorbarentals",
-  email: "mailto:zorbagraphic@gmail.com",
-  emailShort: "zorbagraphic@gmail.com",
-  website: "https://zorbaco.com",
-  websiteShort: "zorbaco.com",
+  facebookProfile: "https://www.facebook.com/ZorbaRents",
+  youtube: "https://youtube.com/@shakeshake-m7t",
+  instagram: "https://instagram.com/zorbarentals",
+  email: "mailto:zorbagraphic@yahoo.com",
 };
 
 export const PROPERTY_MAP_LINKS: Record<string, { full: string; short: string }> = {
