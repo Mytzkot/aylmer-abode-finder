@@ -112,15 +112,6 @@ export function Header() {
             >
               <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
-            <button
-              onClick={() => setOpen(true)}
-              className="hidden lg:inline-flex shrink-0 p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
-              aria-label={openMenu}
-            >
-              <Menu className="w-6 h-6" strokeWidth={2.25} />
-            </button>
-
-
           </div>
         </div>
       </header>
