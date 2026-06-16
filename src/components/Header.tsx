@@ -40,13 +40,22 @@ export function Header() {
     <>
       <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur text-surface-dark border-b border-ink/10 w-full">
         <div className="mx-auto max-w-7xl px-3 sm:px-4 h-16 md:h-20 flex items-center justify-between gap-2">
-          <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0 min-w-0">
-            <img
-              src={logo}
-              alt="Zorba Guest Houses"
-              className="h-12 sm:h-14 md:h-16 w-auto"
-            />
-          </Link>
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <button
+              onClick={() => setOpen(true)}
+              className="shrink-0 p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              aria-label={openMenu}
+            >
+              <Menu className="w-6 h-6" strokeWidth={2.25} />
+            </button>
+            <Link to="/" aria-label="Zorba Guest Houses — Home" className="flex items-center shrink-0 min-w-0">
+              <img
+                src={logo}
+                alt="Zorba Guest Houses"
+                className="h-12 sm:h-14 md:h-16 w-auto"
+              />
+            </Link>
+          </div>
 
           <nav className="hidden lg:flex items-center gap-0.5 mr-1">
             {PRIMARY_NAV.map((l) =>
@@ -65,21 +74,6 @@ export function Header() {
                 </Link>
               )
             )}
-            <DropdownMenu>
-              <DropdownMenuTrigger className={`${linkClass} inline-flex items-center gap-1`}>
-                <T>More</T>
-                <ChevronDown className="w-4 h-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[12rem]">
-                {MORE_NAV.map((l) => (
-                  <DropdownMenuItem key={l.to} asChild>
-                    <Link to={l.to} className="cursor-pointer font-semibold">
-                      <T>{l.label}</T>
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
           </nav>
 
 
@@ -91,13 +85,6 @@ export function Header() {
             >
               <T>Book Now</T>
             </Link>
-            <button
-              onClick={() => setOpen(true)}
-              className="shrink-0 p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark lg:hidden"
-              aria-label={openMenu}
-            >
-              <Menu className="w-6 h-6" strokeWidth={2.25} />
-            </button>
           </div>
         </div>
       </header>
