@@ -64,10 +64,10 @@ function ContactItem({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center gap-1.5 text-white/90 hover:text-white transition group"
+      className="flex flex-row items-center gap-3 text-white/90 hover:text-white transition group"
     >
       <Icon
-        className={`w-6 h-6 ${iconColor} group-hover:scale-110 transition`}
+        className={`w-5 h-5 ${iconColor} group-hover:scale-110 transition shrink-0`}
       />
       <span className="text-[13px] font-semibold leading-tight">{label}</span>
     </a>
