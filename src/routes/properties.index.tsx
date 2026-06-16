@@ -19,7 +19,7 @@ export const Route = createFileRoute("/properties/")({
   }),
 });
 
-interface RoomRow { id: string; property_id?: string | null; address?: string | null; current_status?: string | null; base_rate?: number | null; }
+interface RoomRow { id: string; property_id?: string | null; current_status?: string | null; base_rate?: number | null; }
 
 function PropertiesPage() {
   const [roomsByProp, setRoomsByProp] = useState<Record<string, RoomRow[]>>({});
@@ -27,15 +27,18 @@ function PropertiesPage() {
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     (async () => {
-      const { data: rooms } = await supabase.from("rooms").select("*");
-      if (!rooms) return;
+      const [{ data: rooms }, { data: props }] = await Promise.all([
+        supabase.from("rooms").select("id, property_id, current_status, base_rate"),
+        supabase.from("properties").select("id, slug"),
+      ]);
+      if (!rooms || !props) return;
+      const slugById: Record<string, string> = {};
+      for (const p of props as Array<{ id: string; slug: string }>) slugById[p.id] = p.slug;
       const grouped: Record<string, RoomRow[]> = {};
       for (const p of PROPERTIES) grouped[p.id] = [];
       for (const r of rooms as RoomRow[]) {
-        const key = (r.address || "").toLowerCase();
-        let pid = PROPERTIES.find((p) => key.includes(p.address.toLowerCase().split(" ")[0]))?.id;
-        if (!pid && r.property_id) pid = r.property_id;
-        if (pid && grouped[pid]) grouped[pid].push(r);
+        const slug = r.property_id ? slugById[r.property_id] : undefined;
+        if (slug && grouped[slug]) grouped[slug].push(r);
       }
       setRoomsByProp(grouped);
     })();
