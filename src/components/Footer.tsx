@@ -7,8 +7,6 @@ import {
   Mail,
   MapPin,
   Send,
-  Globe,
-  
   CreditCard,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -19,15 +17,6 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
 import logo from "@/assets/zorba-logo-blue.png";
-
-const SOCIALS = [
-  { href: CONTACT.facebook, Icon: Facebook, label: "Facebook", color: "bg-[#1877F2] text-white" },
-  { href: CONTACT.messenger, Icon: Send, label: "Messenger", color: "bg-[#0084FF] text-white" },
-  { href: CONTACT.whatsapp, Icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] text-white" },
-  { href: CONTACT.youtube, Icon: Youtube, label: "YouTube", color: "bg-[#FF0000] text-white" },
-  { href: CONTACT.instagram, Icon: Instagram, label: "Instagram", color: "bg-gradient-to-tr from-[#FEDA75] via-[#FA7E1E] to-[#D62976] text-white" },
-  { href: CONTACT.email, Icon: Mail, label: "Email", color: "bg-white text-surface-dark" },
-];
 
 function ColTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -59,30 +48,32 @@ function FLink({ to, href, children }: { to?: string; href?: string; children: R
   );
 }
 
-function IconLink({
+function ContactItem({
   href,
   Icon,
+  label,
   iconColor,
-  children,
 }: {
   href: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  label: string;
   iconColor: string;
-  children: React.ReactNode;
 }) {
   return (
     <a
       href={href}
-      target={href.startsWith("http") ? "_blank" : undefined}
-      rel="noreferrer"
-      className="flex items-start gap-2.5 text-[14px] md:text-[16px] font-semibold text-white/90 hover:text-white hover:underline transition leading-tight"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex flex-col items-center gap-1.5 text-white/90 hover:text-white transition group"
     >
-      <Icon className={`w-[18px] h-[18px] shrink-0 mt-0.5 ${iconColor}`} />
-      <span className="min-w-0 break-all">{children}</span>
+      <Icon
+        className={`w-6 h-6 ${iconColor} group-hover:scale-110 transition`}
+        strokeWidth={1.8}
+      />
+      <span className="text-[13px] font-semibold leading-tight">{label}</span>
     </a>
   );
 }
-
 
 function NewsletterSignup() {
   const subscribe = useServerFn(subscribeNewsletter);
@@ -119,7 +110,7 @@ function NewsletterSignup() {
         <T>Want us to email you when a room opens up? Join our mailing list.</T>
       </p>
       {status === "ok" ? (
-        <p className="text-[14px] font-semibold text-coral"><T>You're on the list — thanks!</T></p>
+        <p className="text-[14px] font-semibold text-coral"><T>You&apos;re on the list — thanks!</T></p>
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
@@ -175,7 +166,7 @@ export function Footer() {
               rel="noreferrer"
               className="mt-3 inline-flex items-center gap-2 text-[14px] font-semibold text-coral hover:underline"
             >
-              <Youtube className="w-4 h-4 text-[#FF0000]" /> <T>View room tours on YouTube</T>
+              <Youtube className="w-4 h-4" /> <T>View room tours on YouTube</T>
             </a>
             <NewsletterSignup />
           </div>
@@ -228,48 +219,76 @@ export function Footer() {
             </div>
 
             <div>
-              <ColTitle><T>Connect</T></ColTitle>
-              <ul className="space-y-1">
-                <li><IconLink href={CONTACT.tel} Icon={Phone} iconColor="text-emerald-400">1-343-202-5460</IconLink></li>
-                <li><IconLink href={CONTACT.whatsapp} Icon={MessageCircle} iconColor="text-[#25D366]">{CONTACT.whatsappShort}</IconLink></li>
-                <li><IconLink href={CONTACT.messenger} Icon={Send} iconColor="text-[#0084FF]">{CONTACT.messengerShort}</IconLink></li>
-                <li><IconLink href={CONTACT.facebook} Icon={Facebook} iconColor="text-[#1877F2]">{CONTACT.facebookShort}</IconLink></li>
-                <li><IconLink href={CONTACT.youtube} Icon={Youtube} iconColor="text-[#FF0000]">{CONTACT.youtubeShort}</IconLink></li>
-                <li><IconLink href={CONTACT.instagram} Icon={Instagram} iconColor="text-[#D62976]">{CONTACT.instagramShort}</IconLink></li>
-                <li><IconLink href={CONTACT.email} Icon={Mail} iconColor="text-coral">{CONTACT.emailShort}</IconLink></li>
-                <li><IconLink href={CONTACT.website} Icon={Globe} iconColor="text-sky-400">{CONTACT.websiteShort}</IconLink></li>
-              </ul>
-              <p className="text-[13px] italic text-white/70 pt-3 font-medium">
+              {/* Contact Us */}
+              <ColTitle><T>Contact Us</T></ColTitle>
+              <div className="flex flex-wrap gap-4 mb-6">
+                <ContactItem
+                  href={CONTACT.tel}
+                  Icon={Phone}
+                  label="Call"
+                  iconColor="text-emerald-400"
+                />
+                <ContactItem
+                  href={CONTACT.whatsapp}
+                  Icon={MessageCircle}
+                  label="WhatsApp"
+                  iconColor="text-[#25D366]"
+                />
+                <ContactItem
+                  href={CONTACT.email}
+                  Icon={Mail}
+                  label="Email"
+                  iconColor="text-coral"
+                />
+                <ContactItem
+                  href={CONTACT.messenger}
+                  Icon={Send}
+                  label="Messenger"
+                  iconColor="text-[#0084FF]"
+                />
+              </div>
+
+              {/* Follow Us */}
+              <ColTitle><T>Follow Us</T></ColTitle>
+              <div className="flex flex-wrap gap-4 mb-4">
+                <ContactItem
+                  href={CONTACT.facebook}
+                  Icon={Facebook}
+                  label="Facebook"
+                  iconColor="text-[#1877F2]"
+                />
+                <ContactItem
+                  href={CONTACT.facebookProfile}
+                  Icon={Facebook}
+                  label="Facebook (profile)"
+                  iconColor="text-[#1877F2]"
+                />
+                <ContactItem
+                  href={CONTACT.instagram}
+                  Icon={Instagram}
+                  label="Instagram"
+                  iconColor="text-[#D62976]"
+                />
+                <ContactItem
+                  href={CONTACT.youtube}
+                  Icon={Youtube}
+                  label="YouTube"
+                  iconColor="text-[#FF0000]"
+                />
+              </div>
+
+              <p className="text-[13px] italic text-white/70 pt-2 font-medium">
                 Je parle arabe et anglais — Texte en français
               </p>
             </div>
           </div>
         </div>
 
-        {/* Social icons row */}
-        <div className="mt-12 pt-8 border-t border-white/15">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {SOCIALS.map(({ href, Icon, label, color }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                aria-label={label}
-                title={label}
-                className={`w-11 h-11 rounded-full ${color} shadow hover:scale-110 transition flex items-center justify-center`}
-              >
-                <Icon className="w-4 h-4" strokeWidth={2.25} />
-              </a>
-            ))}
-          </div>
-        </div>
-
         {/* Bottom bar */}
-        <div className="mt-8 py-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[12px] md:text-[13px] text-white/80">
+        <div className="mt-12 py-6 border-t border-white/15 flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[12px] md:text-[13px] text-white/80">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-semibold text-white">
-              © 2026 Zorba Rentals. All rights reserved.
+              &copy; 2026 Zorba Rentals. All rights reserved.
             </p>
             <p className="text-white/75">
               Ottawa/Hull NCR — National Capital Region
@@ -310,4 +329,3 @@ export function Footer() {
     </footer>
   );
 }
-
