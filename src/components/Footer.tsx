@@ -55,7 +55,7 @@ function ContactItem({
   iconColor,
 }: {
   href: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
   label: string;
   iconColor: string;
 }) {
