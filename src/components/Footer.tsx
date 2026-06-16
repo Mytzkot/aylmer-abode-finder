@@ -55,7 +55,7 @@ function ContactItem({
   iconColor,
 }: {
   href: string;
-  Icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  Icon: React.ComponentType<{ className?: string }>;
   label: string;
   iconColor: string;
 }) {
@@ -68,7 +68,6 @@ function ContactItem({
     >
       <Icon
         className={`w-6 h-6 ${iconColor} group-hover:scale-110 transition`}
-        strokeWidth={1.8}
       />
       <span className="text-[13px] font-semibold leading-tight">{label}</span>
     </a>
@@ -224,25 +223,25 @@ export function Footer() {
               <div className="flex flex-wrap gap-4 mb-6">
                 <ContactItem
                   href={CONTACT.tel}
-                  Icon={Phone}
+                  Icon={FaPhone}
                   label="Call"
                   iconColor="text-emerald-400"
                 />
                 <ContactItem
                   href={CONTACT.whatsapp}
-                  Icon={MessageCircle}
+                  Icon={FaWhatsapp}
                   label="WhatsApp"
                   iconColor="text-[#25D366]"
                 />
                 <ContactItem
                   href={CONTACT.email}
-                  Icon={Mail}
+                  Icon={FaEnvelope}
                   label="Email"
                   iconColor="text-coral"
                 />
                 <ContactItem
                   href={CONTACT.messenger}
-                  Icon={Send}
+                  Icon={FaFacebookMessenger}
                   label="Messenger"
                   iconColor="text-[#0084FF]"
                 />
@@ -253,25 +252,25 @@ export function Footer() {
               <div className="flex flex-wrap gap-4 mb-4">
                 <ContactItem
                   href={CONTACT.facebook}
-                  Icon={Facebook}
+                  Icon={FaFacebook}
                   label="Facebook"
                   iconColor="text-[#1877F2]"
                 />
                 <ContactItem
                   href={CONTACT.facebookProfile}
-                  Icon={Facebook}
+                  Icon={FaFacebookF}
                   label="Facebook (profile)"
                   iconColor="text-[#1877F2]"
                 />
                 <ContactItem
                   href={CONTACT.instagram}
-                  Icon={Instagram}
+                  Icon={FaInstagram}
                   label="Instagram"
                   iconColor="text-[#D62976]"
                 />
                 <ContactItem
                   href={CONTACT.youtube}
-                  Icon={Youtube}
+                  Icon={FaYoutube}
                   label="YouTube"
                   iconColor="text-[#FF0000]"
                 />
