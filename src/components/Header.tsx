@@ -26,20 +26,10 @@ const MORE_NAV = [
   { to: "/extras", label: "Extras" },
 ];
 
-const FULL_NAV = [
-  { to: "/", label: "Home" },
-  { to: "/rooms", label: "All Rooms" },
-  { to: "/properties", label: "Locations" },
-  { to: "/extras", label: "Extras" },
-  { to: "/book", label: "Booking Page" },
-  { to: "/pay", label: "Pay Online" },
-  { to: "/portal", label: "Tenant Portal" },
-  { to: "/apply", label: "Apply Now" },
-  { to: "/about", label: "About Us" },
-  { to: "/faq", label: "FAQ" },
-  { to: "/newcomer", label: "Newcomer Guide" },
-  { to: "/transit", label: "Transit" },
-  { to: "/#contact", label: "Contact Us" },
+const DRAWER_NAV = [
+  ...PRIMARY_NAV,
+  ...MORE_NAV,
+  { to: "/book", label: "Book Now" },
 ];
 
 export function Header() {
