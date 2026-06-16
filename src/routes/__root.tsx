@@ -12,6 +12,7 @@ import { Toaster } from "sonner";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FaqChatbot } from "@/components/FaqChatbot";
+import { WhatsAppFloat } from "@/components/WhatsAppFloat";
 
 import appCss from "../styles.css?url";
 
@@ -117,6 +118,7 @@ function RootComponent() {
           <div className="flex-1 flex flex-col"><Outlet /></div>
           <Footer />
           <FaqChatbot />
+          <WhatsAppFloat />
         </div>
         <Toaster position="top-center" richColors />
       </LanguageProvider>
