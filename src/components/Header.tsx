@@ -26,20 +26,10 @@ const MORE_NAV = [
   { to: "/extras", label: "Extras" },
 ];
 
-const FULL_NAV = [
-  { to: "/", label: "Home" },
-  { to: "/rooms", label: "All Rooms" },
-  { to: "/properties", label: "Locations" },
-  { to: "/extras", label: "Extras" },
-  { to: "/book", label: "Booking Page" },
-  { to: "/pay", label: "Pay Online" },
-  { to: "/portal", label: "Tenant Portal" },
-  { to: "/apply", label: "Apply Now" },
-  { to: "/about", label: "About Us" },
-  { to: "/faq", label: "FAQ" },
-  { to: "/newcomer", label: "Newcomer Guide" },
-  { to: "/transit", label: "Transit" },
-  { to: "/#contact", label: "Contact Us" },
+const DRAWER_NAV = [
+  ...PRIMARY_NAV,
+  ...MORE_NAV,
+  { to: "/book", label: "Book Now" },
 ];
 
 export function Header() {
@@ -112,15 +102,6 @@ export function Header() {
             >
               <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
-            <button
-              onClick={() => setOpen(true)}
-              className="hidden lg:inline-flex shrink-0 p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
-              aria-label={openMenu}
-            >
-              <Menu className="w-6 h-6" strokeWidth={2.25} />
-            </button>
-
-
           </div>
         </div>
       </header>
@@ -151,7 +132,7 @@ export function Header() {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-1">
-            {FULL_NAV.map((l) =>
+            {DRAWER_NAV.map((l) =>
               l.to.startsWith("/#") ? (
                 <a
                   key={l.to}
