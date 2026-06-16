@@ -10,7 +10,6 @@ export const Route = createFileRoute("/admin/rooms")({ component: RoomsPage });
 
 interface Room {
   id: string;
-  address?: string;
   name?: string;
   current_status?: string;
   base_rate?: number;
@@ -30,7 +29,7 @@ function RoomsPage() {
   const load = async () => {
     const { data, error } = await supabase
       .from("rooms")
-      .select("id, name, address, current_status, base_rate, image_urls")
+      .select("id, name, current_status, base_rate, image_urls")
       .order("name");
     if (error) {
       console.error(error);
