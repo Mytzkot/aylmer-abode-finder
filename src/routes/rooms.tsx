@@ -39,8 +39,8 @@ interface PropertyRow { id: string; slug: string; address: string; short_name: s
 type Sort = "available" | "price_asc" | "price_desc";
 
 const HIDDEN_PROPERTY_SLUGS = new Set(["162-eddy"]);
-const PRICE_MIN = 50;
-const PRICE_MAX = 1500;
+const PRICE_MIN = 750;
+const PRICE_MAX = 1200;
 
 function RoomsShop() {
   const [rooms, setRooms] = useState<RoomRow[]>([]);
