@@ -1,21 +1,29 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/zorba-logo-transparent.png";
 
-const DESKTOP_NAV = [
-  { to: "/", label: "Home", exact: true },
-  { to: "/properties", label: "Locations" },
+const PRIMARY_NAV = [
   { to: "/rooms", label: "All Rooms" },
-  { to: "/extras", label: "Extras" },
+  { to: "/properties", label: "Locations" },
   { to: "/apply", label: "Apply Now" },
+  { to: "/#contact", label: "Contact Us" },
+];
+
+const MORE_NAV = [
   { to: "/about", label: "About Us" },
   { to: "/faq", label: "FAQ" },
   { to: "/newcomer", label: "Newcomer Guide" },
-  { to: "/#contact", label: "Contact Us" },
+  { to: "/extras", label: "Extras" },
 ];
 
 const FULL_NAV = [
@@ -39,6 +47,9 @@ export function Header() {
   const openMenu = useTranslated("Open menu");
   const closeMenu = useTranslated("Close menu");
 
+  const linkClass =
+    "px-2.5 py-2 rounded-lg text-[17px] font-bold text-surface-dark hover:bg-surface-dark/10 whitespace-nowrap";
+
   return (
     <>
       <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur text-surface-dark border-b border-ink/10 w-full">
@@ -51,29 +62,40 @@ export function Header() {
             />
           </Link>
 
-          <nav className="hidden xl:flex items-center gap-0.5 mr-1">
-            {DESKTOP_NAV.map((l) =>
+          <nav className="hidden lg:flex items-center gap-0.5 mr-1">
+            {PRIMARY_NAV.map((l) =>
               l.to.startsWith("/#") ? (
-                <a
-                  key={l.to}
-                  href={l.to}
-                  className="px-2.5 py-2 rounded-lg text-[17px] font-bold text-surface-dark hover:bg-surface-dark/10 whitespace-nowrap"
-                >
+                <a key={l.to} href={l.to} className={linkClass}>
                   <T>{l.label}</T>
                 </a>
               ) : (
                 <Link
                   key={l.to}
                   to={l.to}
-                  className="px-2.5 py-2 rounded-lg text-[17px] font-bold text-surface-dark hover:bg-surface-dark/10 whitespace-nowrap"
+                  className={linkClass}
                   activeProps={{ className: "bg-surface-dark/10" }}
-                  activeOptions={l.exact ? { exact: true } : undefined}
                 >
                   <T>{l.label}</T>
                 </Link>
               )
             )}
+            <DropdownMenu>
+              <DropdownMenuTrigger className={`${linkClass} inline-flex items-center gap-1`}>
+                <T>More</T>
+                <ChevronDown className="w-4 h-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[12rem]">
+                {MORE_NAV.map((l) => (
+                  <DropdownMenuItem key={l.to} asChild>
+                    <Link to={l.to} className="cursor-pointer font-semibold">
+                      <T>{l.label}</T>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
+
 
           <div className="flex items-center gap-1 sm:gap-2">
             <LanguageToggle />
