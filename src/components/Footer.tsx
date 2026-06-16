@@ -1,14 +1,14 @@
+import { MapPin, CreditCard, Youtube } from "lucide-react";
 import {
-  MessageCircle,
-  Phone,
-  Facebook,
-  Youtube,
-  Instagram,
-  Mail,
-  MapPin,
-  Send,
-  CreditCard,
-} from "lucide-react";
+  FaPhone,
+  FaWhatsapp,
+  FaEnvelope,
+  FaFacebookMessenger,
+  FaFacebook,
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+} from "react-icons/fa";
 import { Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
