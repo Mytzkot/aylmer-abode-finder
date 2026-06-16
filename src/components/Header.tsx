@@ -132,7 +132,7 @@ export function Header() {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-1">
-            {FULL_NAV.map((l) =>
+            {DRAWER_NAV.map((l) =>
               l.to.startsWith("/#") ? (
                 <a
                   key={l.to}
