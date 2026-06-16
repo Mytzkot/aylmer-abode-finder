@@ -1,15 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { LanguageToggle } from "./LanguageToggle";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
 import { PROPERTIES } from "@/data/properties";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import logo from "@/assets/zorba-logo-transparent.png";
 
 const PRIMARY_NAV = [
@@ -19,16 +13,18 @@ const PRIMARY_NAV = [
   { to: "/#contact", label: "Contact Us" },
 ];
 
-const MORE_NAV = [
+const DRAWER_NAV = [
+  { to: "/properties", label: "Locations" },
+  { to: "/rooms", label: "All Rooms" },
+  { to: "/extras", label: "Extras" },
+  { to: "/apply", label: "Apply Now" },
   { to: "/about", label: "About Us" },
   { to: "/faq", label: "FAQ" },
   { to: "/newcomer", label: "Newcomer Guide" },
-  { to: "/extras", label: "Extras" },
-];
-
-const DRAWER_NAV = [
-  ...PRIMARY_NAV,
-  ...MORE_NAV,
+  { to: "/transit", label: "Transit & Map" },
+  { to: "/pay", label: "Pay Online" },
+  { to: "/portal", label: "Tenant Portal" },
+  { to: "/#contact", label: "Contact Us" },
   { to: "/book", label: "Book Now" },
 ];
 
