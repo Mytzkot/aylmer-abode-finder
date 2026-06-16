@@ -107,15 +107,19 @@ export function Header() {
             </Link>
             <button
               onClick={() => setOpen(true)}
-              className="shrink-0 p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark xl:hidden"
+              className="shrink-0 p-2 sm:p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark lg:hidden"
               aria-label={openMenu}
             >
               <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
             <button
               onClick={() => setOpen(true)}
-              className="hidden xl:inline-flex shrink-0 p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
+              className="hidden lg:inline-flex shrink-0 p-2.5 rounded-xl hover:bg-surface-dark/10 border border-surface-dark/20 text-surface-dark"
               aria-label={openMenu}
+            >
+              <Menu className="w-6 h-6" strokeWidth={2.25} />
+            </button>
+
             >
               <Menu className="w-6 h-6" strokeWidth={2.25} />
             </button>
