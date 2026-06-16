@@ -43,7 +43,8 @@ export function TenantMessageForm() {
       .insert({ full_name, phone, email, location, room_number, message });
 
     if (insErr) {
-      setError(insErr.message);
+      console.error("Tenant message submit error:", insErr);
+      setError("We couldn't send your message. Please try again.");
       setSubmitting(false);
       return;
     }

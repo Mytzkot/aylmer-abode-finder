@@ -159,7 +159,7 @@ function ApplyPage() {
     }
     const { error } = await supabase.from("applications").insert(payload as never);
     setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) { console.error("Application submit error:", error); toast.error("We couldn't submit your application. Please try again."); return; }
     setDone(true);
   };
 
