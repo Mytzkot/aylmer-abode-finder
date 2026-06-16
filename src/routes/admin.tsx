@@ -94,6 +94,11 @@ function AdminLayout() {
     );
   }
 
+  // Block UI until admin role is verified; non-admins are signed out + redirected above.
+  if (isAdmin !== true) {
+    return <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Verifying access…</div>;
+  }
+
   const navItems = [
     { to: "/admin/applications", label: "Applications", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
