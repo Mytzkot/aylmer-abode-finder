@@ -151,8 +151,10 @@ function ApplyPage() {
     }
     setStudentDocUploading(true);
     try {
-      const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
-      const path = `${crypto.randomUUID()}.${ext}`;
+      const ext = (file.name.split(".").pop() || "").toLowerCase();
+      const allowedExt = ["pdf", "jpg", "jpeg", "png", "webp", "heic"];
+      const safeExt = allowedExt.includes(ext) ? ext : "pdf";
+      const path = `applications/${crypto.randomUUID()}.${safeExt}`;
       const { error } = await supabase.storage
         .from("application-docs")
         .upload(path, file, { contentType: file.type, upsert: false });
