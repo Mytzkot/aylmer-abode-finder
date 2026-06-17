@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { getVisitorCount } from "@/lib/visitor-counter.functions";
@@ -100,12 +100,14 @@ function AdminLayout() {
   }
 
   const navItems = [
-    { to: "/admin/applications", label: "Applications", icon: ClipboardList },
+    { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
+    { to: "/admin/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
   ];
+
 
 
   return (
@@ -146,7 +148,7 @@ function AdminLayout() {
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-5">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-6">
         {navItems.map(n => (
           <Link key={n.to} to={n.to} className={`touch-min flex flex-col items-center justify-center py-2 text-xs font-medium ${path.startsWith(n.to) ? "text-primary" : "text-muted-foreground"}`}>
             <n.icon className="w-5 h-5 mb-0.5" /> {n.label}

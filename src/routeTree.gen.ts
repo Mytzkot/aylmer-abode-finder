@@ -32,6 +32,7 @@ import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminLedgerRouteImport } from './routes/admin.ledger'
+import { Route as AdminCalendarRouteImport } from './routes/admin.calendar'
 import { Route as AdminBoardRouteImport } from './routes/admin.board'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$id.$roomSlug'
@@ -152,6 +153,11 @@ const AdminLedgerRoute = AdminLedgerRouteImport.update({
   path: '/ledger',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCalendarRoute = AdminCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBoardRoute = AdminBoardRouteImport.update({
   id: '/board',
   path: '/board',
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -246,6 +254,7 @@ export interface FileRoutesById {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/calendar'
     | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/calendar'
     | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/calendar'
     | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
@@ -525,6 +537,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLedgerRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/calendar': {
+      id: '/admin/calendar'
+      path: '/calendar'
+      fullPath: '/admin/calendar'
+      preLoaderRoute: typeof AdminCalendarRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/board': {
       id: '/admin/board'
       path: '/board'
@@ -571,6 +590,7 @@ const AdminTenantsRouteWithChildren = AdminTenantsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminBoardRoute: typeof AdminBoardRoute
+  AdminCalendarRoute: typeof AdminCalendarRoute
   AdminLedgerRoute: typeof AdminLedgerRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
@@ -579,6 +599,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminBoardRoute: AdminBoardRoute,
+  AdminCalendarRoute: AdminCalendarRoute,
   AdminLedgerRoute: AdminLedgerRoute,
   AdminRoomsRoute: AdminRoomsRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
