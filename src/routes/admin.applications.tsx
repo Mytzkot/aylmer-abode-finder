@@ -43,11 +43,12 @@ function AppsPage() {
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Applications</h1>
 
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase mb-2">Pending ({pending.length})</h2>
+      <h2 className="text-sm font-semibold text-muted-foreground uppercase mb-2">New ({pending.length})</h2>
       <div className="space-y-2 mb-6">
-        {pending.length === 0 && <p className="text-sm text-muted-foreground">No pending applications.</p>}
+        {pending.length === 0 && <p className="text-sm text-muted-foreground">No new applications.</p>}
         {pending.map(a => <AppRow key={a.id} a={a} onClick={() => setSelected(a)} />)}
       </div>
+
 
       {others.length > 0 && (
         <>
@@ -104,16 +105,18 @@ function AppsPage() {
 }
 
 function AppRow({ a, onClick }: { a: App; onClick: () => void }) {
+  const status = (a.status || "pending").toLowerCase() === "pending" ? "new" : (a.status || "");
   return (
     <button onClick={onClick} className="w-full text-start bg-card rounded-xl border border-border p-3 flex items-center justify-between hover:border-primary transition">
       <div>
         <div className="font-semibold">{a.first_name} {a.surname}</div>
-        <div className="text-xs text-muted-foreground">{a.email} · {a.stay_type || "—"} · {a.status || "pending"}</div>
+        <div className="text-xs text-muted-foreground">{a.email} · {a.stay_type || "—"} · {status}</div>
       </div>
       <ChevronRight className="w-5 h-5 text-muted-foreground" />
     </button>
   );
 }
+
 
 function Detail({ label, value }: { label: string; value: any }) {
   return (
