@@ -352,6 +352,87 @@ function ApplyPage() {
             <p className="text-xs text-ink/60">{l.helper}</p>
           </fieldset>
 
+          {/* Student section (near the top — relevant to most international applicants) */}
+          <Section title={t.apply.student}>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isStudent}
+                onChange={(e) => toggleStudent(e.target.checked)}
+                className="w-5 h-5 accent-primary"
+              />
+              <span className="font-medium">{t.apply.isStudent}</span>
+            </label>
+
+            {isStudent && (
+              <div className="space-y-3 pt-2">
+                <p className="text-xs text-ink/60 bg-accent/40 rounded-lg px-3 py-2">{af.studentNote}</p>
+                <Two>
+                  <Field
+                    label={af.studentSchool}
+                    name="name_of_school"
+                    required
+                    value={form.name_of_school || ""}
+                    onChange={onText("name_of_school")}
+                    error={errors.name_of_school}
+                    placeholder={af.studentSchoolHint}
+                  />
+                  <Field
+                    label={af.studentProgram}
+                    name="program_of_study"
+                    required
+                    value={form.program_of_study || ""}
+                    onChange={onText("program_of_study")}
+                    error={errors.program_of_study}
+                  />
+                </Two>
+                <Two>
+                  <Field
+                    label={af.studyStartDate}
+                    name="study_start_date"
+                    type="date"
+                    required
+                    value={form.study_start_date || ""}
+                    onChange={onText("study_start_date")}
+                    error={errors.study_start_date}
+                  />
+                  <Field
+                    label={af.countryOfOrigin}
+                    name="country_of_origin"
+                    required
+                    value={form.country_of_origin || ""}
+                    onChange={onText("country_of_origin")}
+                    error={errors.country_of_origin}
+                    autoComplete="country-name"
+                  />
+                </Two>
+
+                <div data-field="student_document">
+                  <span className="text-sm font-medium mb-1 block">{af.studentDoc}</span>
+                  <input
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadStudentDoc(file);
+                      e.target.value = "";
+                    }}
+                    disabled={studentDocUploading}
+                    className="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-secondary file:px-3 file:py-2 file:font-medium hover:file:bg-accent disabled:opacity-50"
+                  />
+                  <p className="text-xs text-ink/50 mt-1">
+                    {studentDocUploading
+                      ? af.studentDocUploading
+                      : studentDocName
+                        ? `✓ ${af.studentDocUploaded} — ${studentDocName}`
+                        : af.studentDocHint}
+                  </p>
+                </div>
+              </div>
+            )}
+          </Section>
+
+
           {/* Desired move-in date */}
           <Section title={af.desiredMoveIn}>
             <Field
