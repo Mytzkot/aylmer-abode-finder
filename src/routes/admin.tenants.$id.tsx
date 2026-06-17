@@ -322,7 +322,10 @@ function PaymentsSection({ tenantId, rent, payments, tenant, roomLabel, onChange
                     {new Date(p.paid_on).toLocaleDateString()}{p.notes ? ` · ${p.notes}` : ""}
                   </div>
                 </div>
-                <button onClick={() => removePayment(p.id)} className="text-xs text-destructive hover:underline shrink-0">Delete</button>
+                <div className="flex items-center gap-3 shrink-0">
+                  <button onClick={() => downloadReceipt(p)} className="text-xs font-semibold text-brand hover:underline">Receipt</button>
+                  <button onClick={() => removePayment(p.id)} className="text-xs text-destructive hover:underline">Delete</button>
+                </div>
               </li>
             ))}
           </ul>
