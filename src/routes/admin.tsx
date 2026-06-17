@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays, Home } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { getVisitorCount } from "@/lib/visitor-counter.functions";
@@ -55,9 +55,6 @@ function AdminLayout() {
     if (user && isAdmin) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
   }, [user, isAdmin, fetchVisitors]);
 
-  useEffect(() => {
-    if (user && isAdmin && path === "/admin") navigate({ to: "/admin/applications" });
-  }, [user, isAdmin, path, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,6 +97,7 @@ function AdminLayout() {
   }
 
   const navItems = [
+    { to: "/admin", label: "Dash", icon: Home },
     { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
@@ -118,12 +116,15 @@ function AdminLayout() {
           <span className="text-xs font-bold tracking-wider text-ink/60 uppercase">Admin</span>
         </Link>
         <nav className="flex-1 space-y-1">
-          {navItems.map(n => (
-            <Link key={n.to} to={n.to}
-              className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium ${path.startsWith(n.to) ? "bg-brand text-white" : "hover:bg-cream"}`}>
-              <n.icon className="w-4 h-4" /> {n.label}
-            </Link>
-          ))}
+          {navItems.map(n => {
+            const active = n.to === "/admin" ? path === "/admin" || path === "/admin/" : path.startsWith(n.to);
+            return (
+              <Link key={n.to} to={n.to}
+                className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium ${active ? "bg-brand text-white" : "hover:bg-cream"}`}>
+                <n.icon className="w-4 h-4" /> {n.label}
+              </Link>
+            );
+          })}
         </nav>
         <div className="mt-4 mb-2 px-3 py-2 rounded-xl bg-cream/60 border border-border text-xs">
           <div className="flex items-center gap-1.5 text-ink/60 font-semibold uppercase tracking-wider mb-0.5">
@@ -148,12 +149,15 @@ function AdminLayout() {
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-6">
-        {navItems.map(n => (
-          <Link key={n.to} to={n.to} className={`touch-min flex flex-col items-center justify-center py-2 text-xs font-medium ${path.startsWith(n.to) ? "text-primary" : "text-muted-foreground"}`}>
-            <n.icon className="w-5 h-5 mb-0.5" /> {n.label}
-          </Link>
-        ))}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-7">
+        {navItems.map(n => {
+          const active = n.to === "/admin" ? path === "/admin" || path === "/admin/" : path.startsWith(n.to);
+          return (
+            <Link key={n.to} to={n.to} className={`touch-min flex flex-col items-center justify-center py-2 text-xs font-medium ${active ? "text-primary" : "text-muted-foreground"}`}>
+              <n.icon className="w-5 h-5 mb-0.5" /> {n.label}
+            </Link>
+          );
+        })}
       </nav>
     </div>
   );
