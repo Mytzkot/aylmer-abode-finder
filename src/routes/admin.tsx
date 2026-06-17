@@ -104,7 +104,9 @@ function AdminLayout() {
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
+    { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
   ];
+
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
