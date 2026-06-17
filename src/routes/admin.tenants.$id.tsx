@@ -147,6 +147,8 @@ function TenantFilePage() {
         tenantId={t.id}
         rent={rent}
         payments={payments}
+        tenant={t}
+        roomLabel={t.room_id ? rooms.find(r => r.id === t.room_id)?.room_number ? `Room ${rooms.find(r => r.id === t.room_id)?.room_number}` : null : null}
         onChanged={load}
       />
       <BalanceBlock rent={rent} paid={paid} outstanding={outstanding} payments={payments} />
