@@ -34,6 +34,7 @@ import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
+import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLedgerRouteImport } from './routes/admin.ledger'
 import { Route as AdminCalendarRouteImport } from './routes/admin.calendar'
 import { Route as AdminBoardRouteImport } from './routes/admin.board'
@@ -166,6 +167,11 @@ const AdminRoomsRoute = AdminRoomsRouteImport.update({
   path: '/rooms',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLedgerRoute = AdminLedgerRouteImport.update({
   id: '/ledger',
   path: '/ledger',
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -280,6 +288,7 @@ export interface FileRoutesById {
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
@@ -315,6 +324,7 @@ export interface FileRouteTypes {
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
     | '/admin/subscribers'
     | '/admin/tenants'
@@ -344,6 +354,7 @@ export interface FileRouteTypes {
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
     | '/admin/subscribers'
     | '/admin/tenants'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
     | '/admin/subscribers'
     | '/admin/tenants'
@@ -586,6 +598,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRoomsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/ledger': {
       id: '/admin/ledger'
       path: '/ledger'
@@ -648,6 +667,7 @@ interface AdminRouteChildren {
   AdminBoardRoute: typeof AdminBoardRoute
   AdminCalendarRoute: typeof AdminCalendarRoute
   AdminLedgerRoute: typeof AdminLedgerRoute
+  AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
   AdminSubscribersRoute: typeof AdminSubscribersRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
@@ -659,6 +679,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBoardRoute: AdminBoardRoute,
   AdminCalendarRoute: AdminCalendarRoute,
   AdminLedgerRoute: AdminLedgerRoute,
+  AdminNewsletterRoute: AdminNewsletterRoute,
   AdminRoomsRoute: AdminRoomsRoute,
   AdminSubscribersRoute: AdminSubscribersRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
