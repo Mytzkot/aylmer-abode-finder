@@ -64,6 +64,10 @@ function ApplyPage() {
   const [occupants, setOccupants] = useState<Occupant[]>([]);
   const [form, setForm] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [studentDocPath, setStudentDocPath] = useState<string | null>(null);
+  const [studentDocName, setStudentDocName] = useState<string | null>(null);
+  const [studentDocUploading, setStudentDocUploading] = useState(false);
+
   const [locationSel, setLocationSel] = useState<string>(prefilledProperty || "any");
   const [budgetSel, setBudgetSel] = useState<string>("any");
   const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
@@ -122,6 +126,48 @@ function ApplyPage() {
   const af = t.applyForm;
   const f = t.fields;
 
+  const toggleStudent = (checked: boolean) => {
+    setIsStudent(checked);
+    if (checked) {
+      // International students typically have no Canadian landlord — auto-relax those.
+      setFirstTimeRenter(true);
+      setErrors((er) => {
+        const c = { ...er };
+        delete c.current_landlord_name;
+        delete c.current_landlord_phone;
+        return c;
+      });
+    }
+  };
+
+  const uploadStudentDoc = async (file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(af.studentDocTooLarge);
+      return;
+    }
+    if (!isSupabaseConfigured) {
+      toast.warning("Backend not connected — file cannot be uploaded.");
+      return;
+    }
+    setStudentDocUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("application-docs")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (error) throw error;
+      setStudentDocPath(path);
+      setStudentDocName(file.name);
+      toast.success(af.studentDocUploaded);
+    } catch (err) {
+      console.error("Student doc upload failed:", err);
+      toast.error(af.studentDocFailed);
+    } finally {
+      setStudentDocUploading(false);
+    }
+  };
+
   const validate = (): Record<string, string> => {
     const req = (k: string) => !((form[k] ?? "").toString().trim());
     const e: Record<string, string> = {};
@@ -136,6 +182,11 @@ function ApplyPage() {
       if (req("current_landlord_name")) e.current_landlord_name = af.required;
       if (req("current_landlord_phone")) e.current_landlord_phone = af.required;
     }
+    if (isStudent) {
+      for (const k of ["name_of_school", "program_of_study", "study_start_date", "country_of_origin"]) {
+        if (req(k)) e[k] = af.required;
+      }
+    }
     if (form.email && !EMAIL_VALID.test(form.email.trim())) e.email = af.invalidEmail;
     for (const k of ["telephone", "current_landlord_phone", "emergency_phone", "reference_1_phone", "reference_2_phone"]) {
       const v = (form[k] ?? "").trim();
@@ -149,6 +200,7 @@ function ApplyPage() {
     }
     return e;
   };
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
