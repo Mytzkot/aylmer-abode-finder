@@ -336,6 +336,7 @@ export type Database = {
         Row: {
           airbnb_listing_url: string | null
           base_rate: number | null
+          bed_type: string | null
           booked_until: string | null
           created_at: string
           current_status: string
@@ -359,6 +360,7 @@ export type Database = {
         Insert: {
           airbnb_listing_url?: string | null
           base_rate?: number | null
+          bed_type?: string | null
           booked_until?: string | null
           created_at?: string
           current_status?: string
@@ -382,6 +384,7 @@ export type Database = {
         Update: {
           airbnb_listing_url?: string | null
           base_rate?: number | null
+          bed_type?: string | null
           booked_until?: string | null
           created_at?: string
           current_status?: string
