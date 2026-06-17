@@ -165,7 +165,28 @@ function RoomsShop() {
 
   const headingEN = "Available Rooms";
   const headingFR = "Chambres Disponibles";
-  const resultsLabel = useTranslated(`${filtered.length} ${filtered.length === 1 ? "room" : "rooms"}`);
+  const totalVisible = useMemo(
+    () => rooms.filter(r =>
+      r.property_id &&
+      !HIDDEN_PROPERTY_SLUGS.has(propById[r.property_id]?.slug || "") &&
+      !/storage|5x5/i.test(r.name || "")
+    ),
+    [rooms, propById],
+  );
+  const availableNowCount = useMemo(
+    () => totalVisible.filter(r => {
+      const status = (r.current_status || "").toLowerCase();
+      if (status !== "available") return false;
+      if (r.booked_until && Date.parse(r.booked_until) > now) return false;
+      const le = leaseEndByRoom[r.id];
+      if (le && Date.parse(le) > now) return false;
+      return true;
+    }).length,
+    [totalVisible, leaseEndByRoom, now],
+  );
+  const resultsLabel = useTranslated(
+    `${availableNowCount} of ${totalVisible.length} rooms available · showing ${filtered.length}`,
+  );
 
   const resetFilters = () => {
     setLocationId("all");
@@ -336,18 +357,36 @@ function RoomsShop() {
               const img = (r.image_urls && r.image_urls[0]) || (isHousekeeping ? housekeepingIcon : fallback);
               const price = r.rate_monthly ?? r.base_rate;
               const to = p ? "/properties/$id/$roomSlug" : "/rooms";
+              const status = (r.current_status || "").toLowerCase();
+              const bookedUntilT = r.booked_until ? Date.parse(r.booked_until) : 0;
+              const leaseEndT = leaseEndByRoom[r.id] ? Date.parse(leaseEndByRoom[r.id]) : 0;
+              const futureBookT = Math.max(bookedUntilT, leaseEndT);
+              const isRented = status !== "available" || futureBookT > now;
+              const freeOnLabel = futureBookT > now
+                ? new Date(futureBookT).toLocaleDateString(undefined, { month: "short", day: "numeric" })
+                : null;
               return (
                 <Link key={r.id}
                   to={to}
                   params={p ? { id: p.slug, roomSlug: r.slug || r.id } : undefined}
-                  className="group block">
-                  <div className="aspect-square bg-cream-deep overflow-hidden rounded-md">
+                  className="group block relative">
+                  <div className="aspect-square bg-cream-deep overflow-hidden rounded-md relative">
                     {img && <img src={img} alt={r.name || ""} loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
+                      className={`w-full h-full object-cover transition duration-500 ${isRented ? "grayscale opacity-60" : "group-hover:scale-105"}`} />}
+                    <span className={`absolute top-2 start-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
+                      isRented ? "bg-ink/80 text-white" : "bg-success text-white"
+                    }`}>
+                      {isRented ? <T>Rented</T> : <T>Available</T>}
+                    </span>
                   </div>
                   <div className="pt-2">
-                    <h3 className="text-sm font-semibold text-ink group-hover:underline leading-tight">{r.name || `Room ${r.room_number}`}</h3>
-                    {price != null && <p className="text-sm text-ink font-medium">CAD${Number(price).toFixed(2)} <span className="text-ink/60 font-normal">/ <T>month</T></span></p>}
+                    <h3 className={`text-sm font-semibold leading-tight ${isRented ? "text-ink/60" : "text-ink group-hover:underline"}`}>{r.name || `Room ${r.room_number}`}</h3>
+                    {price != null && <p className={`text-sm font-medium ${isRented ? "text-ink/50 line-through" : "text-ink"}`}>CAD${Number(price).toFixed(2)} <span className="font-normal">/ <T>month</T></span></p>}
+                    {isRented && (
+                      <p className="text-[11px] text-ink/60 mt-0.5">
+                        {freeOnLabel ? <><T>Free from</T> {freeOnLabel}</> : <T>Not available</T>}
+                      </p>
+                    )}
                   </div>
                 </Link>
               );
