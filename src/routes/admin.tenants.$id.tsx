@@ -143,19 +143,13 @@ function TenantFilePage() {
         </div>
       </section>
 
-      <section className="bg-card rounded-2xl border border-border p-4 space-y-3">
-        <h2 className="font-bold text-sm uppercase tracking-wider text-ink/60">Balance</h2>
-        <div className="grid grid-cols-3 gap-2 text-sm">
-          <Stat label="Rent" value={`$${rent.toFixed(2)}`} />
-          <Stat label="Paid" value={`$${paid.toFixed(2)}`} tone="good" />
-          <Stat label="Outstanding" value={`$${outstanding.toFixed(2)}`} tone={outstanding > 0 ? "bad" : "good"} />
-        </div>
-        {payments.length > 0 && (
-          <div className="text-xs text-muted-foreground">
-            {payments.length} payment{payments.length === 1 ? "" : "s"} on record.
-          </div>
-        )}
-      </section>
+      <PaymentsSection
+        tenantId={t.id}
+        rent={rent}
+        payments={payments}
+        onChanged={load}
+      />
+      <BalanceBlock rent={rent} paid={paid} outstanding={outstanding} payments={payments} />
 
       <section className="bg-card rounded-2xl border border-border p-4 space-y-3">
         <h2 className="font-bold text-sm uppercase tracking-wider text-ink/60">Deposit</h2>
