@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays, Home, Mail } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays, Home, Mail, DollarSign } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { getVisitorCount } from "@/lib/visitor-counter.functions";
