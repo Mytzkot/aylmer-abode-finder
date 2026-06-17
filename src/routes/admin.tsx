@@ -55,9 +55,6 @@ function AdminLayout() {
     if (user && isAdmin) fetchVisitors().then(r => setVisitors(r.count)).catch(() => {});
   }, [user, isAdmin, fetchVisitors]);
 
-  useEffect(() => {
-    if (user && isAdmin && path === "/admin") navigate({ to: "/admin/applications" });
-  }, [user, isAdmin, path, navigate]);
 
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault();
