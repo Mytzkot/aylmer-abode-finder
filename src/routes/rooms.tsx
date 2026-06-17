@@ -382,10 +382,11 @@ function RoomsShop() {
                     {img && <img src={img} alt={r.name || ""} loading="lazy"
                       className={`w-full h-full object-cover transition duration-500 ${isRented ? "grayscale opacity-60" : "group-hover:scale-105"}`} />}
                     <span className={`absolute top-2 start-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
-                      isRented ? "bg-ink/80 text-white" : "bg-success text-white"
+                      isRented ? "bg-ink/70 text-white" : "bg-success text-white"
                     }`}>
-                      {isRented ? <T>Rented</T> : <T>Available</T>}
+                      {isRented ? <T>Not available</T> : <T>Available</T>}
                     </span>
+
                   </div>
                   <div className="pt-2">
                     <h3 className={`text-sm font-semibold leading-tight ${isRented ? "text-ink/60" : "text-ink group-hover:underline"}`}>{r.name || `Room ${r.room_number}`}</h3>
