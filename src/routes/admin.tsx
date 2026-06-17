@@ -100,12 +100,14 @@ function AdminLayout() {
   }
 
   const navItems = [
-    { to: "/admin/applications", label: "Applications", icon: ClipboardList },
+    { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
+    { to: "/admin/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
   ];
+
 
 
   return (
