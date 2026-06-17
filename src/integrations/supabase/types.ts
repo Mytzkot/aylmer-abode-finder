@@ -192,6 +192,62 @@ export type Database = {
           },
         ]
       }
+      monthly_expenses: {
+        Row: {
+          cleaning: number
+          created_at: string
+          electricity: number
+          gas: number
+          id: string
+          insurance: number
+          internet: number
+          labor_fees: number
+          maintenance: number
+          property_id: string
+          rent_mortgage: number
+          updated_at: string
+          year_month: string
+        }
+        Insert: {
+          cleaning?: number
+          created_at?: string
+          electricity?: number
+          gas?: number
+          id?: string
+          insurance?: number
+          internet?: number
+          labor_fees?: number
+          maintenance?: number
+          property_id: string
+          rent_mortgage?: number
+          updated_at?: string
+          year_month: string
+        }
+        Update: {
+          cleaning?: number
+          created_at?: string
+          electricity?: number
+          gas?: number
+          id?: string
+          insurance?: number
+          internet?: number
+          labor_fees?: number
+          maintenance?: number
+          property_id?: string
+          rent_mortgage?: number
+          updated_at?: string
+          year_month?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monthly_expenses_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string
