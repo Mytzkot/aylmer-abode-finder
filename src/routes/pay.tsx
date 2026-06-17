@@ -34,16 +34,7 @@ function PayOnline() {
     }
   };
 
-  const cardRequestSubject = encodeURIComponent("Card payment link request");
-  const cardRequestBody = encodeURIComponent(
-    "Hi, I'd like to pay my rent by credit/debit card. Please send me a secure payment link.\n\n" +
-      "Bonjour, j'aimerais payer mon loyer par carte de crédit/débit. Veuillez m'envoyer un lien de paiement sécurisé.\n\n" +
-      "Name / Nom:\nAddress / Adresse:\nAmount / Montant:"
-  );
-  const cardEmail = `mailto:zorbagraphic@yahoo.com?subject=${cardRequestSubject}&body=${cardRequestBody}`;
-  const cardWhatsApp = `${CONTACT.whatsapp}?text=${encodeURIComponent(
-    "Hi, I'd like a card payment link for my rent. / Bonjour, j'aimerais un lien de paiement par carte pour mon loyer."
-  )}`;
+  // Card request now uses a database-backed form (CardLinkRequestForm below).
 
   return (
     <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
