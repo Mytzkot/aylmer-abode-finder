@@ -101,8 +101,9 @@ function AdminLayout() {
     { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
+    { to: "/admin/rent", label: "Rent", icon: DollarSign },
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
-    { to: "/admin/calendar", label: "Calendar", icon: CalendarDays },
+    { to: "/admin/calendar", label: "Cal", icon: CalendarDays },
     { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
     { to: "/admin/newsletter", label: "Email", icon: Mail },
   ];
