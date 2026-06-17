@@ -183,38 +183,16 @@ export const sendAvailabilityNewsletter = createServerFn({ method: "POST" })
     }
     const recipients = (subs ?? []) as Array<{ id: string; email: string; unsubscribe_token: string }>;
 
-    // Check if email infra is available
-    let send: ((args: any) => Promise<any>) | null = null;
-    try {
-      const mod = await import("@/lib/email/send");
-      send = mod.sendTransactionalEmail;
-    } catch {
-      return {
-        ok: false as const,
-        error: "Email sender is not yet configured. Set up a verified email domain to enable sending.",
-        sent: 0,
-        recipientCount: recipients.length,
-        needsEmailSetup: true,
-      };
-    }
-
-    let sent = 0;
-    const failures: string[] = [];
-    for (const r of recipients) {
-      try {
-        await send!({
-          templateName: "availability-newsletter",
-          recipientEmail: r.email,
-          idempotencyKey: `availability-${r.id}-${new Date().toISOString().slice(0, 10)}`,
-          templateData: { unsubscribeToken: r.unsubscribe_token },
-        });
-        sent++;
-      } catch (e: any) {
-        failures.push(`${r.email}: ${e?.message ?? "send failed"}`);
-      }
-    }
-    if (failures.length) console.error("newsletter send failures:", failures);
-    return { ok: true as const, sent, recipientCount: recipients.length, failures: failures.slice(0, 10) };
+    // Email sender not yet configured — short-circuit with a clear status the
+    // admin UI can react to. Subscribers stay in the database, ready to send
+    // the moment the email sender is configured.
+    return {
+      ok: false as const,
+      error: "Email sender is not yet configured. Set up a verified email domain to enable sending.",
+      sent: 0,
+      recipientCount: recipients.length,
+      needsEmailSetup: true,
+    };
   });
 
 // ----- helpers ---------------------------------------------------------------
