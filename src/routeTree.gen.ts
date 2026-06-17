@@ -31,6 +31,7 @@ import { Route as BookRoomIdRouteImport } from './routes/book.$roomId'
 import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
+import { Route as AdminLedgerRouteImport } from './routes/admin.ledger'
 import { Route as AdminBoardRouteImport } from './routes/admin.board'
 import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
 import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$id.$roomSlug'
@@ -146,6 +147,11 @@ const AdminRoomsRoute = AdminRoomsRouteImport.update({
   path: '/rooms',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLedgerRoute = AdminLedgerRouteImport.update({
+  id: '/ledger',
+  path: '/ledger',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBoardRoute = AdminBoardRouteImport.update({
   id: '/board',
   path: '/board',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/transit': typeof TransitRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
+  '/admin/ledger': typeof AdminLedgerRoute
   '/admin/rooms': typeof AdminRoomsRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/transit'
     | '/admin/applications'
     | '/admin/board'
+    | '/admin/ledger'
     | '/admin/rooms'
     | '/admin/tenants'
     | '/apply/$roomId'
@@ -506,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRoomsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/ledger': {
+      id: '/admin/ledger'
+      path: '/ledger'
+      fullPath: '/admin/ledger'
+      preLoaderRoute: typeof AdminLedgerRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/board': {
       id: '/admin/board'
       path: '/board'
@@ -552,6 +571,7 @@ const AdminTenantsRouteWithChildren = AdminTenantsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminBoardRoute: typeof AdminBoardRoute
+  AdminLedgerRoute: typeof AdminLedgerRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
 }
@@ -559,6 +579,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminBoardRoute: AdminBoardRoute,
+  AdminLedgerRoute: AdminLedgerRoute,
   AdminRoomsRoute: AdminRoomsRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
 }
