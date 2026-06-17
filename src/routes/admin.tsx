@@ -104,6 +104,7 @@ function AdminLayout() {
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
     { to: "/admin/calendar", label: "Calendar", icon: CalendarDays },
     { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
+    { to: "/admin/subscribers", label: "List", icon: Mail },
   ];
 
 
