@@ -224,8 +224,10 @@ function BalanceBlock({ rent, paid, outstanding, payments }: { rent: number; pai
   );
 }
 
-function PaymentsSection({ tenantId, rent, payments, onChanged }: {
-  tenantId: string; rent: number; payments: Payment[]; onChanged: () => void;
+function PaymentsSection({ tenantId, rent, payments, tenant, roomLabel, onChanged }: {
+  tenantId: string; rent: number; payments: Payment[];
+  tenant: Tenant; roomLabel: string | null;
+  onChanged: () => void;
 }) {
   const [amount, setAmount] = useState<string>("");
   const [method, setMethod] = useState<string>("Interac e-Transfer");
@@ -256,6 +258,22 @@ function PaymentsSection({ tenantId, rent, payments, onChanged }: {
     const { error } = await supabase.from("payment_ledger").delete().eq("id", id);
     if (error) { toast.error(error.message); return; }
     onChanged();
+  };
+
+  const downloadReceipt = async (p: Payment) => {
+    const { downloadReceiptPdf } = await import("@/lib/receipt");
+    downloadReceiptPdf({
+      receiptNumber: p.id.slice(0, 8).toUpperCase(),
+      paidOn: p.paid_on,
+      amount: Number(p.amount),
+      method: p.method,
+      notes: p.notes,
+      tenantName: `${tenant.first_name || ""} ${tenant.surname || ""}`.trim() || null,
+      tenantEmail: tenant.email || null,
+      tenantPhone: tenant.telephone || null,
+      roomLabel,
+      propertyAddress: null,
+    });
   };
 
   return (
