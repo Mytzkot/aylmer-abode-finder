@@ -54,6 +54,20 @@ export const translations = {
       additional_information: "Additional information",
     },
     faq: { title: "Ask us anything", placeholder: "Type your question…", send: "Send" },
+    applyForm: {
+      desiredMoveIn: "Desired move-in date",
+      minStayNote: "Minimum stay: 31 days.",
+      firstTimeRenter: "First-time renter / no previous landlord",
+      addressPlaceholder: "Start typing your address…",
+      addressSearching: "Searching…",
+      addressNoResults: "No matches — keep typing or enter your address manually.",
+      phoneHint: "Digits, spaces and dashes only",
+      required: "This field is required",
+      invalidEmail: "Please enter a valid email address",
+      invalidPhone: "Please enter a valid phone number",
+      invalidIncome: "Please enter a valid amount",
+      fixErrors: "Please fix the highlighted fields.",
+    },
   },
 
   fr: {
@@ -109,6 +123,20 @@ export const translations = {
       additional_information: "Renseignements complémentaires",
     },
     faq: { title: "Posez-nous votre question", placeholder: "Tapez votre question…", send: "Envoyer" },
+    applyForm: {
+      desiredMoveIn: "Date d'emménagement souhaitée",
+      minStayNote: "Séjour minimum : 31 jours.",
+      firstTimeRenter: "Premier locataire / aucun propriétaire précédent",
+      addressPlaceholder: "Commencez à taper votre adresse…",
+      addressSearching: "Recherche en cours…",
+      addressNoResults: "Aucun résultat — continuez à taper ou saisissez votre adresse manuellement.",
+      phoneHint: "Chiffres, espaces et tirets seulement",
+      required: "Ce champ est obligatoire",
+      invalidEmail: "Veuillez saisir une adresse courriel valide",
+      invalidPhone: "Veuillez saisir un numéro de téléphone valide",
+      invalidIncome: "Veuillez saisir un montant valide",
+      fixErrors: "Veuillez corriger les champs en surbrillance.",
+    },
   },
 
   ar: {
@@ -164,6 +192,20 @@ export const translations = {
       additional_information: "معلومات إضافية",
     },
     faq: { title: "اسألنا أي شيء", placeholder: "اكتب سؤالك…", send: "إرسال" },
+    applyForm: {
+      desiredMoveIn: "تاريخ الانتقال المطلوب",
+      minStayNote: "الحد الأدنى للإقامة: 31 يومًا.",
+      firstTimeRenter: "مستأجر لأول مرة / لا يوجد مالك سابق",
+      addressPlaceholder: "ابدأ بكتابة عنوانك…",
+      addressSearching: "جارٍ البحث…",
+      addressNoResults: "لا توجد نتائج — تابع الكتابة أو أدخل عنوانك يدويًا.",
+      phoneHint: "الأرقام والمسافات والشرطات فقط",
+      required: "هذا الحقل مطلوب",
+      invalidEmail: "يرجى إدخال بريد إلكتروني صالح",
+      invalidPhone: "يرجى إدخال رقم هاتف صالح",
+      invalidIncome: "يرجى إدخال مبلغ صالح",
+      fixErrors: "يرجى تصحيح الحقول المظللة.",
+    },
   },
 };
 
