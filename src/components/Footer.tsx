@@ -109,7 +109,7 @@ function NewsletterSignup() {
         <T>Want us to email you when a room opens up? Join our mailing list.</T>
       </p>
       {status === "ok" ? (
-        <p className="text-[14px] font-semibold text-coral"><T>You&apos;re on the list — thanks!</T></p>
+        <p className="text-[14px] font-semibold text-coral"><T>Thanks! You&apos;ll hear from us when a room opens up.</T></p>
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
