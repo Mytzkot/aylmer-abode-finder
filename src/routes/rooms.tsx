@@ -123,6 +123,9 @@ function RoomsShop() {
     }
 
     const freeOn = (r: RoomRow): number => {
+      // Externally-managed rooms ignore admin status & tenant data: only the
+      // manual switch decides availability.
+      if (r.externally_managed) return r.manual_available ? 0 : Number.POSITIVE_INFINITY;
       const status = (r.current_status || "").toLowerCase();
       const candidates: number[] = [];
       if (r.booked_until) {
@@ -177,6 +180,7 @@ function RoomsShop() {
   );
   const availableNowCount = useMemo(
     () => totalVisible.filter(r => {
+      if (r.externally_managed) return !!r.manual_available;
       const status = (r.current_status || "").toLowerCase();
       if (status !== "available") return false;
       if (r.booked_until && Date.parse(r.booked_until) > now) return false;
