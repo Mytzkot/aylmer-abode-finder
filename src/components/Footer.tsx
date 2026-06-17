@@ -12,7 +12,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
-import { T } from "@/i18n/LanguageProvider";
+import { T, useLang } from "@/i18n/LanguageProvider";
 import { useServerFn } from "@tanstack/react-start";
 
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
