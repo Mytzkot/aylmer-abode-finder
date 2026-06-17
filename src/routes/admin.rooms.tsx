@@ -18,7 +18,7 @@ interface Room {
   manual_available?: boolean | null;
 }
 
-const STATUSES = ["Available", "Rented", "Maintenance"] as const;
+const STATUSES = ["Available", "Occupied", "Coming soon"] as const;
 // 10-year signed URL — refresh by re-uploading if Supabase storage signing key rotates.
 const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 365 * 10;
 
@@ -57,25 +57,21 @@ function RoomsPage() {
   }, []);
 
   const setStatus = async (r: Room, status: string) => {
-    const { error } = await supabase.from("rooms").update({ current_status: status }).eq("id", r.id);
+    // Keep manual_available in sync so externally-managed rooms also reflect status on the public site.
+    const manual_available = status === "Available";
+    const { error } = await supabase
+      .from("rooms")
+      .update({ current_status: status, manual_available })
+      .eq("id", r.id);
     if (error) {
       console.error(error);
       toast.error("Could not update status.");
       return;
     }
-    setRooms(rooms.map((x) => (x.id === r.id ? { ...x, current_status: status } : x)));
+    setRooms(rooms.map((x) => (x.id === r.id ? { ...x, current_status: status, manual_available } : x)));
+    toast.success(status === "Available" ? "Now showing as Available on the public site." : `Marked as ${status} — hidden from public availability.`);
   };
 
-  const setManualAvailable = async (r: Room, value: boolean) => {
-    const { error } = await supabase.from("rooms").update({ manual_available: value }).eq("id", r.id);
-    if (error) {
-      console.error(error);
-      toast.error("Could not update availability.");
-      return;
-    }
-    setRooms(rooms.map((x) => (x.id === r.id ? { ...x, manual_available: value } : x)));
-    toast.success(value ? "Marked as available on public site." : "Marked as not available on public site.");
-  };
 
   const handleFiles = async (room: Room, files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -181,10 +177,10 @@ function RoomsPage() {
             tenant={tenantsByRoom[r.id] || null}
             uploading={uploadingId === r.id}
             onStatus={(s) => setStatus(r, s)}
-            onManualAvailable={(v) => setManualAvailable(r, v)}
             onFiles={(fs) => handleFiles(r, fs)}
             onRemove={(url) => removeImage(r, url)}
           />
+
         ))}
         {rooms.length === 0 && <p className="text-sm text-muted-foreground">No rooms found.</p>}
       </div>
@@ -197,7 +193,6 @@ function RoomCard({
   tenant,
   uploading,
   onStatus,
-  onManualAvailable,
   onFiles,
   onRemove,
 }: {
@@ -205,18 +200,17 @@ function RoomCard({
   tenant: TenantLite | null;
   uploading: boolean;
   onStatus: (s: string) => void;
-  onManualAvailable: (v: boolean) => void;
   onFiles: (fs: FileList | null) => void;
   onRemove: (url: string) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const s = room.current_status || "Available";
-  const tone =
-    s.toLowerCase() === "available"
-      ? "bg-success text-white"
-      : s.toLowerCase() === "rented"
-        ? "bg-foreground text-background"
-        : "bg-destructive/10 text-destructive";
+  const s = room.current_status || "Occupied";
+  const isAvail = s === "Available";
+  const tone = isAvail
+    ? "bg-success text-white"
+    : s === "Coming soon"
+      ? "bg-amber-500 text-white"
+      : "bg-foreground text-background";
   const images = room.image_urls || [];
 
   return (
@@ -227,7 +221,7 @@ function RoomCard({
 
       <div className="flex items-center justify-between">
         <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${tone}`}>
-          {room.externally_managed ? (room.manual_available ? "Public: Available" : "Public: Not available") : s}
+          {isAvail ? "Public: Available" : `Public: ${s === "Coming soon" ? "Coming soon" : "Not available"}`}
         </span>
         <span className="text-sm font-semibold">${room.base_rate ?? "—"}</span>
       </div>
@@ -240,38 +234,22 @@ function RoomCard({
         </div>
       )}
 
-
-      {room.externally_managed ? (
-        <div className="rounded-lg border border-dashed border-input bg-muted/40 p-3 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Externally managed
-          </p>
-          <p className="text-xs text-muted-foreground leading-snug">
-            Bookings for this room are handled on another platform, so tenant assignments here don't affect public availability. Use the switch below to show or hide it on the public site.
-          </p>
-          <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
-            <span className="text-sm font-semibold">Show as available on public site</span>
-            <input
-              type="checkbox"
-              checked={!!room.manual_available}
-              onChange={(e) => onManualAvailable(e.target.checked)}
-              className="w-5 h-5 accent-success"
-            />
-          </label>
-        </div>
-      ) : (
+      <label className="block">
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Public status</span>
         <select
           value={s}
           onChange={(e) => onStatus(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border border-input bg-background text-sm"
+          className="mt-1 w-full px-3 py-2 rounded-lg border border-input bg-background text-sm"
         >
           {STATUSES.map((st) => (
-            <option key={st} value={st}>
-              {st}
-            </option>
+            <option key={st} value={st}>{st}</option>
           ))}
         </select>
-      )}
+        <p className="mt-1 text-[11px] text-muted-foreground">
+          Only “Available” shows the green badge on the public site.
+        </p>
+      </label>
+
 
 
       <div>
