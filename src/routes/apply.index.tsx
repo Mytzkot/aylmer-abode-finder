@@ -243,6 +243,11 @@ function ApplyPage() {
       employment_duration: form.employment_duration?.trim() || null,
       employer_phone: form.employer_phone?.trim() || null,
       school_name: isStudent ? (form.name_of_school?.trim() || null) : null,
+      program_of_study: isStudent ? (form.program_of_study?.trim() || null) : null,
+      study_start_date: isStudent ? (form.study_start_date || null) : null,
+      country_of_origin: isStudent ? (form.country_of_origin?.trim() || null) : null,
+      student_document_path: isStudent ? studentDocPath : null,
+
       emergency_contact_name: form.emergency_name?.trim() || null,
       emergency_contact_phone: form.emergency_phone?.trim() || null,
       reference_1_name: form.reference_1_name?.trim() || null,
