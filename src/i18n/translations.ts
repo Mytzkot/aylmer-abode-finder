@@ -67,8 +67,22 @@ export const translations = {
       invalidPhone: "Please enter a valid phone number",
       invalidIncome: "Please enter a valid amount",
       fixErrors: "Please fix the highlighted fields.",
+      studentSchool: "School / institution",
+      studentSchoolHint: "e.g., UQO, La Cité, Algonquin",
+      studentProgram: "Program of study",
+      studyStartDate: "Expected study start date",
+      countryOfOrigin: "Country of origin",
+      studentDoc: "Student ID or acceptance letter",
+      studentDocHint: "Optional — PDF or image, max 5 MB",
+      studentDocUploading: "Uploading…",
+      studentDocUploaded: "File attached",
+      studentDocTooLarge: "File is larger than 5 MB.",
+      studentDocFailed: "Upload failed. You can submit without it.",
+      studentNote: "Because you're a student, the previous-landlord fields are optional. You can still fill them if you have one.",
     },
   },
+
+
 
   fr: {
     nav: { home: "Accueil", properties: "Emplacements", transit: "Transport", newcomer: "Guide du nouvel arrivant", admin: "Admin" },
@@ -136,8 +150,21 @@ export const translations = {
       invalidPhone: "Veuillez saisir un numéro de téléphone valide",
       invalidIncome: "Veuillez saisir un montant valide",
       fixErrors: "Veuillez corriger les champs en surbrillance.",
+      studentSchool: "École / établissement",
+      studentSchoolHint: "ex. : UQO, La Cité, Algonquin",
+      studentProgram: "Programme d'études",
+      studyStartDate: "Date prévue du début des études",
+      countryOfOrigin: "Pays d'origine",
+      studentDoc: "Carte étudiante ou lettre d'admission",
+      studentDocHint: "Facultatif — PDF ou image, max 5 Mo",
+      studentDocUploading: "Téléversement…",
+      studentDocUploaded: "Fichier joint",
+      studentDocTooLarge: "Le fichier dépasse 5 Mo.",
+      studentDocFailed: "Échec du téléversement. Vous pouvez envoyer sans le fichier.",
+      studentNote: "Comme vous êtes étudiant(e), les champs propriétaire précédent sont facultatifs. Vous pouvez les remplir si vous en avez un.",
     },
   },
+
 
   ar: {
     nav: { home: "الرئيسية", properties: "المواقع", transit: "النقل", newcomer: "دليل القادمين الجدد", admin: "الإدارة" },
@@ -205,8 +232,21 @@ export const translations = {
       invalidPhone: "يرجى إدخال رقم هاتف صالح",
       invalidIncome: "يرجى إدخال مبلغ صالح",
       fixErrors: "يرجى تصحيح الحقول المظللة.",
+      studentSchool: "المدرسة / المؤسسة",
+      studentSchoolHint: "مثال: UQO، La Cité، Algonquin",
+      studentProgram: "برنامج الدراسة",
+      studyStartDate: "تاريخ بدء الدراسة المتوقع",
+      countryOfOrigin: "بلد المنشأ",
+      studentDoc: "بطاقة الطالب أو خطاب القبول",
+      studentDocHint: "اختياري — PDF أو صورة، بحد أقصى 5 ميغابايت",
+      studentDocUploading: "جارٍ الرفع…",
+      studentDocUploaded: "تم إرفاق الملف",
+      studentDocTooLarge: "حجم الملف يتجاوز 5 ميغابايت.",
+      studentDocFailed: "فشل الرفع. يمكنك الإرسال بدون الملف.",
+      studentNote: "بما أنك طالب، فإن حقول المالك السابق اختيارية. يمكنك تعبئتها إن وُجد.",
     },
   },
+
 };
 
 export type T = (typeof translations)["en"];
