@@ -97,6 +97,7 @@ function AdminLayout() {
   }
 
   const navItems = [
+    { to: "/admin", label: "Dash", icon: Home },
     { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
