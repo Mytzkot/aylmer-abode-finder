@@ -161,7 +161,7 @@ function ApplyPage() {
       setTimeout(() => {
         const el = document.querySelector(`[data-field="${firstKey}"]`) as HTMLElement | null;
         el?.scrollIntoView({ behavior: "smooth", block: "center" });
-        el?.querySelector("input,textarea,select")?.focus?.();
+        (el?.querySelector("input,textarea,select") as HTMLElement | null)?.focus?.();
       }, 50);
       return;
     }
