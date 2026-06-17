@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TransitRouteImport } from './routes/transit'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoomsRouteImport } from './routes/rooms'
@@ -40,6 +41,11 @@ import { Route as AdminApplicationsRouteImport } from './routes/admin.applicatio
 import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$id.$roomSlug'
 import { Route as AdminTenantsIdRouteImport } from './routes/admin.tenants.$id'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
@@ -206,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
@@ -267,6 +275,7 @@ export interface FileRoutesById {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
@@ -301,6 +310,7 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
@@ -329,6 +339,7 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
@@ -394,10 +406,18 @@ export interface RootRouteChildren {
   RoomsRoute: typeof RoomsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitRoute: typeof TransitRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transit': {
       id: '/transit'
       path: '/transit'
@@ -712,6 +732,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoomsRoute: RoomsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitRoute: TransitRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
