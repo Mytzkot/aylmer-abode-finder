@@ -194,6 +194,7 @@ function RoomsPage() {
 
 function RoomCard({
   room,
+  tenant,
   uploading,
   onStatus,
   onManualAvailable,
@@ -201,6 +202,7 @@ function RoomCard({
   onRemove,
 }: {
   room: Room;
+  tenant: TenantLite | null;
   uploading: boolean;
   onStatus: (s: string) => void;
   onManualAvailable: (v: boolean) => void;
@@ -229,6 +231,15 @@ function RoomCard({
         </span>
         <span className="text-sm font-semibold">${room.base_rate ?? "—"}</span>
       </div>
+
+      {tenant && (
+        <div className="rounded-lg bg-secondary/60 border border-border px-3 py-2 text-sm">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">Current tenant</div>
+          <div className="font-semibold">{tenant.first_name || ""} {tenant.surname || ""}</div>
+          {tenant.telephone && <div className="text-xs text-muted-foreground">{tenant.telephone}</div>}
+        </div>
+      )}
+
 
       {room.externally_managed ? (
         <div className="rounded-lg border border-dashed border-input bg-muted/40 p-3 space-y-2">
