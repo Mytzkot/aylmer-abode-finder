@@ -64,6 +64,10 @@ function ApplyPage() {
   const [occupants, setOccupants] = useState<Occupant[]>([]);
   const [form, setForm] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [studentDocPath, setStudentDocPath] = useState<string | null>(null);
+  const [studentDocName, setStudentDocName] = useState<string | null>(null);
+  const [studentDocUploading, setStudentDocUploading] = useState(false);
+
   const [locationSel, setLocationSel] = useState<string>(prefilledProperty || "any");
   const [budgetSel, setBudgetSel] = useState<string>("any");
   const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
@@ -122,6 +126,48 @@ function ApplyPage() {
   const af = t.applyForm;
   const f = t.fields;
 
+  const toggleStudent = (checked: boolean) => {
+    setIsStudent(checked);
+    if (checked) {
+      // International students typically have no Canadian landlord — auto-relax those.
+      setFirstTimeRenter(true);
+      setErrors((er) => {
+        const c = { ...er };
+        delete c.current_landlord_name;
+        delete c.current_landlord_phone;
+        return c;
+      });
+    }
+  };
+
+  const uploadStudentDoc = async (file: File) => {
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(af.studentDocTooLarge);
+      return;
+    }
+    if (!isSupabaseConfigured) {
+      toast.warning("Backend not connected — file cannot be uploaded.");
+      return;
+    }
+    setStudentDocUploading(true);
+    try {
+      const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("application-docs")
+        .upload(path, file, { contentType: file.type, upsert: false });
+      if (error) throw error;
+      setStudentDocPath(path);
+      setStudentDocName(file.name);
+      toast.success(af.studentDocUploaded);
+    } catch (err) {
+      console.error("Student doc upload failed:", err);
+      toast.error(af.studentDocFailed);
+    } finally {
+      setStudentDocUploading(false);
+    }
+  };
+
   const validate = (): Record<string, string> => {
     const req = (k: string) => !((form[k] ?? "").toString().trim());
     const e: Record<string, string> = {};
@@ -136,6 +182,11 @@ function ApplyPage() {
       if (req("current_landlord_name")) e.current_landlord_name = af.required;
       if (req("current_landlord_phone")) e.current_landlord_phone = af.required;
     }
+    if (isStudent) {
+      for (const k of ["name_of_school", "program_of_study", "study_start_date", "country_of_origin"]) {
+        if (req(k)) e[k] = af.required;
+      }
+    }
     if (form.email && !EMAIL_VALID.test(form.email.trim())) e.email = af.invalidEmail;
     for (const k of ["telephone", "current_landlord_phone", "emergency_phone", "reference_1_phone", "reference_2_phone"]) {
       const v = (form[k] ?? "").trim();
@@ -149,6 +200,7 @@ function ApplyPage() {
     }
     return e;
   };
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,6 +243,11 @@ function ApplyPage() {
       employment_duration: form.employment_duration?.trim() || null,
       employer_phone: form.employer_phone?.trim() || null,
       school_name: isStudent ? (form.name_of_school?.trim() || null) : null,
+      program_of_study: isStudent ? (form.program_of_study?.trim() || null) : null,
+      study_start_date: isStudent ? (form.study_start_date || null) : null,
+      country_of_origin: isStudent ? (form.country_of_origin?.trim() || null) : null,
+      student_document_path: isStudent ? studentDocPath : null,
+
       emergency_contact_name: form.emergency_name?.trim() || null,
       emergency_contact_phone: form.emergency_phone?.trim() || null,
       reference_1_name: form.reference_1_name?.trim() || null,
@@ -295,6 +352,87 @@ function ApplyPage() {
             <p className="text-xs text-ink/60">{l.helper}</p>
           </fieldset>
 
+          {/* Student section (near the top — relevant to most international applicants) */}
+          <Section title={t.apply.student}>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isStudent}
+                onChange={(e) => toggleStudent(e.target.checked)}
+                className="w-5 h-5 accent-primary"
+              />
+              <span className="font-medium">{t.apply.isStudent}</span>
+            </label>
+
+            {isStudent && (
+              <div className="space-y-3 pt-2">
+                <p className="text-xs text-ink/60 bg-accent/40 rounded-lg px-3 py-2">{af.studentNote}</p>
+                <Two>
+                  <Field
+                    label={af.studentSchool}
+                    name="name_of_school"
+                    required
+                    value={form.name_of_school || ""}
+                    onChange={onText("name_of_school")}
+                    error={errors.name_of_school}
+                    placeholder={af.studentSchoolHint}
+                  />
+                  <Field
+                    label={af.studentProgram}
+                    name="program_of_study"
+                    required
+                    value={form.program_of_study || ""}
+                    onChange={onText("program_of_study")}
+                    error={errors.program_of_study}
+                  />
+                </Two>
+                <Two>
+                  <Field
+                    label={af.studyStartDate}
+                    name="study_start_date"
+                    type="date"
+                    required
+                    value={form.study_start_date || ""}
+                    onChange={onText("study_start_date")}
+                    error={errors.study_start_date}
+                  />
+                  <Field
+                    label={af.countryOfOrigin}
+                    name="country_of_origin"
+                    required
+                    value={form.country_of_origin || ""}
+                    onChange={onText("country_of_origin")}
+                    error={errors.country_of_origin}
+                    autoComplete="country-name"
+                  />
+                </Two>
+
+                <div data-field="student_document">
+                  <span className="text-sm font-medium mb-1 block">{af.studentDoc}</span>
+                  <input
+                    type="file"
+                    accept="application/pdf,image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadStudentDoc(file);
+                      e.target.value = "";
+                    }}
+                    disabled={studentDocUploading}
+                    className="block w-full text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-secondary file:px-3 file:py-2 file:font-medium hover:file:bg-accent disabled:opacity-50"
+                  />
+                  <p className="text-xs text-ink/50 mt-1">
+                    {studentDocUploading
+                      ? af.studentDocUploading
+                      : studentDocName
+                        ? `✓ ${af.studentDocUploaded} — ${studentDocName}`
+                        : af.studentDocHint}
+                  </p>
+                </div>
+              </div>
+            )}
+          </Section>
+
+
           {/* Desired move-in date */}
           <Section title={af.desiredMoveIn}>
             <Field
@@ -386,27 +524,8 @@ function ApplyPage() {
             <Field label={f.employer_address} name="employer_address" value={form.employer_address || ""} onChange={onText("employer_address")} />
           </Section>
 
-          <Section title={t.apply.student}>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={isStudent} onChange={(e) => setIsStudent(e.target.checked)} className="w-5 h-5 accent-primary" />
-              <span className="font-medium">{t.apply.isStudent}</span>
-            </label>
-            {isStudent && (
-              <>
-                <Two>
-                  <Field label={f.name_of_school} name="name_of_school" value={form.name_of_school || ""} onChange={onText("name_of_school")} />
-                  <Field label={f.program_of_study} name="program_of_study" value={form.program_of_study || ""} onChange={onText("program_of_study")} />
-                </Two>
-                <label className="flex items-center gap-2 mt-2">
-                  <input type="checkbox" checked={form.is_international_student === "1"} onChange={(e) => setField("is_international_student", e.target.checked ? "1" : "")} className="w-5 h-5 accent-primary" />
-                  <span>{f.is_international_student}</span>
-                </label>
-                {form.is_international_student === "1" && (
-                  <Field label={lang === "fr" ? "Pays d'origine" : lang === "ar" ? "بلد الإقامة" : "Home country"} name="country_of_origin" value={form.country_of_origin || ""} onChange={onText("country_of_origin")} />
-                )}
-              </>
-            )}
-          </Section>
+
+
 
           <Section title={t.apply.emergency}>
             <Two>

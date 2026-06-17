@@ -104,6 +104,7 @@ export type Database = {
         Row: {
           additional_information: string | null
           additional_occupants: Json | null
+          country_of_origin: string | null
           created_at: string
           current_landlord_name: string | null
           current_landlord_phone: string | null
@@ -123,6 +124,7 @@ export type Database = {
           monthly_income: number | null
           present_address: string | null
           present_occupation: string | null
+          program_of_study: string | null
           reason_for_moving: string | null
           reference_1_name: string | null
           reference_1_phone: string | null
@@ -135,12 +137,15 @@ export type Database = {
           source_of_income: string | null
           status: string
           stay_type: string | null
+          student_document_path: string | null
+          study_start_date: string | null
           surname: string | null
           telephone: string | null
         }
         Insert: {
           additional_information?: string | null
           additional_occupants?: Json | null
+          country_of_origin?: string | null
           created_at?: string
           current_landlord_name?: string | null
           current_landlord_phone?: string | null
@@ -160,6 +165,7 @@ export type Database = {
           monthly_income?: number | null
           present_address?: string | null
           present_occupation?: string | null
+          program_of_study?: string | null
           reason_for_moving?: string | null
           reference_1_name?: string | null
           reference_1_phone?: string | null
@@ -172,12 +178,15 @@ export type Database = {
           source_of_income?: string | null
           status?: string
           stay_type?: string | null
+          student_document_path?: string | null
+          study_start_date?: string | null
           surname?: string | null
           telephone?: string | null
         }
         Update: {
           additional_information?: string | null
           additional_occupants?: Json | null
+          country_of_origin?: string | null
           created_at?: string
           current_landlord_name?: string | null
           current_landlord_phone?: string | null
@@ -197,6 +206,7 @@ export type Database = {
           monthly_income?: number | null
           present_address?: string | null
           present_occupation?: string | null
+          program_of_study?: string | null
           reason_for_moving?: string | null
           reference_1_name?: string | null
           reference_1_phone?: string | null
@@ -209,6 +219,8 @@ export type Database = {
           source_of_income?: string | null
           status?: string
           stay_type?: string | null
+          student_document_path?: string | null
+          study_start_date?: string | null
           surname?: string | null
           telephone?: string | null
         }
