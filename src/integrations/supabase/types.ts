@@ -108,21 +108,31 @@ export type Database = {
           current_landlord_name: string | null
           current_landlord_phone: string | null
           date_of_birth: string | null
+          desired_move_in_date: string | null
           email: string | null
           emergency_contact_name: string | null
           emergency_contact_phone: string | null
+          employer_address: string | null
           employer_name: string | null
           employer_phone: string | null
+          employment_duration: string | null
           first_name: string | null
+          first_time_renter: boolean | null
           id: string
           is_student: boolean | null
           monthly_income: number | null
           present_address: string | null
+          present_occupation: string | null
           reason_for_moving: string | null
+          reference_1_name: string | null
+          reference_1_phone: string | null
+          reference_2_name: string | null
+          reference_2_phone: string | null
           reference_name: string | null
           reference_phone: string | null
           room_id: string | null
           school_name: string | null
+          source_of_income: string | null
           status: string
           stay_type: string | null
           surname: string | null
@@ -135,21 +145,31 @@ export type Database = {
           current_landlord_name?: string | null
           current_landlord_phone?: string | null
           date_of_birth?: string | null
+          desired_move_in_date?: string | null
           email?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
+          employer_address?: string | null
           employer_name?: string | null
           employer_phone?: string | null
+          employment_duration?: string | null
           first_name?: string | null
+          first_time_renter?: boolean | null
           id?: string
           is_student?: boolean | null
           monthly_income?: number | null
           present_address?: string | null
+          present_occupation?: string | null
           reason_for_moving?: string | null
+          reference_1_name?: string | null
+          reference_1_phone?: string | null
+          reference_2_name?: string | null
+          reference_2_phone?: string | null
           reference_name?: string | null
           reference_phone?: string | null
           room_id?: string | null
           school_name?: string | null
+          source_of_income?: string | null
           status?: string
           stay_type?: string | null
           surname?: string | null
@@ -162,21 +182,31 @@ export type Database = {
           current_landlord_name?: string | null
           current_landlord_phone?: string | null
           date_of_birth?: string | null
+          desired_move_in_date?: string | null
           email?: string | null
           emergency_contact_name?: string | null
           emergency_contact_phone?: string | null
+          employer_address?: string | null
           employer_name?: string | null
           employer_phone?: string | null
+          employment_duration?: string | null
           first_name?: string | null
+          first_time_renter?: boolean | null
           id?: string
           is_student?: boolean | null
           monthly_income?: number | null
           present_address?: string | null
+          present_occupation?: string | null
           reason_for_moving?: string | null
+          reference_1_name?: string | null
+          reference_1_phone?: string | null
+          reference_2_name?: string | null
+          reference_2_phone?: string | null
           reference_name?: string | null
           reference_phone?: string | null
           room_id?: string | null
           school_name?: string | null
+          source_of_income?: string | null
           status?: string
           stay_type?: string | null
           surname?: string | null
