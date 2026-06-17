@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, CheckCircle2 } from "lucide-react";
 import { AmenityIcons } from "@/components/AmenityIcons";
 import { useLang } from "@/i18n/LanguageProvider";
@@ -49,6 +49,10 @@ const L = {
   ar: { intro: "اختر الموقع والميزانية ثم أكمل بياناتك.", chooseProp: "اختر الموقع والميزانية", whichLoc: "أي موقع تتقدّم له؟", whichBudget: "ما ميزانيتك الشهرية؟", helper: "سنوفر لك أفضل غرفة متاحة ضمن ميزانيتك", noMatch: "لا توجد مطابقة دقيقة — سنتواصل معك بأقرب الخيارات.", matches: (n: number, loc: string, b: string) => `${n} غرفة تطابق اختيارك في ${loc} حوالي ${b} دولار/شهر`, matchesAny: (n: number, b: string) => `${n} غرفة تطابق اختيارك حوالي ${b} دولار/شهر`, matchesLoc: (n: number, loc: string) => `${n} غرفة متاحة في ${loc}`, back: "العودة إلى الرئيسية", thanksLine2: "لقد استلمنا طلبك وسنتواصل معك خلال 24 ساعة." },
 };
 
+const PHONE_ALLOWED = /[^0-9 +\-()]/g;
+const PHONE_VALID = /^[+0-9 ()\-.]{7,20}$/;
+const EMAIL_VALID = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function ApplyPage() {
   const { property: prefilledProperty } = useSearch({ from: "/apply/" });
   const { t, lang, dir } = useLang();
@@ -56,8 +60,10 @@ function ApplyPage() {
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [isStudent, setIsStudent] = useState(false);
+  const [firstTimeRenter, setFirstTimeRenter] = useState(false);
   const [occupants, setOccupants] = useState<Occupant[]>([]);
-  const [form, setForm] = useState<Record<string, any>>({});
+  const [form, setForm] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [locationSel, setLocationSel] = useState<string>(prefilledProperty || "any");
   const [budgetSel, setBudgetSel] = useState<string>("any");
   const [allRooms, setAllRooms] = useState<RoomRow[]>([]);
@@ -72,10 +78,6 @@ function ApplyPage() {
     })();
   }, []);
 
-  // Match rooms by selected location + budget (within $50)
-  const propertyIdBySlug: Record<string, string | undefined> = {};
-  // We don't know property UUIDs here without a separate fetch; rely on property_id directly when available.
-  // Filter purely by property_id when set, otherwise by name keyword fallback.
   const propertyKeyword: Record<string, string> = {
     "102-amour": "102",
     "58-conrad": "58",
@@ -109,48 +111,97 @@ function ApplyPage() {
     return l.matchesLoc(n, locText);
   })();
 
-  const upd = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm(f => ({ ...f, [k]: e.target.value }));
+  const setField = (k: string, v: string) => {
+    setForm((f) => ({ ...f, [k]: v }));
+    if (errors[k]) setErrors((e) => { const c = { ...e }; delete c[k]; return c; });
+  };
+  const onText = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setField(k, e.target.value);
+  const onPhone = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setField(k, e.target.value.replace(PHONE_ALLOWED, ""));
+  const onNumber = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setField(k, e.target.value.replace(/[^0-9.]/g, ""));
+
+  const af = t.applyForm;
+  const f = t.fields;
+
+  const validate = (): Record<string, string> => {
+    const req = (k: string) => !((form[k] ?? "").toString().trim());
+    const e: Record<string, string> = {};
+    const required = [
+      "surname", "first_name", "telephone", "email", "present_address",
+      "reason_for_moving", "date_of_birth", "desired_move_in_date",
+      "monthly_income", "source_of_income", "present_occupation",
+      "emergency_name", "emergency_phone",
+    ];
+    for (const k of required) if (req(k)) e[k] = af.required;
+    if (!firstTimeRenter) {
+      if (req("current_landlord_name")) e.current_landlord_name = af.required;
+      if (req("current_landlord_phone")) e.current_landlord_phone = af.required;
+    }
+    if (form.email && !EMAIL_VALID.test(form.email.trim())) e.email = af.invalidEmail;
+    for (const k of ["telephone", "current_landlord_phone", "emergency_phone", "reference_1_phone", "reference_2_phone"]) {
+      const v = (form[k] ?? "").trim();
+      if (!v) continue;
+      if (k === "current_landlord_phone" && firstTimeRenter) continue;
+      if (!PHONE_VALID.test(v)) e[k] = af.invalidPhone;
+    }
+    if (form.monthly_income) {
+      const n = Number(form.monthly_income);
+      if (!Number.isFinite(n) || n < 0) e.monthly_income = af.invalidIncome;
+    }
+    return e;
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      toast.error(af.fixErrors);
+      // scroll to first error
+      const firstKey = Object.keys(errs)[0];
+      setTimeout(() => {
+        const el = document.querySelector(`[data-field="${firstKey}"]`) as HTMLElement | null;
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        (el?.querySelector("input,textarea,select") as HTMLElement | null)?.focus?.();
+      }, 50);
+      return;
+    }
     setSubmitting(true);
 
     const locationLabel = LOCATION_OPTIONS.find((o) => o.value === locationSel)?.label_en || "Any location";
     const budgetLabel = budgetSel === "any" ? "any budget" : `$${budgetSel}/month`;
     const exactRoomId = matchedRooms.length === 1 ? matchedRooms[0].id : null;
 
-    // Validate user input with zod before sending anything to the backend.
-    const { applySchema, firstError } = await import("@/lib/validation");
-    const parsed = applySchema.safeParse({
-      first_name: form.first_name,
-      surname: form.surname,
-      telephone: form.telephone,
-      email: form.email,
-      present_address: form.present_address,
-      reason_for_moving: form.reason_for_moving,
-      current_landlord_name: form.current_landlord_name,
-      current_landlord_phone: form.current_landlord_phone,
-      date_of_birth: form.date_of_birth,
-      monthly_income: form.monthly_income ? Number(form.monthly_income) : null,
-      employer_name: form.employer_name,
-      employer_phone: form.employer_phone,
-      school_name: form.name_of_school,
-      additional_information: form.additional_information,
-    });
-    if (!parsed.success) {
-      setSubmitting(false);
-      toast.error(firstError(parsed.error));
-      return;
-    }
-
     const payload = {
-      ...parsed.data,
+      surname: form.surname?.trim(),
+      first_name: form.first_name?.trim(),
+      telephone: form.telephone?.trim(),
+      email: form.email?.trim(),
+      present_address: form.present_address?.trim(),
+      reason_for_moving: form.reason_for_moving?.trim(),
+      date_of_birth: form.date_of_birth || null,
+      desired_move_in_date: form.desired_move_in_date || null,
+      first_time_renter: firstTimeRenter,
+      current_landlord_name: firstTimeRenter ? null : form.current_landlord_name?.trim() || null,
+      current_landlord_phone: firstTimeRenter ? null : form.current_landlord_phone?.trim() || null,
+      monthly_income: form.monthly_income ? Number(form.monthly_income) : null,
+      source_of_income: form.source_of_income?.trim() || null,
+      present_occupation: form.present_occupation?.trim() || null,
+      employer_name: form.employer_name?.trim() || null,
+      employer_address: form.employer_address?.trim() || null,
+      employment_duration: form.employment_duration?.trim() || null,
+      employer_phone: form.employer_phone?.trim() || null,
+      school_name: isStudent ? (form.name_of_school?.trim() || null) : null,
+      emergency_contact_name: form.emergency_name?.trim() || null,
+      emergency_contact_phone: form.emergency_phone?.trim() || null,
+      reference_1_name: form.reference_1_name?.trim() || null,
+      reference_1_phone: form.reference_1_phone?.trim() || null,
+      reference_2_name: form.reference_2_name?.trim() || null,
+      reference_2_phone: form.reference_2_phone?.trim() || null,
       stay_type: "Monthly",
       is_student: isStudent,
       additional_occupants: occupants.slice(0, 10),
       room_id: exactRoomId,
-      additional_information: `${parsed.data.additional_information || ""}\n[Preferred: ${locationLabel} around ${budgetLabel} — match best fit]`.trim().slice(0, 2000),
+      additional_information: `${(form.additional_information || "").trim()}\n[Preferred: ${locationLabel} around ${budgetLabel} — match best fit]`.trim().slice(0, 2000),
     };
 
     if (!isSupabaseConfigured) {
@@ -162,7 +213,6 @@ function ApplyPage() {
     if (error) { console.error("Application submit error:", error); toast.error("We couldn't submit your application. Please try again."); return; }
     setDone(true);
   };
-
 
   if (done) {
     const propLabel = LOCATION_OPTIONS.find((o) => o.value === locationSel);
@@ -191,9 +241,6 @@ function ApplyPage() {
     );
   }
 
-
-  const f = t.fields;
-
   return (
     <div className="min-h-screen flex flex-col bg-cream" dir={dir}>
       <main className="flex-1 mx-auto max-w-2xl w-full px-4 py-8 text-start">
@@ -202,7 +249,7 @@ function ApplyPage() {
 
         <div className="mb-6"><AmenityIcons /></div>
 
-        <form onSubmit={submit} className="space-y-6">
+        <form onSubmit={submit} noValidate className="space-y-6">
           {/* Location + Budget selection */}
           <fieldset className="bg-card border-2 border-brand/40 rounded-2xl p-5 space-y-4">
             <legend className="px-2 font-bold text-base">{l.chooseProp}</legend>
@@ -248,54 +295,143 @@ function ApplyPage() {
             <p className="text-xs text-ink/60">{l.helper}</p>
           </fieldset>
 
+          {/* Desired move-in date */}
+          <Section title={af.desiredMoveIn}>
+            <Field
+              label={af.desiredMoveIn}
+              name="desired_move_in_date"
+              type="date"
+              required
+              value={form.desired_move_in_date || ""}
+              onChange={onText("desired_move_in_date")}
+              error={errors.desired_move_in_date}
+              min={new Date().toISOString().slice(0, 10)}
+            />
+            <p className="text-xs text-ink/60">{af.minStayNote}</p>
+          </Section>
 
           <Section title={t.apply.personal}>
-            <Two><Input label={f.surname} onChange={upd("surname")} required /><Input label={f.first_name} onChange={upd("first_name")} required /></Two>
-            <Two><Input label={f.telephone} type="tel" onChange={upd("telephone")} required /><Input label={f.email} type="email" onChange={upd("email")} required /></Two>
-            <Input label={f.present_address} onChange={upd("present_address")} />
-            <Input label={f.reason_for_moving} onChange={upd("reason_for_moving")} />
-            <Two><Input label={f.current_landlord_name} onChange={upd("current_landlord_name")} /><Input label={f.current_landlord_phone} type="tel" onChange={upd("current_landlord_phone")} /></Two>
-            <Input label={f.date_of_birth} type="date" onChange={upd("date_of_birth")} />
+            <Two>
+              <Field label={f.surname} name="surname" required value={form.surname || ""} onChange={onText("surname")} error={errors.surname} autoComplete="family-name" />
+              <Field label={f.first_name} name="first_name" required value={form.first_name || ""} onChange={onText("first_name")} error={errors.first_name} autoComplete="given-name" />
+            </Two>
+            <Two>
+              <Field label={f.telephone} name="telephone" type="tel" inputMode="tel" required value={form.telephone || ""} onChange={onPhone("telephone")} error={errors.telephone} hint={af.phoneHint} autoComplete="tel" />
+              <Field label={f.email} name="email" type="email" required value={form.email || ""} onChange={onText("email")} error={errors.email} autoComplete="email" />
+            </Two>
+
+            <AddressAutocomplete
+              label={f.present_address}
+              value={form.present_address || ""}
+              onChange={(v) => setField("present_address", v)}
+              error={errors.present_address}
+              placeholder={af.addressPlaceholder}
+              searchingLabel={af.addressSearching}
+              noResultsLabel={af.addressNoResults}
+            />
+
+            <Field label={f.reason_for_moving} name="reason_for_moving" required value={form.reason_for_moving || ""} onChange={onText("reason_for_moving")} error={errors.reason_for_moving} />
+
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={firstTimeRenter}
+                onChange={(e) => {
+                  setFirstTimeRenter(e.target.checked);
+                  if (e.target.checked) {
+                    setErrors((er) => { const c = { ...er }; delete c.current_landlord_name; delete c.current_landlord_phone; return c; });
+                  }
+                }}
+                className="w-5 h-5 accent-primary"
+              />
+              <span className="font-medium text-sm">{af.firstTimeRenter}</span>
+            </label>
+
+            <Two>
+              <Field
+                label={f.current_landlord_name}
+                name="current_landlord_name"
+                required={!firstTimeRenter}
+                disabled={firstTimeRenter}
+                value={form.current_landlord_name || ""}
+                onChange={onText("current_landlord_name")}
+                error={errors.current_landlord_name}
+              />
+              <Field
+                label={f.current_landlord_phone}
+                name="current_landlord_phone"
+                type="tel"
+                inputMode="tel"
+                required={!firstTimeRenter}
+                disabled={firstTimeRenter}
+                value={form.current_landlord_phone || ""}
+                onChange={onPhone("current_landlord_phone")}
+                error={errors.current_landlord_phone}
+              />
+            </Two>
+
+            <Field label={f.date_of_birth} name="date_of_birth" type="date" required value={form.date_of_birth || ""} onChange={onText("date_of_birth")} error={errors.date_of_birth} max={new Date().toISOString().slice(0, 10)} />
           </Section>
 
           <Section title={t.apply.employment}>
-            <Two><Input label={f.monthly_income} type="number" onChange={upd("monthly_income")} /><Input label={f.source_of_income} onChange={upd("source_of_income")} /></Two>
-            <Input label={f.present_occupation} onChange={upd("present_occupation")} />
-            <Two><Input label={f.employer_name} onChange={upd("employer_name")} /><Input label={f.employment_duration} onChange={upd("employment_duration")} /></Two>
-            <Input label={f.employer_address} onChange={upd("employer_address")} />
+            <Two>
+              <Field label={f.monthly_income} name="monthly_income" type="number" inputMode="numeric" required value={form.monthly_income || ""} onChange={onNumber("monthly_income")} error={errors.monthly_income} min={0} />
+              <Field label={f.source_of_income} name="source_of_income" required value={form.source_of_income || ""} onChange={onText("source_of_income")} error={errors.source_of_income} />
+            </Two>
+            <Field label={f.present_occupation} name="present_occupation" required value={form.present_occupation || ""} onChange={onText("present_occupation")} error={errors.present_occupation} />
+            <Two>
+              <Field label={f.employer_name} name="employer_name" value={form.employer_name || ""} onChange={onText("employer_name")} />
+              <Field label={f.employment_duration} name="employment_duration" value={form.employment_duration || ""} onChange={onText("employment_duration")} />
+            </Two>
+            <Field label={f.employer_address} name="employer_address" value={form.employer_address || ""} onChange={onText("employer_address")} />
           </Section>
 
           <Section title={t.apply.student}>
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={isStudent} onChange={e => setIsStudent(e.target.checked)} className="w-5 h-5 accent-primary" />
+              <input type="checkbox" checked={isStudent} onChange={(e) => setIsStudent(e.target.checked)} className="w-5 h-5 accent-primary" />
               <span className="font-medium">{t.apply.isStudent}</span>
             </label>
             {isStudent && (
               <>
-                <Two><Input label={f.name_of_school} onChange={upd("name_of_school")} /><Input label={f.program_of_study} onChange={upd("program_of_study")} /></Two>
-                <label className="flex items-center gap-2 mt-2"><input type="checkbox" checked={!!form.is_international_student} onChange={e => setForm(s => ({ ...s, is_international_student: e.target.checked }))} className="w-5 h-5 accent-primary" /><span>{f.is_international_student}</span></label>
-                {form.is_international_student && (
-                  <Input label={lang === "fr" ? "Pays d'origine" : lang === "ar" ? "بلد الإقامة" : "Home country / Pays d'origine"} onChange={upd("country_of_origin")} />
+                <Two>
+                  <Field label={f.name_of_school} name="name_of_school" value={form.name_of_school || ""} onChange={onText("name_of_school")} />
+                  <Field label={f.program_of_study} name="program_of_study" value={form.program_of_study || ""} onChange={onText("program_of_study")} />
+                </Two>
+                <label className="flex items-center gap-2 mt-2">
+                  <input type="checkbox" checked={form.is_international_student === "1"} onChange={(e) => setField("is_international_student", e.target.checked ? "1" : "")} className="w-5 h-5 accent-primary" />
+                  <span>{f.is_international_student}</span>
+                </label>
+                {form.is_international_student === "1" && (
+                  <Field label={lang === "fr" ? "Pays d'origine" : lang === "ar" ? "بلد الإقامة" : "Home country"} name="country_of_origin" value={form.country_of_origin || ""} onChange={onText("country_of_origin")} />
                 )}
               </>
             )}
           </Section>
 
           <Section title={t.apply.emergency}>
-            <Two><Input label={f.emergency_name} onChange={upd("emergency_name")} /><Input label={f.emergency_phone} type="tel" onChange={upd("emergency_phone")} /></Two>
+            <Two>
+              <Field label={f.emergency_name} name="emergency_name" required value={form.emergency_name || ""} onChange={onText("emergency_name")} error={errors.emergency_name} />
+              <Field label={f.emergency_phone} name="emergency_phone" type="tel" inputMode="tel" required value={form.emergency_phone || ""} onChange={onPhone("emergency_phone")} error={errors.emergency_phone} />
+            </Two>
           </Section>
 
           <Section title={t.apply.references}>
-            <Two><Input label={f.reference_1_name} onChange={upd("reference_1_name")} /><Input label={f.reference_1_phone} type="tel" onChange={upd("reference_1_phone")} /></Two>
-            <Two><Input label={f.reference_2_name} onChange={upd("reference_2_name")} /><Input label={f.reference_2_phone} type="tel" onChange={upd("reference_2_phone")} /></Two>
+            <Two>
+              <Field label={f.reference_1_name} name="reference_1_name" value={form.reference_1_name || ""} onChange={onText("reference_1_name")} />
+              <Field label={f.reference_1_phone} name="reference_1_phone" type="tel" inputMode="tel" value={form.reference_1_phone || ""} onChange={onPhone("reference_1_phone")} error={errors.reference_1_phone} />
+            </Two>
+            <Two>
+              <Field label={f.reference_2_name} name="reference_2_name" value={form.reference_2_name || ""} onChange={onText("reference_2_name")} />
+              <Field label={f.reference_2_phone} name="reference_2_phone" type="tel" inputMode="tel" value={form.reference_2_phone || ""} onChange={onPhone("reference_2_phone")} error={errors.reference_2_phone} />
+            </Two>
           </Section>
 
           <Section title={t.apply.occupants}>
             {occupants.map((o, i) => (
               <div key={i} className="grid grid-cols-7 gap-2 items-end">
-                <div className="col-span-3"><Input label={f.occupant_name} value={o.name} onChange={e => { const c = [...occupants]; c[i].name = e.target.value; setOccupants(c); }} /></div>
-                <div className="col-span-2"><Input label={f.occupant_relation} value={o.relation} onChange={e => { const c = [...occupants]; c[i].relation = e.target.value; setOccupants(c); }} /></div>
-                <div className="col-span-1"><Input label={f.occupant_age} value={o.age} onChange={e => { const c = [...occupants]; c[i].age = e.target.value; setOccupants(c); }} /></div>
+                <div className="col-span-3"><Field label={f.occupant_name} name={`occ_n_${i}`} value={o.name} onChange={(e) => { const c = [...occupants]; c[i].name = e.target.value; setOccupants(c); }} /></div>
+                <div className="col-span-2"><Field label={f.occupant_relation} name={`occ_r_${i}`} value={o.relation} onChange={(e) => { const c = [...occupants]; c[i].relation = e.target.value; setOccupants(c); }} /></div>
+                <div className="col-span-1"><Field label={f.occupant_age} name={`occ_a_${i}`} value={o.age} onChange={(e) => { const c = [...occupants]; c[i].age = e.target.value; setOccupants(c); }} /></div>
                 <button type="button" onClick={() => setOccupants(occupants.filter((_, j) => j !== i))} className="touch-min col-span-1 mb-0.5 inline-flex justify-center rounded-lg bg-destructive/10 text-destructive p-2"><Trash2 className="w-4 h-4" /></button>
               </div>
             ))}
@@ -305,7 +441,7 @@ function ApplyPage() {
           </Section>
 
           <Section title={t.apply.additional}>
-            <textarea onChange={upd("additional_information")} rows={4} className="w-full px-3 py-2.5 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
+            <textarea value={form.additional_information || ""} onChange={onText("additional_information")} rows={4} className="w-full px-3 py-2.5 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary" />
           </Section>
 
           <button disabled={submitting} className="touch-min w-full rounded-xl bg-primary text-primary-foreground font-bold py-3.5 text-base hover:opacity-90 disabled:opacity-50">
@@ -330,11 +466,120 @@ function Two({ children }: { children: React.ReactNode }) {
   return <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{children}</div>;
 }
 
-function Input({ label, ...rest }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  name: string;
+  error?: string;
+  hint?: string;
+}
+
+function Field({ label, name, error, hint, required, ...rest }: FieldProps) {
   return (
-    <label className="block">
-      <span className="text-sm font-medium mb-1 block">{label}</span>
-      <input {...rest} className="w-full px-3 py-2.5 rounded-lg border border-input bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary" />
+    <label className="block" data-field={name}>
+      <span className="text-sm font-medium mb-1 block">
+        {label}{required && <span className="text-destructive"> *</span>}
+      </span>
+      <input
+        {...rest}
+        name={name}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${name}-err` : undefined}
+        className={`w-full px-3 py-2.5 rounded-lg border bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 ${error ? "border-destructive" : "border-input"}`}
+      />
+      {error ? (
+        <p id={`${name}-err`} className="text-xs text-destructive mt-1">{error}</p>
+      ) : hint ? (
+        <p className="text-xs text-ink/50 mt-1">{hint}</p>
+      ) : null}
     </label>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Address autocomplete using OpenStreetMap Nominatim (free, no API key).
+// Falls back gracefully to a plain text field if the network call fails.
+// ---------------------------------------------------------------------------
+interface NominatimResult { place_id: number; display_name: string }
+
+function AddressAutocomplete({
+  label, value, onChange, error, placeholder, searchingLabel, noResultsLabel,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+  placeholder: string;
+  searchingLabel: string;
+  noResultsLabel: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState<NominatimResult[]>([]);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const handleChange = (v: string) => {
+    onChange(v);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (v.trim().length < 4) { setResults([]); setOpen(false); return; }
+    setLoading(true);
+    setOpen(true);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=0&limit=6&countrycodes=ca&q=${encodeURIComponent(v)}`;
+        const res = await fetch(url, { headers: { "Accept": "application/json" } });
+        const data: NominatimResult[] = await res.json();
+        setResults(Array.isArray(data) ? data : []);
+      } catch {
+        setResults([]);
+      } finally {
+        setLoading(false);
+      }
+    }, 350);
+  };
+
+  return (
+    <div className="block relative" ref={wrapRef} data-field="present_address">
+      <span className="text-sm font-medium mb-1 block">
+        {label}<span className="text-destructive"> *</span>
+      </span>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        onFocus={() => { if (results.length) setOpen(true); }}
+        placeholder={placeholder}
+        autoComplete="street-address"
+        aria-invalid={!!error}
+        className={`w-full px-3 py-2.5 rounded-lg border bg-background text-base focus:outline-none focus:ring-2 focus:ring-primary ${error ? "border-destructive" : "border-input"}`}
+      />
+      {error && <p className="text-xs text-destructive mt-1">{error}</p>}
+      {open && (
+        <div className="absolute z-20 mt-1 w-full bg-card border border-border rounded-lg shadow-lg max-h-64 overflow-auto">
+          {loading && <div className="px-3 py-2 text-sm text-ink/60">{searchingLabel}</div>}
+          {!loading && results.length === 0 && (
+            <div className="px-3 py-2 text-sm text-ink/60">{noResultsLabel}</div>
+          )}
+          {!loading && results.map((r) => (
+            <button
+              key={r.place_id}
+              type="button"
+              onClick={() => { onChange(r.display_name); setOpen(false); setResults([]); }}
+              className="block w-full text-start px-3 py-2 text-sm hover:bg-accent border-b border-border last:border-b-0"
+            >
+              {r.display_name}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
