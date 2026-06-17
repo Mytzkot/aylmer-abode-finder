@@ -43,11 +43,12 @@ function AppsPage() {
     <div className="p-4 md:p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Applications</h1>
 
-      <h2 className="text-sm font-semibold text-muted-foreground uppercase mb-2">Pending ({pending.length})</h2>
+      <h2 className="text-sm font-semibold text-muted-foreground uppercase mb-2">New ({pending.length})</h2>
       <div className="space-y-2 mb-6">
-        {pending.length === 0 && <p className="text-sm text-muted-foreground">No pending applications.</p>}
+        {pending.length === 0 && <p className="text-sm text-muted-foreground">No new applications.</p>}
         {pending.map(a => <AppRow key={a.id} a={a} onClick={() => setSelected(a)} />)}
       </div>
+
 
       {others.length > 0 && (
         <>
