@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut, Eye } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { getVisitorCount } from "@/lib/visitor-counter.functions";
@@ -103,6 +103,7 @@ function AdminLayout() {
     { to: "/admin/applications", label: "Applications", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
+    { to: "/admin/board", label: "Board", icon: LayoutGrid },
   ];
 
   return (
