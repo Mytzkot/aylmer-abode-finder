@@ -32,6 +32,8 @@ interface RoomRow {
   rate_monthly: number | null;
   image_urls: string[] | null;
   booked_until: string | null;
+  externally_managed: boolean | null;
+  manual_available: boolean | null;
   created_at: string;
 }
 interface PropertyRow { id: string; slug: string; address: string; short_name: string | null; }
@@ -64,7 +66,7 @@ function RoomsShop() {
         supabase
           .from("rooms")
           .select(
-            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at",
+            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, externally_managed, manual_available, created_at",
           ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
         supabase
