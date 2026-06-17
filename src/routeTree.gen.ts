@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UnsubscribeRouteImport } from './routes/unsubscribe'
 import { Route as TransitRouteImport } from './routes/transit'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoomsRouteImport } from './routes/rooms'
@@ -31,8 +32,8 @@ import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as BookRoomIdRouteImport } from './routes/book.$roomId'
 import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
-import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
+import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLedgerRouteImport } from './routes/admin.ledger'
 import { Route as AdminCalendarRouteImport } from './routes/admin.calendar'
 import { Route as AdminBoardRouteImport } from './routes/admin.board'
@@ -40,6 +41,11 @@ import { Route as AdminApplicationsRouteImport } from './routes/admin.applicatio
 import { Route as PropertiesIdRoomSlugRouteImport } from './routes/properties.$id.$roomSlug'
 import { Route as AdminTenantsIdRouteImport } from './routes/admin.tenants.$id'
 
+const UnsubscribeRoute = UnsubscribeRouteImport.update({
+  id: '/unsubscribe',
+  path: '/unsubscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TransitRoute = TransitRouteImport.update({
   id: '/transit',
   path: '/transit',
@@ -150,14 +156,14 @@ const AdminTenantsRoute = AdminTenantsRouteImport.update({
   path: '/tenants',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
-  id: '/subscribers',
-  path: '/subscribers',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminRoomsRoute = AdminRoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNewsletterRoute = AdminNewsletterRouteImport.update({
+  id: '/newsletter',
+  path: '/newsletter',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminLedgerRoute = AdminLedgerRouteImport.update({
@@ -206,12 +212,13 @@ export interface FileRoutesByFullPath {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -234,12 +241,13 @@ export interface FileRoutesByTo {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -267,12 +275,13 @@ export interface FileRoutesById {
   '/rooms': typeof RoomsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/transit': typeof TransitRoute
+  '/unsubscribe': typeof UnsubscribeRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/board': typeof AdminBoardRoute
   '/admin/calendar': typeof AdminCalendarRoute
   '/admin/ledger': typeof AdminLedgerRoute
+  '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -301,12 +310,13 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -329,12 +339,13 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -361,12 +372,13 @@ export interface FileRouteTypes {
     | '/rooms'
     | '/sitemap.xml'
     | '/transit'
+    | '/unsubscribe'
     | '/admin/applications'
     | '/admin/board'
     | '/admin/calendar'
     | '/admin/ledger'
+    | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -394,10 +406,18 @@ export interface RootRouteChildren {
   RoomsRoute: typeof RoomsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TransitRoute: typeof TransitRoute
+  UnsubscribeRoute: typeof UnsubscribeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/unsubscribe': {
+      id: '/unsubscribe'
+      path: '/unsubscribe'
+      fullPath: '/unsubscribe'
+      preLoaderRoute: typeof UnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/transit': {
       id: '/transit'
       path: '/transit'
@@ -552,18 +572,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTenantsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/subscribers': {
-      id: '/admin/subscribers'
-      path: '/subscribers'
-      fullPath: '/admin/subscribers'
-      preLoaderRoute: typeof AdminSubscribersRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/rooms': {
       id: '/admin/rooms'
       path: '/rooms'
       fullPath: '/admin/rooms'
       preLoaderRoute: typeof AdminRoomsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/newsletter': {
+      id: '/admin/newsletter'
+      path: '/newsletter'
+      fullPath: '/admin/newsletter'
+      preLoaderRoute: typeof AdminNewsletterRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/ledger': {
@@ -628,8 +648,8 @@ interface AdminRouteChildren {
   AdminBoardRoute: typeof AdminBoardRoute
   AdminCalendarRoute: typeof AdminCalendarRoute
   AdminLedgerRoute: typeof AdminLedgerRoute
+  AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
-  AdminSubscribersRoute: typeof AdminSubscribersRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -639,8 +659,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminBoardRoute: AdminBoardRoute,
   AdminCalendarRoute: AdminCalendarRoute,
   AdminLedgerRoute: AdminLedgerRoute,
+  AdminNewsletterRoute: AdminNewsletterRoute,
   AdminRoomsRoute: AdminRoomsRoute,
-  AdminSubscribersRoute: AdminSubscribersRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
@@ -712,6 +732,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoomsRoute: RoomsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TransitRoute: TransitRoute,
+  UnsubscribeRoute: UnsubscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

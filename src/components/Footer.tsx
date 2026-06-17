@@ -12,7 +12,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { CONTACT, PROPERTIES, PROPERTY_MAP_LINKS } from "@/data/properties";
-import { T } from "@/i18n/LanguageProvider";
+import { T, useLang } from "@/i18n/LanguageProvider";
 import { useServerFn } from "@tanstack/react-start";
 
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
@@ -74,6 +74,21 @@ function ContactItem({
   );
 }
 
+const THANKS_EN = "Thanks! You'll get our room-availability updates and we'll email you when a room opens up.";
+const THANKS_FR = "Merci ! Vous recevrez nos mises à jour sur les chambres disponibles et nous vous écrirons dès qu'une chambre se libère.";
+
+function BilingualThanks() {
+  const { lang } = useLang();
+  if (lang === "fr") return <p className="text-[14px] font-semibold text-coral" lang="fr">{THANKS_FR}</p>;
+  if (lang === "en") return <p className="text-[14px] font-semibold text-coral" lang="en">{THANKS_EN}</p>;
+  return (
+    <div className="space-y-1">
+      <p className="text-[14px] font-semibold text-coral" lang="en">{THANKS_EN}</p>
+      <p className="text-[14px] font-semibold text-coral" lang="fr">{THANKS_FR}</p>
+    </div>
+  );
+}
+
 function NewsletterSignup() {
   const subscribe = useServerFn(subscribeNewsletter);
   const [email, setEmail] = useState("");
@@ -109,7 +124,7 @@ function NewsletterSignup() {
         <T>Want us to email you when a room opens up? Join our mailing list.</T>
       </p>
       {status === "ok" ? (
-        <p className="text-[14px] font-semibold text-coral"><T>Thanks! You&apos;ll hear from us when a room opens up.</T></p>
+        <BilingualThanks />
       ) : (
         <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-2">
           <input
