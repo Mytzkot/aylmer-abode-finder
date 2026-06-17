@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays, Home, Mail } from "lucide-react";
+import { ClipboardList, Users, DoorOpen, LogOut, Eye, LayoutGrid, BookOpen, CalendarDays, Home, Mail, DollarSign } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import { useServerFn } from "@tanstack/react-start";
 import { getVisitorCount } from "@/lib/visitor-counter.functions";
@@ -101,8 +101,9 @@ function AdminLayout() {
     { to: "/admin/applications", label: "Apps", icon: ClipboardList },
     { to: "/admin/tenants", label: "Tenants", icon: Users },
     { to: "/admin/rooms", label: "Rooms", icon: DoorOpen },
+    { to: "/admin/rent", label: "Rent", icon: DollarSign },
     { to: "/admin/board", label: "Board", icon: LayoutGrid },
-    { to: "/admin/calendar", label: "Calendar", icon: CalendarDays },
+    { to: "/admin/calendar", label: "Cal", icon: CalendarDays },
     { to: "/admin/ledger", label: "Ledger", icon: BookOpen },
     { to: "/admin/newsletter", label: "Email", icon: Mail },
   ];
@@ -150,7 +151,7 @@ function AdminLayout() {
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-8">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-9">
         {navItems.map(n => {
           const active = n.to === "/admin" ? path === "/admin" || path === "/admin/" : path.startsWith(n.to);
           return (

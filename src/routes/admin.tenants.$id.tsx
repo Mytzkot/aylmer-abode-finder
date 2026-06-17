@@ -147,6 +147,8 @@ function TenantFilePage() {
         tenantId={t.id}
         rent={rent}
         payments={payments}
+        tenant={t}
+        roomLabel={t.room_id ? rooms.find(r => r.id === t.room_id)?.room_number ? `Room ${rooms.find(r => r.id === t.room_id)?.room_number}` : null : null}
         onChanged={load}
       />
       <BalanceBlock rent={rent} paid={paid} outstanding={outstanding} payments={payments} />
@@ -222,8 +224,10 @@ function BalanceBlock({ rent, paid, outstanding, payments }: { rent: number; pai
   );
 }
 
-function PaymentsSection({ tenantId, rent, payments, onChanged }: {
-  tenantId: string; rent: number; payments: Payment[]; onChanged: () => void;
+function PaymentsSection({ tenantId, rent, payments, tenant, roomLabel, onChanged }: {
+  tenantId: string; rent: number; payments: Payment[];
+  tenant: Tenant; roomLabel: string | null;
+  onChanged: () => void;
 }) {
   const [amount, setAmount] = useState<string>("");
   const [method, setMethod] = useState<string>("Interac e-Transfer");
@@ -254,6 +258,22 @@ function PaymentsSection({ tenantId, rent, payments, onChanged }: {
     const { error } = await supabase.from("payment_ledger").delete().eq("id", id);
     if (error) { toast.error(error.message); return; }
     onChanged();
+  };
+
+  const downloadReceipt = async (p: Payment) => {
+    const { downloadReceiptPdf } = await import("@/lib/receipt");
+    downloadReceiptPdf({
+      receiptNumber: p.id.slice(0, 8).toUpperCase(),
+      paidOn: p.paid_on,
+      amount: Number(p.amount),
+      method: p.method,
+      notes: p.notes,
+      tenantName: `${tenant.first_name || ""} ${tenant.surname || ""}`.trim() || null,
+      tenantEmail: tenant.email || null,
+      tenantPhone: tenant.telephone || null,
+      roomLabel,
+      propertyAddress: null,
+    });
   };
 
   return (
@@ -302,7 +322,10 @@ function PaymentsSection({ tenantId, rent, payments, onChanged }: {
                     {new Date(p.paid_on).toLocaleDateString()}{p.notes ? ` · ${p.notes}` : ""}
                   </div>
                 </div>
-                <button onClick={() => removePayment(p.id)} className="text-xs text-destructive hover:underline shrink-0">Delete</button>
+                <div className="flex items-center gap-3 shrink-0">
+                  <button onClick={() => downloadReceipt(p)} className="text-xs font-semibold text-brand hover:underline">Receipt</button>
+                  <button onClick={() => removePayment(p.id)} className="text-xs text-destructive hover:underline">Delete</button>
+                </div>
               </li>
             ))}
           </ul>

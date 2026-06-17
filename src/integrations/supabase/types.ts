@@ -192,6 +192,42 @@ export type Database = {
           },
         ]
       }
+      card_payment_requests: {
+        Row: {
+          address_or_room: string | null
+          amount: number | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          id: string
+          message: string | null
+          name: string
+          status: string
+        }
+        Insert: {
+          address_or_room?: string | null
+          amount?: number | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          name: string
+          status?: string
+        }
+        Update: {
+          address_or_room?: string | null
+          amount?: number | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          name?: string
+          status?: string
+        }
+        Relationships: []
+      }
       monthly_expenses: {
         Row: {
           cleaning: number
@@ -354,6 +390,50 @@ export type Database = {
           youtube_url?: string | null
         }
         Relationships: []
+      }
+      rent_reminders: {
+        Row: {
+          amount_due: number | null
+          channel: string
+          contact: string | null
+          id: string
+          month_start: string
+          notes: string | null
+          sent_at: string
+          sent_by: string | null
+          tenant_id: string
+        }
+        Insert: {
+          amount_due?: number | null
+          channel: string
+          contact?: string | null
+          id?: string
+          month_start: string
+          notes?: string | null
+          sent_at?: string
+          sent_by?: string | null
+          tenant_id: string
+        }
+        Update: {
+          amount_due?: number | null
+          channel?: string
+          contact?: string | null
+          id?: string
+          month_start?: string
+          notes?: string | null
+          sent_at?: string
+          sent_by?: string | null
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rent_reminders_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {

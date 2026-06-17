@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Send, CreditCard, Copy, Check } from "lucide-react";
+import { Send, CreditCard, Copy, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { CONTACT } from "@/data/properties";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/pay")({
   component: PayOnline,
@@ -32,16 +34,7 @@ function PayOnline() {
     }
   };
 
-  const cardRequestSubject = encodeURIComponent("Card payment link request");
-  const cardRequestBody = encodeURIComponent(
-    "Hi, I'd like to pay my rent by credit/debit card. Please send me a secure payment link.\n\n" +
-      "Bonjour, j'aimerais payer mon loyer par carte de crédit/débit. Veuillez m'envoyer un lien de paiement sécurisé.\n\n" +
-      "Name / Nom:\nAddress / Adresse:\nAmount / Montant:"
-  );
-  const cardEmail = `mailto:zorbagraphic@yahoo.com?subject=${cardRequestSubject}&body=${cardRequestBody}`;
-  const cardWhatsApp = `${CONTACT.whatsapp}?text=${encodeURIComponent(
-    "Hi, I'd like a card payment link for my rent. / Bonjour, j'aimerais un lien de paiement par carte pour mon loyer."
-  )}`;
+  // Card request now uses a database-backed form (CardLinkRequestForm below).
 
   return (
     <main className="flex-1 mx-auto max-w-3xl w-full px-4 py-12 md:py-16">
@@ -137,34 +130,105 @@ function PayOnline() {
         </div>
 
         <p className="mt-4 text-sm md:text-base text-ink/80">
-          Message us and we'll send you a secure payment link for your card.
+          Fill in the form below and we'll send you a secure payment link.
         </p>
         <p className="text-sm text-ink/60 italic">
-          Écrivez-nous et nous vous enverrons un lien de paiement sécurisé pour votre carte.
+          Remplissez le formulaire et nous vous enverrons un lien de paiement sécurisé.
         </p>
 
-        <div className="mt-5 flex flex-col sm:flex-row gap-3">
-          <a
-            href={cardWhatsApp}
-            target="_blank"
-            rel="noreferrer"
-            className="touch-min flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white px-5 py-3 font-bold hover:opacity-90"
-          >
-            Request via WhatsApp
-          </a>
-          <a
-            href={cardEmail}
-            className="touch-min flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-ink text-white px-5 py-3 font-bold hover:opacity-90"
-          >
-            Request via Email
-          </a>
-        </div>
+        <CardLinkRequestForm />
 
-        <p className="mt-3 text-xs text-muted-foreground">
+        <p className="mt-4 text-xs text-muted-foreground">
           A dedicated card payment service for rent is coming soon. ·
           <span className="italic"> Un service de paiement par carte dédié au loyer sera bientôt disponible.</span>
         </p>
       </section>
     </main>
+  );
+}
+
+function CardLinkRequestForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [addr, setAddr] = useState("");
+  const [amount, setAmount] = useState("");
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) { toast.error("Please enter your name"); return; }
+    if (!email.trim() && !phone.trim()) { toast.error("Please enter an email or phone"); return; }
+    setBusy(true);
+    const { error } = await supabase.from("card_payment_requests").insert({
+      name: name.trim(),
+      contact_email: email.trim() || null,
+      contact_phone: phone.trim() || null,
+      address_or_room: addr.trim() || null,
+      amount: amount ? Number(amount) : null,
+      message: message.trim() || null,
+    });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    setSent(true);
+  };
+
+  if (sent) {
+    return (
+      <div className="mt-5 rounded-2xl bg-success/10 border border-success/30 p-5 text-sm">
+        <p className="font-semibold text-success">
+          Thanks! We received your request and will email or text you a secure payment link shortly.
+        </p>
+        <p className="italic text-ink/70 mt-1">
+          Merci ! Nous avons reçu votre demande et nous vous enverrons un lien de paiement sécurisé sous peu.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <label className="text-xs text-muted-foreground block sm:col-span-2">
+        Full name · Nom complet *
+        <input value={name} onChange={e => setName(e.target.value)} required
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <label className="text-xs text-muted-foreground block">
+        Email
+        <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <label className="text-xs text-muted-foreground block">
+        Phone · Téléphone
+        <input type="tel" value={phone} onChange={e => setPhone(e.target.value)}
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <label className="text-xs text-muted-foreground block sm:col-span-2">
+        Address or room · Adresse ou chambre
+        <input value={addr} onChange={e => setAddr(e.target.value)}
+          placeholder="e.g. 102 Chemin d'Amour, Room 3"
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <label className="text-xs text-muted-foreground block">
+        Amount (CAD) · Montant
+        <input type="number" inputMode="decimal" value={amount} onChange={e => setAmount(e.target.value)}
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <label className="text-xs text-muted-foreground block">
+        Note (optional)
+        <input value={message} onChange={e => setMessage(e.target.value)}
+          className="mt-1 w-full px-3 py-2.5 rounded-xl border border-input bg-background text-sm" />
+      </label>
+      <p className="sm:col-span-2 text-[11px] text-muted-foreground">
+        We'll only use this to send you a payment link. We never store card details.
+      </p>
+      <button type="submit" disabled={busy}
+        className="touch-min sm:col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-ink text-white px-5 py-3 font-bold hover:opacity-90 disabled:opacity-50">
+        {busy && <Loader2 className="w-4 h-4 animate-spin" />}
+        {busy ? "Sending…" : "Request payment link · Demander un lien"}
+      </button>
+    </form>
   );
 }
