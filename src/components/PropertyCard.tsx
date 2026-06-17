@@ -31,8 +31,10 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
   const next = () => setIdx((idx + 1) % prop.images.length);
   const prev = () => setIdx((idx - 1 + prop.images.length) % prop.images.length);
 
-  const availableCount = rooms.filter(r => (r.current_status || "").toLowerCase() === "available").length;
+  const availableRooms = rooms.filter(r => (r.current_status || "").toLowerCase() === "available");
+  const availableCount = availableRooms.length;
   const firstRoom = rooms[0];
+  const firstAvailable = availableRooms[0];
   const youtubeUrl = firstRoom?.youtube_video_url || prop.youtube;
   const airbnbUrl = firstRoom?.airbnb_listing_url || null;
   const gmapsUrl = mapsUrl(prop.address, prop.city);
@@ -97,8 +99,8 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
           )}
         </div>
 
-        <div className="text-xs text-muted-foreground font-medium">
-          {roomsLine}
+        <div className={`text-xs font-medium ${availableCount === 0 ? "text-destructive" : "text-muted-foreground"}`}>
+          {availableCount === 0 ? <T>Fully rented — join the waitlist</T> : roomsLine}
         </div>
 
         <ul className="flex flex-wrap gap-1.5 pt-1" aria-label={amenitiesLabel}>
@@ -117,9 +119,15 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
         </ul>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
-          <Link to="/book/$roomId" params={{ roomId: firstRoom?.id || prop.id }} className="btn-pill btn-ink text-sm py-2.5">
-            <Calendar className="w-4 h-4" /> {t.cta.book}
-          </Link>
+          {firstAvailable ? (
+            <Link to="/book/$roomId" params={{ roomId: firstAvailable.id }} className="btn-pill btn-ink text-sm py-2.5">
+              <Calendar className="w-4 h-4" /> {t.cta.book}
+            </Link>
+          ) : (
+            <span className="btn-pill text-sm py-2.5 bg-cream-deep text-ink/50 cursor-not-allowed justify-center inline-flex items-center gap-1">
+              <Calendar className="w-4 h-4" /> <T>No rooms available</T>
+            </span>
+          )}
           <Link to="/apply" search={{ property: prop.id }} className="btn-pill btn-coral text-sm py-2.5">
             <FileText className="w-4 h-4" /> {t.cta.apply}
           </Link>
