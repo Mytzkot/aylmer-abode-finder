@@ -398,9 +398,11 @@ export type Database = {
           current_status: string
           description_en: string | null
           description_fr: string | null
+          externally_managed: boolean
           features: string[] | null
           id: string
           image_urls: string[] | null
+          manual_available: boolean
           name: string | null
           notes: string | null
           property_id: string | null
@@ -422,9 +424,11 @@ export type Database = {
           current_status?: string
           description_en?: string | null
           description_fr?: string | null
+          externally_managed?: boolean
           features?: string[] | null
           id?: string
           image_urls?: string[] | null
+          manual_available?: boolean
           name?: string | null
           notes?: string | null
           property_id?: string | null
@@ -446,9 +450,11 @@ export type Database = {
           current_status?: string
           description_en?: string | null
           description_fr?: string | null
+          externally_managed?: boolean
           features?: string[] | null
           id?: string
           image_urls?: string[] | null
+          manual_available?: boolean
           name?: string | null
           notes?: string | null
           property_id?: string | null

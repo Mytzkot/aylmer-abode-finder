@@ -32,6 +32,8 @@ interface RoomRow {
   rate_monthly: number | null;
   image_urls: string[] | null;
   booked_until: string | null;
+  externally_managed: boolean | null;
+  manual_available: boolean | null;
   created_at: string;
 }
 interface PropertyRow { id: string; slug: string; address: string; short_name: string | null; }
@@ -64,7 +66,7 @@ function RoomsShop() {
         supabase
           .from("rooms")
           .select(
-            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, created_at",
+            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, externally_managed, manual_available, created_at",
           ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
         supabase
@@ -121,6 +123,9 @@ function RoomsShop() {
     }
 
     const freeOn = (r: RoomRow): number => {
+      // Externally-managed rooms ignore admin status & tenant data: only the
+      // manual switch decides availability.
+      if (r.externally_managed) return r.manual_available ? 0 : Number.POSITIVE_INFINITY;
       const status = (r.current_status || "").toLowerCase();
       const candidates: number[] = [];
       if (r.booked_until) {
@@ -175,6 +180,7 @@ function RoomsShop() {
   );
   const availableNowCount = useMemo(
     () => totalVisible.filter(r => {
+      if (r.externally_managed) return !!r.manual_available;
       const status = (r.current_status || "").toLowerCase();
       if (status !== "available") return false;
       if (r.booked_until && Date.parse(r.booked_until) > now) return false;
@@ -361,8 +367,10 @@ function RoomsShop() {
               const bookedUntilT = r.booked_until ? Date.parse(r.booked_until) : 0;
               const leaseEndT = leaseEndByRoom[r.id] ? Date.parse(leaseEndByRoom[r.id]) : 0;
               const futureBookT = Math.max(bookedUntilT, leaseEndT);
-              const isRented = status !== "available" || futureBookT > now;
-              const freeOnLabel = futureBookT > now
+              const isRented = r.externally_managed
+                ? !r.manual_available
+                : (status !== "available" || futureBookT > now);
+              const freeOnLabel = !r.externally_managed && futureBookT > now
                 ? new Date(futureBookT).toLocaleDateString(undefined, { month: "short", day: "numeric" })
                 : null;
               return (

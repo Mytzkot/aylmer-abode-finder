@@ -47,6 +47,7 @@ interface RoomRow {
   id: string; slug: string | null; room_number: string | null; name: string | null;
   current_status: string | null; rate_monthly: number | null; base_rate: number | null;
   image_urls: string[] | null; booked_until: string | null;
+  externally_managed: boolean | null; manual_available: boolean | null;
 }
 
 const POPULAR_FACILITIES = [
@@ -114,7 +115,7 @@ function PropertyHub() {
       setProp(p as PropertyRow);
       const { data: rs } = await supabase
         .from("rooms")
-        .select("id, slug, room_number, name, current_status, rate_monthly, base_rate, image_urls, booked_until")
+        .select("id, slug, room_number, name, current_status, rate_monthly, base_rate, image_urls, booked_until, externally_managed, manual_available")
         .eq("property_id", p.id)
         .order("room_number", { ascending: true });
       setRooms((rs as RoomRow[]) || []);
@@ -124,7 +125,9 @@ function PropertyHub() {
 
   if (!loading && !prop) throw notFound();
 
-  const availableCount = rooms.filter((r) => (r.current_status || "").toLowerCase() === "available").length;
+  const isRoomAvail = (r: RoomRow) =>
+    r.externally_managed ? !!r.manual_available : (r.current_status || "").toLowerCase() === "available";
+  const availableCount = rooms.filter(isRoomAvail).length;
   const minPrice = useMemo(() => {
     const prices = rooms
       .map((r) => r.rate_monthly ?? r.base_rate)
@@ -315,7 +318,7 @@ function PropertyHub() {
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {rooms.map((r) => {
                     const img = (r.image_urls && r.image_urls[0]) || fallbackImg;
-                    const isAvail = (r.current_status || "").toLowerCase() === "available";
+                    const isAvail = isRoomAvail(r);
                     const price = r.rate_monthly ?? r.base_rate;
                     // Derive room number: prefer DB column, else parse first digit run from name
                     const parsedNum = (r.name || "").match(/\d+/)?.[0];

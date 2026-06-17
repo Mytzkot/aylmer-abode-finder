@@ -14,6 +14,8 @@ interface Room {
   current_status?: string;
   base_rate?: number;
   image_urls?: string[] | null;
+  externally_managed?: boolean | null;
+  manual_available?: boolean | null;
 }
 
 const STATUSES = ["Available", "Rented", "Maintenance"] as const;
@@ -29,7 +31,7 @@ function RoomsPage() {
   const load = async () => {
     const { data, error } = await supabase
       .from("rooms")
-      .select("id, name, current_status, base_rate, image_urls")
+      .select("id, name, current_status, base_rate, image_urls, externally_managed, manual_available")
       .order("name");
     if (error) {
       console.error(error);
@@ -49,6 +51,17 @@ function RoomsPage() {
       return;
     }
     setRooms(rooms.map((x) => (x.id === r.id ? { ...x, current_status: status } : x)));
+  };
+
+  const setManualAvailable = async (r: Room, value: boolean) => {
+    const { error } = await supabase.from("rooms").update({ manual_available: value }).eq("id", r.id);
+    if (error) {
+      console.error(error);
+      toast.error("Could not update availability.");
+      return;
+    }
+    setRooms(rooms.map((x) => (x.id === r.id ? { ...x, manual_available: value } : x)));
+    toast.success(value ? "Marked as available on public site." : "Marked as not available on public site.");
   };
 
   const handleFiles = async (room: Room, files: FileList | null) => {
@@ -154,6 +167,7 @@ function RoomsPage() {
             room={r}
             uploading={uploadingId === r.id}
             onStatus={(s) => setStatus(r, s)}
+            onManualAvailable={(v) => setManualAvailable(r, v)}
             onFiles={(fs) => handleFiles(r, fs)}
             onRemove={(url) => removeImage(r, url)}
           />
@@ -168,12 +182,14 @@ function RoomCard({
   room,
   uploading,
   onStatus,
+  onManualAvailable,
   onFiles,
   onRemove,
 }: {
   room: Room;
   uploading: boolean;
   onStatus: (s: string) => void;
+  onManualAvailable: (v: boolean) => void;
   onFiles: (fs: FileList | null) => void;
   onRemove: (url: string) => void;
 }) {
@@ -194,21 +210,44 @@ function RoomCard({
       </div>
 
       <div className="flex items-center justify-between">
-        <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${tone}`}>{s}</span>
+        <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${tone}`}>
+          {room.externally_managed ? (room.manual_available ? "Public: Available" : "Public: Not available") : s}
+        </span>
         <span className="text-sm font-semibold">${room.base_rate ?? "—"}</span>
       </div>
 
-      <select
-        value={s}
-        onChange={(e) => onStatus(e.target.value)}
-        className="w-full px-3 py-2 rounded-lg border border-input bg-background text-sm"
-      >
-        {STATUSES.map((st) => (
-          <option key={st} value={st}>
-            {st}
-          </option>
-        ))}
-      </select>
+      {room.externally_managed ? (
+        <div className="rounded-lg border border-dashed border-input bg-muted/40 p-3 space-y-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Externally managed
+          </p>
+          <p className="text-xs text-muted-foreground leading-snug">
+            Bookings for this room are handled on another platform, so tenant assignments here don't affect public availability. Use the switch below to show or hide it on the public site.
+          </p>
+          <label className="flex items-center justify-between gap-3 cursor-pointer select-none">
+            <span className="text-sm font-semibold">Show as available on public site</span>
+            <input
+              type="checkbox"
+              checked={!!room.manual_available}
+              onChange={(e) => onManualAvailable(e.target.checked)}
+              className="w-5 h-5 accent-success"
+            />
+          </label>
+        </div>
+      ) : (
+        <select
+          value={s}
+          onChange={(e) => onStatus(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-input bg-background text-sm"
+        >
+          {STATUSES.map((st) => (
+            <option key={st} value={st}>
+              {st}
+            </option>
+          ))}
+        </select>
+      )}
+
 
       <div>
         <div className="text-xs font-semibold text-muted-foreground mb-2">

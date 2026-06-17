@@ -4,7 +4,12 @@ import { useState } from "react";
 import { useLang, T, useTranslated } from "@/i18n/LanguageProvider";
 import type { PropertyMeta } from "@/data/properties";
 
-interface Room { id: string; name?: string | null; current_status?: string | null; base_rate?: number | null; youtube_video_url?: string | null; airbnb_listing_url?: string | null; }
+interface Room { id: string; name?: string | null; current_status?: string | null; base_rate?: number | null; youtube_video_url?: string | null; airbnb_listing_url?: string | null; externally_managed?: boolean | null; manual_available?: boolean | null; }
+
+function isRoomBookable(r: Room): boolean {
+  if (r.externally_managed) return !!r.manual_available;
+  return (r.current_status || "").toLowerCase() === "available";
+}
 
 function mapsUrl(address: string, city: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${address} ${city}`)}`;
@@ -31,7 +36,7 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
   const next = () => setIdx((idx + 1) % prop.images.length);
   const prev = () => setIdx((idx - 1 + prop.images.length) % prop.images.length);
 
-  const availableRooms = rooms.filter(r => (r.current_status || "").toLowerCase() === "available");
+  const availableRooms = rooms.filter(isRoomBookable);
   const availableCount = availableRooms.length;
   const firstRoom = rooms[0];
   const firstAvailable = availableRooms[0];

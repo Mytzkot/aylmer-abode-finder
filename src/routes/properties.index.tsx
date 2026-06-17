@@ -19,7 +19,7 @@ export const Route = createFileRoute("/properties/")({
   }),
 });
 
-interface RoomRow { id: string; property_id?: string | null; current_status?: string | null; base_rate?: number | null; }
+interface RoomRow { id: string; property_id?: string | null; current_status?: string | null; base_rate?: number | null; externally_managed?: boolean | null; manual_available?: boolean | null; }
 
 function PropertiesPage() {
   const [roomsByProp, setRoomsByProp] = useState<Record<string, RoomRow[]>>({});
@@ -28,7 +28,7 @@ function PropertiesPage() {
     if (!isSupabaseConfigured) return;
     (async () => {
       const [{ data: rooms }, { data: props }] = await Promise.all([
-        supabase.from("rooms").select("id, property_id, current_status, base_rate"),
+        supabase.from("rooms").select("id, property_id, current_status, base_rate, externally_managed, manual_available"),
         supabase.from("properties").select("id, slug"),
       ]);
       if (!rooms || !props) return;
