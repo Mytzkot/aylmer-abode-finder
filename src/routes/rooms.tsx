@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal, X, PlayCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { PROPERTIES } from "@/data/properties";
 import { T, useTranslated } from "@/i18n/LanguageProvider";
@@ -32,6 +32,8 @@ interface RoomRow {
   rate_monthly: number | null;
   image_urls: string[] | null;
   booked_until: string | null;
+  available_from: string | null;
+  youtube_video_url: string | null;
   externally_managed: boolean | null;
   manual_available: boolean | null;
   created_at: string;
@@ -66,7 +68,7 @@ function RoomsShop() {
         supabase
           .from("rooms")
           .select(
-            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, externally_managed, manual_available, created_at",
+            "id, slug, property_id, name, room_number, current_status, base_rate, rate_monthly, image_urls, booked_until, available_from, youtube_video_url, externally_managed, manual_available, created_at",
           ),
         supabase.from("properties").select("id, slug, address, short_name").order("address"),
         supabase
@@ -370,7 +372,12 @@ function RoomsShop() {
               const isRented = r.externally_managed
                 ? !r.manual_available
                 : (status !== "available" || futureBookT > now);
-              const freeOnLabel = !r.externally_managed && futureBookT > now
+              const availFromT = r.available_from ? Date.parse(r.available_from) : 0;
+              const futureAvail = !isRented && availFromT > now;
+              const availDateLabel = futureAvail
+                ? new Date(availFromT).toLocaleDateString(undefined, { month: "long", day: "numeric" })
+                : null;
+              const freeOnLabel = isRented && !r.externally_managed && futureBookT > now
                 ? new Date(futureBookT).toLocaleDateString(undefined, { month: "short", day: "numeric" })
                 : null;
               return (
@@ -384,9 +391,20 @@ function RoomsShop() {
                     <span className={`absolute top-2 start-2 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide ${
                       isRented ? "bg-ink/70 text-white" : "bg-success text-white"
                     }`}>
-                      {isRented ? <T>Not available</T> : <T>Available</T>}
+                      {isRented ? <T>Not available</T> : futureAvail ? <><T>Available</T> {availDateLabel}</> : <T>Available now</T>}
                     </span>
-
+                    {!isRented && r.youtube_video_url && (
+                      <a
+                        href={r.youtube_video_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label="Watch room tour"
+                        className="absolute bottom-2 end-2 w-9 h-9 rounded-full bg-white/95 text-red-600 flex items-center justify-center shadow hover:scale-110 transition"
+                      >
+                        <PlayCircle className="w-6 h-6" />
+                      </a>
+                    )}
                   </div>
                   <div className="pt-2">
                     <h3 className={`text-sm font-semibold leading-tight ${isRented ? "text-ink/60" : "text-ink group-hover:underline"}`}>{r.name || `Room ${r.room_number}`}</h3>

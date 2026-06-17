@@ -46,7 +46,8 @@ interface PropertyRow {
 interface RoomRow {
   id: string; slug: string | null; room_number: string | null; name: string | null;
   current_status: string | null; rate_monthly: number | null; base_rate: number | null;
-  image_urls: string[] | null; booked_until: string | null;
+  image_urls: string[] | null; booked_until: string | null; available_from: string | null;
+  youtube_video_url: string | null;
   externally_managed: boolean | null; manual_available: boolean | null;
 }
 
@@ -115,7 +116,7 @@ function PropertyHub() {
       setProp(p as PropertyRow);
       const { data: rs } = await supabase
         .from("rooms")
-        .select("id, slug, room_number, name, current_status, rate_monthly, base_rate, image_urls, booked_until, externally_managed, manual_available")
+        .select("id, slug, room_number, name, current_status, rate_monthly, base_rate, image_urls, booked_until, available_from, youtube_video_url, externally_managed, manual_available")
         .eq("property_id", p.id)
         .order("room_number", { ascending: true });
       setRooms((rs as RoomRow[]) || []);
@@ -360,16 +361,38 @@ function PropertyHub() {
                               {prop.short_name || prop.address}
                               {roomNum ? <> — <T>Room</T> {roomNum}</> : cleanName ? <> — {cleanName}</> : null}
                             </h3>
-                            {isConrad ? (
-                              <p className="text-ink/60 font-semibold italic"><T>Price — coming soon</T></p>
-                            ) : price != null ? (
+                            {price != null && (
                               <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / <T>month</T></p>
-                            ) : null}
-                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                              isAvail ? "bg-success text-white" : "bg-destructive text-white"
-                            }`}>
-                              {isAvail ? <T>Available</T> : r.booked_until ? <><T>Booked until</T> {r.booked_until}</> : <T>Booked</T>}
-                            </span>
+                            )}
+                            {(() => {
+                              const availFromT = r.available_from ? Date.parse(r.available_from) : 0;
+                              const futureAvail = isAvail && availFromT > Date.now();
+                              const dateLabel = futureAvail
+                                ? new Date(availFromT).toLocaleDateString(undefined, { month: "long", day: "numeric" })
+                                : null;
+                              return (
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                                    isAvail ? "bg-success text-white" : "bg-ink/70 text-white"
+                                  }`}>
+                                    {isAvail
+                                      ? (futureAvail ? <><T>Available</T> {dateLabel}</> : <T>Available now</T>)
+                                      : <T>Not available</T>}
+                                  </span>
+                                  {isAvail && r.youtube_video_url && (
+                                    <a
+                                      href={r.youtube_video_url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      onClick={(e) => e.stopPropagation()}
+                                      className="inline-flex items-center gap-1 text-xs font-semibold text-red-600 hover:underline"
+                                    >
+                                      ▶ <T>Watch tour</T>
+                                    </a>
+                                  )}
+                                </div>
+                              );
+                            })()}
                           </div>
                         </Link>
                       );
