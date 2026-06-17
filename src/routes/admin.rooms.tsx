@@ -22,22 +22,35 @@ const STATUSES = ["Available", "Rented", "Maintenance"] as const;
 // 10-year signed URL — refresh by re-uploading if Supabase storage signing key rotates.
 const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 365 * 10;
 
+interface TenantLite { id: string; first_name?: string | null; surname?: string | null; telephone?: string | null; room_id?: string | null; }
+
 function RoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [tenantsByRoom, setTenantsByRoom] = useState<Record<string, TenantLite>>({});
   const [syncing, setSyncing] = useState(false);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
   const sync = useServerFn(syncSquareCatalog);
 
   const load = async () => {
-    const { data, error } = await supabase
-      .from("rooms")
-      .select("id, name, current_status, base_rate, image_urls, externally_managed, manual_available")
-      .order("name");
+    const [{ data, error }, { data: tens }] = await Promise.all([
+      supabase
+        .from("rooms")
+        .select("id, name, current_status, base_rate, image_urls, externally_managed, manual_available")
+        .order("name"),
+      supabase
+        .from("tenants")
+        .select("id, first_name, surname, telephone, room_id")
+        .eq("status", "current")
+        .not("room_id", "is", null),
+    ]);
     if (error) {
       console.error(error);
       toast.error("Could not load rooms.");
     }
     setRooms((data as Room[]) || []);
+    const map: Record<string, TenantLite> = {};
+    (tens as TenantLite[] | null)?.forEach(t => { if (t.room_id) map[t.room_id] = t; });
+    setTenantsByRoom(map);
   };
   useEffect(() => {
     load();
