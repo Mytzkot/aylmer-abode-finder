@@ -367,8 +367,10 @@ function RoomsShop() {
               const bookedUntilT = r.booked_until ? Date.parse(r.booked_until) : 0;
               const leaseEndT = leaseEndByRoom[r.id] ? Date.parse(leaseEndByRoom[r.id]) : 0;
               const futureBookT = Math.max(bookedUntilT, leaseEndT);
-              const isRented = status !== "available" || futureBookT > now;
-              const freeOnLabel = futureBookT > now
+              const isRented = r.externally_managed
+                ? !r.manual_available
+                : (status !== "available" || futureBookT > now);
+              const freeOnLabel = !r.externally_managed && futureBookT > now
                 ? new Date(futureBookT).toLocaleDateString(undefined, { month: "short", day: "numeric" })
                 : null;
               return (
