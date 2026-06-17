@@ -178,6 +178,7 @@ function RoomsPage() {
           <RoomCard
             key={r.id}
             room={r}
+            tenant={tenantsByRoom[r.id] || null}
             uploading={uploadingId === r.id}
             onStatus={(s) => setStatus(r, s)}
             onManualAvailable={(v) => setManualAvailable(r, v)}
