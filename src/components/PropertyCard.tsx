@@ -64,7 +64,15 @@ export function PropertyCard({ prop, rooms }: { prop: PropertyMeta; rooms: Room[
         aria-label={`View rooms at ${prop.address}`}
         className="block relative aspect-video bg-cream-deep overflow-hidden rounded-3xl m-2 group"
       >
-        <img src={prop.images[idx]} alt={prop.address} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+        {prop.images[idx] === "__coming_soon__" ? (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-cream-deep text-ink/60 gap-2">
+            <Home className="w-10 h-10 opacity-40" />
+            <span className="font-display text-xl"><T>Coming soon</T></span>
+          </div>
+        ) : (
+          <img src={prop.images[idx]} alt={prop.address} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+        )}
+
         {prop.images.length > 1 && (
           <>
             <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); prev(); }} className="touch-min absolute start-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 flex items-center justify-center shadow" aria-label={prevImg}>
