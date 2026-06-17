@@ -167,18 +167,30 @@ function ApplyPage() {
   if (done) {
     const propLabel = LOCATION_OPTIONS.find((o) => o.value === locationSel);
     const propText = propLabel ? (lang === "fr" ? propLabel.label_fr : propLabel.label_en) : "";
+    const thanksEN = "Thanks! We got your application and will contact you soon.";
+    const thanksFR = "Merci ! Nous avons bien reçu votre demande et nous vous contacterons bientôt.";
+    const showBoth = lang !== "en" && lang !== "fr";
     return (
       <div className="min-h-screen flex flex-col" dir={dir}>
         <main className="flex-1 mx-auto max-w-md px-4 py-16 text-center">
           <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">{t.apply.thanks}</h1>
-          <p className="text-sm text-ink/70 mb-2">{l.thanksLine2}</p>
-          {propText && <p className="text-xs text-ink/60 mb-6">→ {propText}</p>}
+          {showBoth ? (
+            <>
+              <p className="text-lg font-semibold text-ink mb-2">{thanksEN}</p>
+              <p className="text-lg font-semibold text-ink mb-2" lang="fr">{thanksFR}</p>
+            </>
+          ) : (
+            <p className="text-lg font-semibold text-ink mb-2" lang={lang}>
+              {lang === "fr" ? thanksFR : thanksEN}
+            </p>
+          )}
+          {propText && <p className="text-xs text-ink/60 mt-4 mb-6">→ {propText}</p>}
           <Link to="/" className="mt-6 inline-flex rounded-xl bg-primary text-primary-foreground px-5 py-3 font-semibold">{l.back}</Link>
         </main>
       </div>
     );
   }
+
 
   const f = t.fields;
 
