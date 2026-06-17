@@ -524,27 +524,8 @@ function ApplyPage() {
             <Field label={f.employer_address} name="employer_address" value={form.employer_address || ""} onChange={onText("employer_address")} />
           </Section>
 
-          <Section title={t.apply.student}>
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={isStudent} onChange={(e) => setIsStudent(e.target.checked)} className="w-5 h-5 accent-primary" />
-              <span className="font-medium">{t.apply.isStudent}</span>
-            </label>
-            {isStudent && (
-              <>
-                <Two>
-                  <Field label={f.name_of_school} name="name_of_school" value={form.name_of_school || ""} onChange={onText("name_of_school")} />
-                  <Field label={f.program_of_study} name="program_of_study" value={form.program_of_study || ""} onChange={onText("program_of_study")} />
-                </Two>
-                <label className="flex items-center gap-2 mt-2">
-                  <input type="checkbox" checked={form.is_international_student === "1"} onChange={(e) => setField("is_international_student", e.target.checked ? "1" : "")} className="w-5 h-5 accent-primary" />
-                  <span>{f.is_international_student}</span>
-                </label>
-                {form.is_international_student === "1" && (
-                  <Field label={lang === "fr" ? "Pays d'origine" : lang === "ar" ? "بلد الإقامة" : "Home country"} name="country_of_origin" value={form.country_of_origin || ""} onChange={onText("country_of_origin")} />
-                )}
-              </>
-            )}
-          </Section>
+
+
 
           <Section title={t.apply.emergency}>
             <Two>
