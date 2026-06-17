@@ -316,48 +316,65 @@ function PropertyHub() {
                 <p className="text-ink/60"><T>No rooms listed yet for this property.</T></p>
               ) : (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {rooms.map((r) => {
-                    const img = (r.image_urls && r.image_urls[0]) || fallbackImg;
-                    const isAvail = isRoomAvail(r);
-                    const price = r.rate_monthly ?? r.base_rate;
-                    // Derive room number: prefer DB column, else parse first digit run from name
-                    const parsedNum = (r.name || "").match(/\d+/)?.[0];
-                    const roomNum = r.room_number || parsedNum;
-                    // Clean display name: strip the "Property - " prefix and French duplicate after slash
-                    const cleanName = (r.name || "")
-                      .replace(/^[^-]+-\s*/, "")
-                      .split("/")[0]
-                      .trim();
-                    return (
-                      <Link
-                        key={r.id}
-                        to="/properties/$id/$roomSlug"
-                        params={{ id: slug, roomSlug: r.slug || r.id }}
-                        className="group block bg-card rounded-2xl overflow-hidden border border-border/60 hover:shadow-lg hover:-translate-y-0.5 transition"
-                      >
-                        <div className="aspect-[4/3] bg-cream-deep overflow-hidden">
-                          {img && (
-                            <img src={img} alt={cleanName || `Room ${roomNum || ""}`} loading="lazy"
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                          )}
-                        </div>
-                        <div className="p-5 space-y-2">
-                          <h3 className="font-display text-xl text-ink leading-tight">
-                            {prop.short_name || prop.address}
-                            {roomNum ? <> — <T>Room</T> {roomNum}</> : cleanName ? <> — {cleanName}</> : null}
-                          </h3>
-                          {price != null && (
-                            <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / <T>month</T></p>
-                          )}
-                          <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                            isAvail ? "bg-success text-white" : "bg-destructive text-white"
-                          }`}>
-                            {isAvail ? <T>Available</T> : r.booked_until ? <><T>Booked until</T> {r.booked_until}</> : <T>Booked</T>}
-                          </span>
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {(() => {
+                    const isConrad = slug === "58-conrad";
+                    const propertyImgSet = new Set<string>([
+                      ...(prop.image_urls || []),
+                      ...(meta?.images || []),
+                      ...(fallbackImg ? [fallbackImg] : []),
+                    ]);
+                    return rooms.map((r) => {
+                      const rawImg = r.image_urls && r.image_urls[0];
+                      // Conrad: only show genuine interior photos (not the house/exterior).
+                      const isExteriorDup = !!rawImg && propertyImgSet.has(rawImg);
+                      const img = isConrad
+                        ? (rawImg && !isExteriorDup ? rawImg : null)
+                        : (rawImg || fallbackImg);
+                      const isAvail = isRoomAvail(r);
+                      const price = r.rate_monthly ?? r.base_rate;
+                      const parsedNum = (r.name || "").match(/\d+/)?.[0];
+                      const roomNum = r.room_number || parsedNum;
+                      const cleanName = (r.name || "")
+                        .replace(/^[^-]+-\s*/, "")
+                        .split("/")[0]
+                        .trim();
+                      return (
+                        <Link
+                          key={r.id}
+                          to="/properties/$id/$roomSlug"
+                          params={{ id: slug, roomSlug: r.slug || r.id }}
+                          className="group block bg-card rounded-2xl overflow-hidden border border-border/60 hover:shadow-lg hover:-translate-y-0.5 transition"
+                        >
+                          <div className="aspect-[4/3] bg-cream-deep overflow-hidden flex items-center justify-center">
+                            {img ? (
+                              <img src={img} alt={cleanName || `Room ${roomNum || ""}`} loading="lazy"
+                                className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                            ) : (
+                              <span className="text-xs font-semibold uppercase tracking-wider text-ink/40">
+                                <T>Photos coming soon</T>
+                              </span>
+                            )}
+                          </div>
+                          <div className="p-5 space-y-2">
+                            <h3 className="font-display text-xl text-ink leading-tight">
+                              {prop.short_name || prop.address}
+                              {roomNum ? <> — <T>Room</T> {roomNum}</> : cleanName ? <> — {cleanName}</> : null}
+                            </h3>
+                            {isConrad ? (
+                              <p className="text-ink/60 font-semibold italic"><T>Price — coming soon</T></p>
+                            ) : price != null ? (
+                              <p className="text-ink font-semibold">CAD ${Number(price).toFixed(0)} / <T>month</T></p>
+                            ) : null}
+                            <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                              isAvail ? "bg-success text-white" : "bg-destructive text-white"
+                            }`}>
+                              {isAvail ? <T>Available</T> : r.booked_until ? <><T>Booked until</T> {r.booked_until}</> : <T>Booked</T>}
+                            </span>
+                          </div>
+                        </Link>
+                      );
+                    });
+                  })()}
                 </div>
               )}
             </section>
