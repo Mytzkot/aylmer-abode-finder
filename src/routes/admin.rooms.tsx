@@ -14,6 +14,8 @@ interface Room {
   current_status?: string;
   base_rate?: number;
   image_urls?: string[] | null;
+  externally_managed?: boolean | null;
+  manual_available?: boolean | null;
 }
 
 const STATUSES = ["Available", "Rented", "Maintenance"] as const;
@@ -29,7 +31,7 @@ function RoomsPage() {
   const load = async () => {
     const { data, error } = await supabase
       .from("rooms")
-      .select("id, name, current_status, base_rate, image_urls")
+      .select("id, name, current_status, base_rate, image_urls, externally_managed, manual_available")
       .order("name");
     if (error) {
       console.error(error);
@@ -49,6 +51,17 @@ function RoomsPage() {
       return;
     }
     setRooms(rooms.map((x) => (x.id === r.id ? { ...x, current_status: status } : x)));
+  };
+
+  const setManualAvailable = async (r: Room, value: boolean) => {
+    const { error } = await supabase.from("rooms").update({ manual_available: value }).eq("id", r.id);
+    if (error) {
+      console.error(error);
+      toast.error("Could not update availability.");
+      return;
+    }
+    setRooms(rooms.map((x) => (x.id === r.id ? { ...x, manual_available: value } : x)));
+    toast.success(value ? "Marked as available on public site." : "Marked as not available on public site.");
   };
 
   const handleFiles = async (room: Room, files: FileList | null) => {
