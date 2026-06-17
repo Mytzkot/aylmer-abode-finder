@@ -30,21 +30,20 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
-async function maybeNotifyAdminOfSignup(email: string) {
-  // Only sends if a Lovable email sender is configured.
-  // When not configured, the signup is still safely stored in the database
-  // and visible in /admin/newsletter.
-  try {
-    const { sendTransactionalEmail } = await import("@/lib/email/send");
-    await sendTransactionalEmail({
-      templateName: "newsletter-signup-admin",
-      recipientEmail: "michellerothman9@gmail.com",
-      idempotencyKey: `newsletter-signup-${email}-${Date.now()}`,
-      templateData: { email },
-    }).catch(() => {});
-  } catch {
-    // Email infra not yet wired — silently ignore. Signup is safe in DB.
-  }
+async function maybeNotifyAdminOfSignup(_email: string) {
+  // Sending requires a verified Lovable email sender domain. Until that's set
+  // up, signups still land safely in `newsletter_subscribers` and are visible
+  // in /admin/newsletter — no signup is ever silently lost.
+  return;
+}
+
+async function trySendNewsletterEmail(_args: {
+  recipientEmail: string;
+  unsubscribeToken: string;
+  idempotencyKey: string;
+}): Promise<{ ok: true } | { ok: false; reason: "no-email-infra" | "send-failed"; message?: string }> {
+  // Same as above — short-circuit until an email sender is configured.
+  return { ok: false, reason: "no-email-infra" };
 }
 
 // ----- Public: validate + perform unsubscribe by token -----------------------
