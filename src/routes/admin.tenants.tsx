@@ -35,20 +35,28 @@ const statusStyle = (s?: string) => {
 function TenantsListPage() {
   const [rows, setRows] = useState<Tenant[]>([]);
   const [rooms, setRooms] = useState<Record<string, Room>>({});
+  const [paidThisMonth, setPaidThisMonth] = useState<Record<string, number>>({});
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState<string>("all");
   const [showAdd, setShowAdd] = useState(false);
 
   const load = async () => {
-    const [{ data: t, error: te }, { data: r }] = await Promise.all([
+    const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0, 0, 0, 0);
+    const [{ data: t, error: te }, { data: r }, { data: pays }] = await Promise.all([
       supabase.from("tenants").select("*").order("created_at", { ascending: false }),
       supabase.from("rooms").select("id, room_number, property_id"),
+      supabase.from("payment_ledger").select("tenant_id, amount, paid_on").gte("paid_on", monthStart.toISOString().slice(0, 10)),
     ]);
     if (te) toast.error(te.message);
     setRows((t as Tenant[]) || []);
     const map: Record<string, Room> = {};
     (r as Room[] | null)?.forEach(rm => { map[rm.id] = rm; });
     setRooms(map);
+    const sums: Record<string, number> = {};
+    (pays as { tenant_id: string; amount: number }[] | null)?.forEach(p => {
+      sums[p.tenant_id] = (sums[p.tenant_id] || 0) + Number(p.amount || 0);
+    });
+    setPaidThisMonth(sums);
   };
   useEffect(() => { load(); }, []);
 
@@ -104,12 +112,21 @@ function TenantsListPage() {
           <tbody>
             {filtered.map(t => {
               const rm = t.room_id ? rooms[t.room_id] : null;
+              const rent = Number(t.monthly_rent || 0);
+              const paid = paidThisMonth[t.id] || 0;
+              const owes = Math.max(0, rent - paid);
+              const isCurrent = (t.status || "current").toLowerCase() === "current";
               return (
                 <tr key={t.id} className="border-t border-border hover:bg-cream/40 cursor-pointer">
                   <td className="p-0">
                     <Link to="/admin/tenants/$id" params={{ id: t.id }} className="block p-3 font-medium text-ink">
                       {(t.first_name || "—")} {t.surname || ""}
                       <div className="sm:hidden text-xs text-muted-foreground font-normal">{t.telephone || t.email || ""}</div>
+                      {isCurrent && rent > 0 && (
+                        <div className={`text-xs font-semibold mt-0.5 ${owes > 0 ? "text-destructive" : "text-success"}`}>
+                          {owes > 0 ? `Owes $${owes.toFixed(2)} this month` : `Paid in full this month`}
+                        </div>
+                      )}
                     </Link>
                   </td>
                   <td className="p-3 text-muted-foreground hidden sm:table-cell">{t.telephone || "—"}</td>
