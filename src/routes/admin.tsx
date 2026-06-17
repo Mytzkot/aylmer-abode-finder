@@ -148,7 +148,7 @@ function AdminLayout() {
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-5">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-6">
         {navItems.map(n => (
           <Link key={n.to} to={n.to} className={`touch-min flex flex-col items-center justify-center py-2 text-xs font-medium ${path.startsWith(n.to) ? "text-primary" : "text-muted-foreground"}`}>
             <n.icon className="w-5 h-5 mb-0.5" /> {n.label}
