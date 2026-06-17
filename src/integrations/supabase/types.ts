@@ -470,42 +470,57 @@ export type Database = {
         Row: {
           application_id: string | null
           created_at: string
+          deposit_amount: number | null
+          deposit_returned: boolean
           email: string | null
           first_name: string | null
           id: string
           lease_end: string | null
           lease_start: string | null
           monthly_rent: number | null
+          move_in_date: string | null
+          notes: string | null
           payment_status: string
           room_id: string | null
+          status: string
           surname: string | null
           telephone: string | null
         }
         Insert: {
           application_id?: string | null
           created_at?: string
+          deposit_amount?: number | null
+          deposit_returned?: boolean
           email?: string | null
           first_name?: string | null
           id?: string
           lease_end?: string | null
           lease_start?: string | null
           monthly_rent?: number | null
+          move_in_date?: string | null
+          notes?: string | null
           payment_status?: string
           room_id?: string | null
+          status?: string
           surname?: string | null
           telephone?: string | null
         }
         Update: {
           application_id?: string | null
           created_at?: string
+          deposit_amount?: number | null
+          deposit_returned?: boolean
           email?: string | null
           first_name?: string | null
           id?: string
           lease_end?: string | null
           lease_start?: string | null
           monthly_rent?: number | null
+          move_in_date?: string | null
+          notes?: string | null
           payment_status?: string
           room_id?: string | null
+          status?: string
           surname?: string | null
           telephone?: string | null
         }
