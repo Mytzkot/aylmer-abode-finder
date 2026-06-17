@@ -150,7 +150,7 @@ function AdminLayout() {
 
       <main className="flex-1 pb-20 md:pb-0"><Outlet /></main>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-7">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-card border-t border-border grid grid-cols-8">
         {navItems.map(n => {
           const active = n.to === "/admin" ? path === "/admin" || path === "/admin/" : path.startsWith(n.to);
           return (
