@@ -37,14 +37,6 @@ async function maybeNotifyAdminOfSignup(_email: string) {
   return;
 }
 
-async function trySendNewsletterEmail(_args: {
-  recipientEmail: string;
-  unsubscribeToken: string;
-  idempotencyKey: string;
-}): Promise<{ ok: true } | { ok: false; reason: "no-email-infra" | "send-failed"; message?: string }> {
-  // Same as above — short-circuit until an email sender is configured.
-  return { ok: false, reason: "no-email-infra" };
-}
 
 // ----- Public: validate + perform unsubscribe by token -----------------------
 export const unsubscribeByToken = createServerFn({ method: "POST" })
