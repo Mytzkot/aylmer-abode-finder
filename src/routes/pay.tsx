@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Send, CreditCard, Copy, Check } from "lucide-react";
+import { Send, CreditCard, Copy, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 import { CONTACT } from "@/data/properties";
 
 export const Route = createFileRoute("/pay")({
