@@ -32,7 +32,6 @@ import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as BookRoomIdRouteImport } from './routes/book.$roomId'
 import { Route as ApplyRoomIdRouteImport } from './routes/apply.$roomId'
 import { Route as AdminTenantsRouteImport } from './routes/admin.tenants'
-import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminRoomsRouteImport } from './routes/admin.rooms'
 import { Route as AdminNewsletterRouteImport } from './routes/admin.newsletter'
 import { Route as AdminLedgerRouteImport } from './routes/admin.ledger'
@@ -157,11 +156,6 @@ const AdminTenantsRoute = AdminTenantsRouteImport.update({
   path: '/tenants',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
-  id: '/subscribers',
-  path: '/subscribers',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminRoomsRoute = AdminRoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
@@ -225,7 +219,6 @@ export interface FileRoutesByFullPath {
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -255,7 +248,6 @@ export interface FileRoutesByTo {
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -290,7 +282,6 @@ export interface FileRoutesById {
   '/admin/ledger': typeof AdminLedgerRoute
   '/admin/newsletter': typeof AdminNewsletterRoute
   '/admin/rooms': typeof AdminRoomsRoute
-  '/admin/subscribers': typeof AdminSubscribersRoute
   '/admin/tenants': typeof AdminTenantsRouteWithChildren
   '/apply/$roomId': typeof ApplyRoomIdRoute
   '/book/$roomId': typeof BookRoomIdRoute
@@ -326,7 +317,6 @@ export interface FileRouteTypes {
     | '/admin/ledger'
     | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -356,7 +346,6 @@ export interface FileRouteTypes {
     | '/admin/ledger'
     | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -390,7 +379,6 @@ export interface FileRouteTypes {
     | '/admin/ledger'
     | '/admin/newsletter'
     | '/admin/rooms'
-    | '/admin/subscribers'
     | '/admin/tenants'
     | '/apply/$roomId'
     | '/book/$roomId'
@@ -584,13 +572,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTenantsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/subscribers': {
-      id: '/admin/subscribers'
-      path: '/subscribers'
-      fullPath: '/admin/subscribers'
-      preLoaderRoute: typeof AdminSubscribersRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/rooms': {
       id: '/admin/rooms'
       path: '/rooms'
@@ -669,7 +650,6 @@ interface AdminRouteChildren {
   AdminLedgerRoute: typeof AdminLedgerRoute
   AdminNewsletterRoute: typeof AdminNewsletterRoute
   AdminRoomsRoute: typeof AdminRoomsRoute
-  AdminSubscribersRoute: typeof AdminSubscribersRoute
   AdminTenantsRoute: typeof AdminTenantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -681,7 +661,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLedgerRoute: AdminLedgerRoute,
   AdminNewsletterRoute: AdminNewsletterRoute,
   AdminRoomsRoute: AdminRoomsRoute,
-  AdminSubscribersRoute: AdminSubscribersRoute,
   AdminTenantsRoute: AdminTenantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
