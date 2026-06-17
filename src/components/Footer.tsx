@@ -74,6 +74,21 @@ function ContactItem({
   );
 }
 
+const THANKS_EN = "Thanks! You'll get our room-availability updates and we'll email you when a room opens up.";
+const THANKS_FR = "Merci ! Vous recevrez nos mises à jour sur les chambres disponibles et nous vous écrirons dès qu'une chambre se libère.";
+
+function BilingualThanks() {
+  const { lang } = useLang();
+  if (lang === "fr") return <p className="text-[14px] font-semibold text-coral" lang="fr">{THANKS_FR}</p>;
+  if (lang === "en") return <p className="text-[14px] font-semibold text-coral" lang="en">{THANKS_EN}</p>;
+  return (
+    <div className="space-y-1">
+      <p className="text-[14px] font-semibold text-coral" lang="en">{THANKS_EN}</p>
+      <p className="text-[14px] font-semibold text-coral" lang="fr">{THANKS_FR}</p>
+    </div>
+  );
+}
+
 function NewsletterSignup() {
   const subscribe = useServerFn(subscribeNewsletter);
   const [email, setEmail] = useState("");
