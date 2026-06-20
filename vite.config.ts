@@ -12,4 +12,9 @@ export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
+  // Force the nitro "cloudflare-module" deploy build to run in non-Lovable CI
+  // (e.g. Cloudflare Workers Builds). Without this the config only emits the
+  // deployable Worker bundle inside the Lovable sandbox, so external builds
+  // produce plain output and `wrangler deploy` has nothing valid to ship.
+  nitro: true,
 });
