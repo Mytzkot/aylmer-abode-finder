@@ -3,5 +3,18 @@
   "name": "tanstack-start-app",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry"
+  "main": "@tanstack/react-start/server-entry",
+  // Runtime environment variables exposed to the Worker. With `nodejs_compat`
+  // these are readable via `process.env.*` during SSR and inside server functions.
+  // Only PUBLIC values belong here — the anon/publishable key is safe to expose
+  // (it is already inlined into the client bundle and committed in .env).
+  // The SECRET service-role key must NOT live here; set it once with:
+  //   npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+  // (or add it under Settings -> Variables and Secrets in the Cloudflare dashboard).
+  "vars": {
+    "SUPABASE_URL": "https://vjbxmcaufiyzfenncivm.supabase.co",
+    "SUPABASE_PUBLISHABLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYnhtY2F1Zml5emZlbm5jaXZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4Njk0MjcsImV4cCI6MjA5NDQ0NTQyN30._tqncLA2l9yeYhjyj10Ew5n5gA6DNKtPjG1QloFXwEk",
+    "VITE_SUPABASE_URL": "https://vjbxmcaufiyzfenncivm.supabase.co",
+    "VITE_SUPABASE_PUBLISHABLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZqYnhtY2F1Zml5emZlbm5jaXZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4Njk0MjcsImV4cCI6MjA5NDQ0NTQyN30._tqncLA2l9yeYhjyj10Ew5n5gA6DNKtPjG1QloFXwEk"
+  }
 }
