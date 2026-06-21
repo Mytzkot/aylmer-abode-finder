@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Morning Dashboard",
+  "version": "1.0.0",
+  "description": "A side panel for notes, a daily to-do list, and (soon) an email summary — right next to any website.",
+  "permissions": ["sidePanel", "storage"],
+  "action": {
+    "default_title": "Open Morning Dashboard"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

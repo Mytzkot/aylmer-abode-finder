@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Morning Dashboard</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1 id="greeting">Hello ☀️</h1>
+      <p id="date" class="date"></p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="notes">📝 Notes</button>
+      <button class="tab" data-tab="todo">✅ To-Do</button>
+      <button class="tab" data-tab="email">📧 Email</button>
+    </nav>
+
+    <!-- Notes -->
+    <section class="panel active" id="panel-notes">
+      <textarea
+        id="notes"
+        placeholder="Jot anything here — it saves as you type. Great for keeping notes next to the website you're reading."
+      ></textarea>
+      <p class="hint">Saved automatically.</p>
+    </section>
+
+    <!-- To-Do -->
+    <section class="panel" id="panel-todo">
+      <div class="progress-wrap">
+        <div class="progress-bar"><span id="progress-fill"></span></div>
+        <span id="progress-label" class="hint"></span>
+      </div>
+      <div class="add-row">
+        <input id="todo-input" type="text" placeholder="Add a task and press Enter…" />
+        <button id="todo-add" aria-label="Add task">+</button>
+      </div>
+      <ul id="todo-list"></ul>
+      <p id="todo-empty" class="empty">Nothing on the list. Add your first task above.</p>
+    </section>
+
+    <!-- Email (placeholder) -->
+    <section class="panel" id="panel-email">
+      <div class="email-placeholder">
+        <div class="spark">✨</div>
+        <p class="strong">Gmail isn't connected yet</p>
+        <p class="hint">
+          Once connected, this will read your recent email each morning and show an
+          AI summary of what's important and new.
+        </p>
+        <button class="connect" disabled>Connect Gmail (coming soon)</button>
+      </div>
+    </section>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>
